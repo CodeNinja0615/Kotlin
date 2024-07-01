@@ -1,1 +1,2 @@
 id("kotlin-parcelize")
+id("kotlin-kapt")

@@ -9,5 +9,5 @@
 
 <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCZqwlzqeIMXhHHl94uT51QKc6rvkp23KU"
+            android:value=""
             />
