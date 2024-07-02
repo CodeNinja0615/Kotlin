@@ -5,6 +5,9 @@
 
 
 
+android:name=".WishListApp"  //---- Remember this for Room Data base in Wishlist app
+
+
 
 
 <meta-data

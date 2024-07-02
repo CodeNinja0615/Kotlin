@@ -13,7 +13,12 @@ import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -25,6 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import kotlinx.coroutines.launch
+import sameer.example.mywishlistapp.data.Wish
 import sameer.example.mywishlistapp.ui.theme.MyWishListAppTheme
 
 @Composable
@@ -34,12 +41,28 @@ fun AddEditDetailView(
     navController: NavController
 )
 {
+    val snackMessage = remember{
+        mutableStateOf("")
+    }
+    val scope = rememberCoroutineScope()
+    val scaffoldState = rememberScaffoldState()
+
+    if (id != 0L){
+        val wish = viewModel.getAWishById(id).collectAsState(initial = Wish(0L, "", ""))
+        viewModel.wishTitleState = wish.value.title
+        viewModel.wishDescriptionState = wish.value.description
+    }else{
+        viewModel.wishTitleState = ""
+        viewModel.wishDescriptionState = ""
+    }
     Scaffold(topBar =  {AppbarView(title =
     if (id != 0L) stringResource(id = R.string.update_wish) else stringResource(id = R.string.add_wish),
         onBackNavClicked = {
             navController.navigateUp()
         }
-    )})
+    )},
+        scaffoldState = scaffoldState
+    )
     {
         Column(modifier = Modifier
             .padding(it)
@@ -55,9 +78,7 @@ fun AddEditDetailView(
                     viewModel.onWishTitleChanged(it)
                 }
             )
-            
             Spacer(modifier = Modifier.height(10.dp))
-
             WishTextFiled(label = "Description", value = viewModel.wishDescriptionState,
                 onValueChanged = {
                     viewModel.onWishDescriptionChanged(it)
@@ -65,13 +86,36 @@ fun AddEditDetailView(
             )
             Spacer(modifier = Modifier.height(10.dp))
             Button(onClick = {
-
                 if (viewModel.wishTitleState.isNotEmpty() &&
                     viewModel.wishDescriptionState.isNotEmpty()){
-                    //--- TODO Update wish
+                    if (id != 0L){
+                        //--- TODO Update wish
+                        viewModel.updateWish(
+                            Wish(
+                                id = id,
+                                title = viewModel.wishTitleState.trim(),
+                                description = viewModel.wishDescriptionState.trim()
+                            )
+                        )
+                        snackMessage.value = "Wish has been updated"
+                    }else {
+                        //--- TODO add a wish
+                        viewModel.addWish(
+                            Wish(
+                                title = viewModel.wishTitleState.trim(),
+                                description = viewModel.wishDescriptionState.trim()
+                            )
+                        )
+                        snackMessage.value = "Wish has been created"
+                    }
                 }else{
-                    //TODO add a wish
+                    snackMessage.value = "Enter field to create a wish"
                 }
+                scope.launch {
+                    scaffoldState.snackbarHostState.showSnackbar(snackMessage.value)
+                    navController.navigateUp()
+                }
+
             }) {
                 Text(
                     text = if (id != 0L) stringResource(id = R.string.update_wish)
