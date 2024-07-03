@@ -52,6 +52,7 @@ android {
 }
 
 dependencies {
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.35.1-alpha")
     val nav_version = "2.7.5"
     val compose_version = "1.6.0-alpha08"
     val room = "2.6.0"
@@ -83,6 +84,7 @@ dependencies {
 
     // Navigation
     implementation("androidx.navigation:navigation-compose:2.7.7")
+
 
 
 

@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.OutlinedTextField
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
@@ -116,11 +117,13 @@ fun AddEditDetailView(
                     navController.navigateUp()
                 }
 
-            }) {
+            },colors = ButtonDefaults.buttonColors(backgroundColor = colorResource(id = R.color.app_bar_color))
+            ) {
                 Text(
                     text = if (id != 0L) stringResource(id = R.string.update_wish)
                     else stringResource(id = R.string.add_wish),
-                    style = TextStyle(fontSize = 18.sp)
+                    style = TextStyle(fontSize = 18.sp),
+                    color = Color.White
                 )
             }
         }
