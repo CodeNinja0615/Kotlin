@@ -37,15 +37,12 @@ fun AccountView(){
                 )
                 Column {
                     Text(text = "Sameer Akhtar")
-                    Row(modifier= Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                        Text(text = "@GarouBoi")
-                        IconButton(onClick = {}) {
-                            Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = null)
-                        }
-
-                    }
+                    Text(text = "@GarouBoi")
                 }
+            }
+            IconButton(onClick = {}) {
+                Icon(imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    contentDescription = null)
             }
         }
         Row(modifier = Modifier.padding(16.dp)) {

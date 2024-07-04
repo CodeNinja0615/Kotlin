@@ -15,8 +15,11 @@ import androidx.compose.material.TextField
 import androidx.compose.material.primarySurface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
 
@@ -61,12 +64,24 @@ fun AccountDialog(dialogOpen: MutableState<Boolean>){
                     )
                 }
             },
-            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.primarySurface).padding(8.dp),
+            modifier = Modifier.fillMaxWidth().background(MaterialTheme.colors.primaryVariant).padding(8.dp),
             shape = RoundedCornerShape(5.dp),
             backgroundColor = Color.White,
             properties = DialogProperties(
                 dismissOnBackPress = true,
                 dismissOnClickOutside = true)
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun AccountDialogPreview(){
+    val dialogOpen = remember{
+        mutableStateOf(true)
+    }
+    dialogOpen.value = true
+    MusicAppUITheme {
+        AccountDialog(dialogOpen = dialogOpen)
     }
 }
