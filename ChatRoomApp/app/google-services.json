@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "269129099673",
+    "project_id": "chatroomapp-bf33a",
+    "storage_bucket": "chatroomapp-bf33a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:269129099673:android:6185b7e115d1da950e8b08",
+        "android_client_info": {
+          "package_name": "sameer.example.chatroomapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAiV17pQGVSHsONXy48p_580wanCLXx5NI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
