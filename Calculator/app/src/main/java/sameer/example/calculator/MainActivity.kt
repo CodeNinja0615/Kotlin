@@ -120,4 +120,11 @@ class MainActivity : AppCompatActivity() {
             value.contains("-")
         }
     }
+
+
+    // Remove last character from the input
+    fun onBackspace(view: View) {
+        tvInput?.text = tvInput?.text?.dropLast(1)
+        lastNumeric = tvInput?.text?.lastOrNull()?.isDigit() ?: false
+    }
 }

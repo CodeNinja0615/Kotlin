@@ -18,4 +18,5 @@
     <string name="plus">+</string>
     <string name="equal">=</string>
     <string name="dot">.</string>
+    <string name="backspace">Backspace</string>
 </resources>
