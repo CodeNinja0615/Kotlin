@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:orientation="vertical"
+android:padding="16dp"
+tools:context=".QuizQuestionActivity">
+
+<TextView
+    android:id="@+id/tv_question"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Question"
+    android:textSize="18sp"
+    android:layout_marginBottom="16dp"
+    android:textStyle="bold" />
+
+<ImageView
+    android:id="@+id/iv_flag"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:scaleType="centerInside"
+    android:layout_marginBottom="16dp" />
+
+<RadioGroup
+    android:id="@+id/rg_options"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <RadioButton
+        android:id="@+id/rb_option_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 1" />
+
+    <RadioButton
+        android:id="@+id/rb_option_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 2" />
+
+    <RadioButton
+        android:id="@+id/rb_option_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 3" />
+
+    <RadioButton
+        android:id="@+id/rb_option_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Option 4" />
+</RadioGroup>
+
+<Button
+    android:id="@+id/btn_submit"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="Submit"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="24dp" />
+
+</LinearLayout>
