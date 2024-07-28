@@ -4,4 +4,5 @@
     <string name="welcome">Welcome</string>
     <string name="start">Start</string>
     <string name="Name">Name</string>
+    <string name="quiz_image">Quiz Image</string>
 </resources>

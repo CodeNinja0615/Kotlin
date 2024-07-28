@@ -1,66 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-xmlns:tools="http://schemas.android.com/tools"
-android:layout_width="match_parent"
-android:layout_height="match_parent"
-android:orientation="vertical"
-android:padding="16dp"
-tools:context=".QuizQuestionActivity">
-
-<TextView
-    android:id="@+id/tv_question"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Question"
-    android:textSize="18sp"
-    android:layout_marginBottom="16dp"
-    android:textStyle="bold" />
-
-<ImageView
-    android:id="@+id/iv_flag"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="200dp"
-    android:scaleType="centerInside"
-    android:layout_marginBottom="16dp" />
-
-<RadioGroup
-    android:id="@+id/rg_options"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-
-    <RadioButton
-        android:id="@+id/rb_option_one"
-        android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:padding="16dp"
+    android:background="@android:color/white"
+    tools:context=".QuizQuestionActivity">
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Option 1" />
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="16dp">
+        <!-- Question Text -->
+        <TextView
+            android:id="@+id/tv_question"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="What is the capital of France?"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            android:textColor="@color/textColorPrimary"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:layout_marginBottom="24dp" />
 
-    <RadioButton
-        android:id="@+id/rb_option_two"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Option 2" />
+        <!-- Image View for Flag or Question Image -->
+        <ImageView
+            android:id="@+id/iv_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:contentDescription="@string/quiz_image"
+            tools:src="@drawable/canada"
+            android:background="@android:color/darker_gray"
+            android:scaleType="centerCrop"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+        >
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="0dp"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_height="wrap_content"
+                android:indeterminate="false"
+                android:layout_weight="1"
+                android:max="5"
+                android:minHeight="50dp"
+                android:progress="1"
+                />
+            <TextView
+                android:id="@+id/tvProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="15dp"
+                android:textSize="14sp"
+                android:text="0/9"
+                />
+        </LinearLayout>
 
-    <RadioButton
-        android:id="@+id/rb_option_three"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Option 3" />
 
-    <RadioButton
-        android:id="@+id/rb_option_four"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Option 4" />
-</RadioGroup>
+        <!-- Option TextViews -->
+        <TextView
+            android:id="@+id/tv_option_one"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="18dp"
+            android:text="Paris"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:padding="15dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
-<Button
-    android:id="@+id/btn_submit"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Submit"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="24dp" />
+        <TextView
+            android:id="@+id/tv_option_two"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="London"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:padding="15dp"
+            android:clickable="true"
+            android:focusable="true"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_option_three"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:text="Berlin"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:padding="15dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <TextView
+            android:id="@+id/tv_option_four"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Madrid"
+            android:textSize="18sp"
+            android:textColor="@android:color/black"
+            android:background="@drawable/default_option_border_bg"
+            android:gravity="center"
+            android:fontFamily="sans-serif"
+            android:padding="15dp"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <!-- Submit Button -->
+        <Button
+            android:id="@+id/btn_submit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:text="SUBMIT"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/DarkPurple"
+            android:fontFamily="sans-serif-medium"
+            app:cornerRadius= "5dp"
+            android:padding="16dp" />
+    </LinearLayout>
+</ScrollView>

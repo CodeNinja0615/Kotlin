@@ -76,12 +76,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:background="@color/purple_700"
+                android:paddingVertical="15dp"
+                android:backgroundTint="@color/DarkPurple"
                 android:elevation="5dp"
                 android:text="@string/start"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                app:cornerRadius="10sp" />
+                app:cornerRadius="5sp" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 

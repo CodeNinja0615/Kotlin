@@ -6,32 +6,32 @@ object Constants {
 
         val que1 = Question(
             1, "What country this flag belongs to?",
-            R.drawable.backgroung_img,"Argentina","Australia",
+            R.drawable.russia,"Argentina","Australia",
             "India", "Austria", 2
         )
         questionsList.add(que1)
 
         val que2 = Question(
             1, "What country this flag belongs to?",
-            R.drawable.backgroung_img,"Argentina","Australia",
+            R.drawable.flag2,"Argentina","Australia",
             "India", "Austria", 2
         )
         questionsList.add(que2)
         val que3 = Question(
             1, "What country this flag belongs to?",
-            R.drawable.backgroung_img,"Argentina","Australia",
+            R.drawable.flag3,"Argentina","Australia",
             "India", "Austria", 2
         )
         questionsList.add(que3)
         val que4 = Question(
             1, "What country this flag belongs to?",
-            R.drawable.backgroung_img,"Argentina","Australia",
+            R.drawable.china,"Argentina","Australia",
             "India", "Austria", 2
         )
         questionsList.add(que4)
         val que5 = Question(
             1, "What country this flag belongs to?",
-            R.drawable.backgroung_img,"Argentina","Australia",
+            R.drawable.canada,"Argentina","Australia",
             "India", "Austria", 2
         )
         questionsList.add(que5)
