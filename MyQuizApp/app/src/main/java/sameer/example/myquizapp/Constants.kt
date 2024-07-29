@@ -7,7 +7,7 @@ object Constants {
         val que1 = Question(
             1, "What country this flag belongs to?",
             R.drawable.russia,"Argentina","Australia",
-            "India", "Austria", 2
+            "India", "Austria", 3
         )
         questionsList.add(que1)
 
@@ -26,13 +26,13 @@ object Constants {
         val que4 = Question(
             1, "What country this flag belongs to?",
             R.drawable.china,"Argentina","Australia",
-            "India", "Austria", 2
+            "India", "Austria", 1
         )
         questionsList.add(que4)
         val que5 = Question(
             1, "What country this flag belongs to?",
             R.drawable.canada,"Argentina","Australia",
-            "India", "Austria", 2
+            "India", "Austria", 4
         )
         questionsList.add(que5)
 
