@@ -60,5 +60,15 @@
     <color name="BGColor">#e9c46a</color>
     <color name="btnBGColor">#2a9d8f</color>
     <color name="grey">#5E5E5E</color>
+    <color name="lightGrey">#7A8089</color>
     <color name="brown">#B64B26</color>
+    <color name="purple">#9C27B0</color>
+    <color name="DarkPurple">#7B1FA2</color>
+    <color name="colorAccent">#FF5252</color>
+    <color name="backgroundColor">#FAFAFA</color>
+    <color name="textColorPrimary">#303030</color>
+    <color name="textColorSecondary">#757575</color>
+    <color name="colorPrimaryGreen">#4CAF50</color>
+    <color name="colorPrimaryDarkGreen">#388E3C</color>
+    <color name="colorAccentYellow">#FFC107</color>
 </resources>

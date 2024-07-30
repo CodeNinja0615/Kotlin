@@ -5,4 +5,8 @@
     <string name="start">Start</string>
     <string name="Name">Name</string>
     <string name="quiz_image">Quiz Image</string>
+    <string name="image">image</string>
+    <string name="hey_congratulations">Hey, Congratulations!</string>
+    <string name="your_score_is_9_out_of_10">Your Score is 9 out of 10</string>
+    <string name="finish">Finish</string>
 </resources>

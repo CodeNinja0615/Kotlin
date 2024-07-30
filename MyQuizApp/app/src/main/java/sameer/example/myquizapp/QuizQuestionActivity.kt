@@ -1,5 +1,6 @@
 package sameer.example.myquizapp
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +20,9 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     private var mQuestionsList: ArrayList<Question>? = null
     private var mSelectedOptionPosition: Int = 0
 
+    private var mUserName: String? = null
+    private var mCorrectAnswers: Int = 0
+
     // Declare variables for each view
     private var tvQuestion: TextView? = null
     private var ivImage: ImageView? = null
@@ -32,6 +36,9 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_quiz_question)
+
+        mUserName = intent.getStringExtra(Constants.USER_NAME)
+
         // Initialize each view by finding them by ID
         tvQuestion = findViewById(R.id.tv_question)
         ivImage = findViewById(R.id.iv_image)
@@ -144,7 +151,13 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
                             setQuestion()
                         }
                         else->{
-                            Toast.makeText(this, "Congo", Toast.LENGTH_LONG).show()
+
+                            val intent = Intent(this, ResultActivity::class.java)
+                            intent.putExtra(Constants.USER_NAME, mUserName)
+                            intent.putExtra(Constants.CORRECT_ANSWERS, mCorrectAnswers)
+                            intent.putExtra(Constants.TOTAL_QUESTION, mQuestionsList?.size)
+                            startActivity(intent)
+                            finish()
                         }
                     }
                 }else{
@@ -152,6 +165,9 @@ class QuizQuestionActivity : AppCompatActivity(), View.OnClickListener {
                     if (mSelectedOptionPosition != question?.correctAnswer){
                         answerView(mSelectedOptionPosition, R.drawable.wrong_option_border_bg)
 
+                    }
+                    else{
+                        mCorrectAnswers++
                     }
                     answerView(question!!.correctAnswer, R.drawable.correct_option_border_bg)
 
