@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical"
+    android:gravity="center">
+
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="40dp"
+        android:text="TextView"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Image Button ->"
+            android:layout_margin="10dp"/>
+        <ImageButton
+            android:id="@+id/image_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/image_icon"/>
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/alert_btn"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="25dp"
+        android:layout_marginTop="168dp"
+        android:text="ALERT DIALOG"
+        app:cornerRadius="0dp" />
+
+    <Button
+        android:id="@+id/custom_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="25dp"
+        android:text="CUSTOM DIALOG"
+        app:cornerRadius="0dp" />
+
+    <Button
+        android:id="@+id/custom_progress_dialog"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_margin="25dp"
+        android:text="CUSTOM PROGRESS DIALOG"
+        app:cornerRadius="0dp" />
+
+
+</LinearLayout>

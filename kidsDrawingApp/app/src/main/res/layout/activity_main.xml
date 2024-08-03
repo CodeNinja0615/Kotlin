@@ -146,6 +146,16 @@
             android:background="@drawable/background_drawing_view_layout"
             android:contentDescription="@string/gallery_launch" />
         <ImageButton
+            android:id="@+id/ib_undo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/undo_icon"
+            android:scaleType="fitXY"
+            android:background="@drawable/background_drawing_view_layout"
+            android:contentDescription="@string/undo_button" />
+
+        <ImageButton
             android:id="@+id/ib_brush"
             android:layout_width="50dp"
             android:layout_height="50dp"
