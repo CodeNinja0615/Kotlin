@@ -48,3 +48,5 @@ implementation("com.google.accompanist:accompanist-systemuicontroller:0.35.1-alp
 implementation(platform("com.google.firebase:firebase-bom:32.6.0"))
 implementation("com.google.firebase:firebase-auth")
 implementation("com.google.firebase:firebase-firestore")
+
+implementation("androidx.activity:activity-ktx:1.10.0-alpha01")

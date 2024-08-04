@@ -22,7 +22,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_image"
+            tools:src="@drawable/bg_image"
         />
         <sameer.example.kidsdrawingapp.DrawingView
             android:id="@+id/drawing_view"
@@ -154,6 +154,16 @@
             android:scaleType="fitXY"
             android:background="@drawable/background_drawing_view_layout"
             android:contentDescription="@string/undo_button" />
+        <!-- Redo ImageButton -->
+        <ImageButton
+            android:id="@+id/ib_redo"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/redo_icon"
+            android:scaleType="fitXY"
+            android:background="@drawable/background_drawing_view_layout"
+            android:contentDescription="@string/redo_button" />
 
         <ImageButton
             android:id="@+id/ib_brush"
@@ -161,6 +171,16 @@
             android:layout_height="50dp"
             android:layout_margin="5dp"
             android:src="@drawable/ic_brush_png"
+            android:scaleType="fitXY"
+            android:background="@drawable/background_drawing_view_layout"
+            android:contentDescription="@string/brush_size" />
+
+        <ImageButton
+            android:id="@+id/ib_save"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="5dp"
+            android:src="@drawable/save_icon"
             android:scaleType="fitXY"
             android:background="@drawable/background_drawing_view_layout"
             android:contentDescription="@string/brush_size" />
