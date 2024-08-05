@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/main_screen_main_layout_padding"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:id="@+id/myImageView"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:src="@drawable/img_main_page"
+        android:contentDescription="@string/start_image"
+        app:layout_constraintBottom_toTopOf="@+id/fl_start"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/fl_start"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/myImageView"
+        android:background="@drawable/item_color_accent_border_ripple_background"
+        android:elevation="25dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/start"
+            android:layout_gravity="center"
+            android:textSize="@dimen/default_button_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDarkGreen"/>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
