@@ -14,3 +14,24 @@ android:name=".WishListApp"  //---- Remember this for Room Data base in Wishlist
             android:name="com.google.android.geo.API_KEY"
             android:value=""
             />
+
+
+
+
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+<uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+
+
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE"/>  //----Only for Android 11 or below
+        </intent>
+    </queries>
