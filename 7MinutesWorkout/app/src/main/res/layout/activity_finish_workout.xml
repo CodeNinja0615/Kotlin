@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_finish_workout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white"
+    tools:context=".FinishWorkoutActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarFinishActivity"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/deep_orange"
+        android:theme="@style/ToolBarTheme"
+        android:titleTextColor="@color/textColorPrimary"
+        app:layout_constraintTop_toTopOf="parent" />
+    <!-- End Text -->
+    <TextView
+        android:id="@+id/end_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="END"
+        android:textSize="30sp"
+        android:textColor="@color/deep_orange"
+        android:layout_marginTop="50dp"
+        android:layout_marginBottom="24dp"
+        android:textStyle="bold" />
+
+    <!-- Circle with Tick -->
+    <FrameLayout
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginBottom="24dp">
+
+        <!-- Circle Background -->
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/item_circular_color_accent_border"
+            android:contentDescription="" />
+
+        <!-- Tick Icon -->
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_tick"
+            android:layout_gravity="center"
+            android:contentDescription="" />
+
+    </FrameLayout>
+
+    <!-- Congratulations Text -->
+    <TextView
+        android:id="@+id/congratulations_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Congratulations!"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp" />
+
+    <TextView
+        android:id="@+id/message_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You have finished the workout!"
+        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:layout_marginBottom="24dp" />
+
+    <!-- Finish Button -->
+    <Button
+        android:id="@+id/finish_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:text="Finish"
+        android:backgroundTint="@color/deep_orange"
+        android:textColor="@color/white" />
+
+</LinearLayout>
