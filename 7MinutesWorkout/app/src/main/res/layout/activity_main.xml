@@ -13,7 +13,6 @@
         android:layout_height="220dp"
         android:src="@drawable/img_main_page"
         android:contentDescription="@string/start_image"
-        app:layout_constraintBottom_toTopOf="@+id/fl_start"
         app:layout_constraintTop_toTopOf="parent" />
 
     <FrameLayout
@@ -22,7 +21,8 @@
         android:layout_height="150dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myImageView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:background="@drawable/item_color_accent_border_ripple_background"
         android:elevation="25dp">
         <TextView
@@ -32,7 +32,70 @@
             android:layout_gravity="center"
             android:textSize="@dimen/default_button_text_size"
             android:textStyle="bold"
-            android:textColor="@color/colorPrimaryDarkGreen"/>
+            android:textColor="@color/deep_orange"/>
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/flBmi"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/item_circular_color_accent_background"
+        app:layout_constraintTop_toBottomOf="@+id/fl_start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/flHistory"
+        app:layout_constraintStart_toStartOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bmi"
+            android:layout_gravity="center"
+            android:textSize="@dimen/default_button_text_size"
+            android:textStyle="bold"
+            android:textColor="@color/white"/>
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/calculator"
+        android:textColor="@color/deep_orange"
+        android:textSize="@dimen/default_button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/flBmi"
+        app:layout_constraintStart_toStartOf="@id/flBmi"
+        app:layout_constraintTop_toBottomOf="@+id/flBmi" />
+
+    <FrameLayout
+        android:id="@+id/flHistory"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:background="@drawable/item_circular_color_accent_background"
+        app:layout_constraintTop_toBottomOf="@+id/fl_start"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/flBmi">
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:src="@drawable/history_icon"
+            android:scaleType="center"
+            android:contentDescription="TODO" />
+    </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="@string/history"
+        android:textColor="@color/deep_orange"
+        android:textSize="@dimen/default_button_text_size"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/flHistory"
+        app:layout_constraintStart_toStartOf="@id/flHistory"
+        app:layout_constraintTop_toBottomOf="@+id/flHistory" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

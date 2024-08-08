@@ -1,6 +1,7 @@
 package sameer.example.a7minutesworkout
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
@@ -10,9 +11,13 @@ import android.os.CountDownTimer
 import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.View
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import sameer.example.a7minutesworkout.databinding.ActivityExerciseBinding
+import sameer.example.a7minutesworkout.databinding.DialogCustomBackConfigurationBinding
 import java.lang.Exception
 import java.util.Locale
 import kotlin.time.times
@@ -45,6 +50,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
 
         if(supportActionBar != null){
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            binding?.toolBarExercise?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
         exerciseList = Constants.defaultExerciseList()
@@ -53,12 +59,45 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         tts = TextToSpeech(this, this)
 
         binding?.toolBarExercise?.setNavigationOnClickListener {
-            onBackPressed()
+            //onBackPressed()
+            customDialogForBackButton()
         }
         setUpRestView()
         setupExerciseStatusRecyclerView()
     }
 
+    private fun customDialogForBackButton() {
+        // Create a Dialog instance
+        val customDialog = Dialog(this)
+        val dialogBinding = DialogCustomBackConfigurationBinding.inflate(layoutInflater)
+
+        // Inflate the custom layout for the dialog
+        //val dialogView = LayoutInflater.from(this).inflate(R.layout.custom_dialog, null)
+
+        // Set the custom layout in the dialog
+        customDialog.setContentView(dialogBinding.root)
+        customDialog.setCanceledOnTouchOutside(false)
+
+        // Set click listeners for TextViews acting as buttons
+        dialogBinding.buttonYes.setOnClickListener {
+            this@ExerciseActivity.finish()
+            customDialog.dismiss() // Close the dialog after submission
+        }
+
+        dialogBinding.buttonNo.setOnClickListener {
+            customDialog.dismiss() // Close the dialog on cancel
+        }
+
+        // Show the dialog
+        customDialog.show()
+    }
+
+    @Deprecated("Deprecated in Java")
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        customDialogForBackButton()
+        //super.onBackPressed()
+    }
     private fun setupExerciseStatusRecyclerView(){
         binding?.rvExerciseStatus?.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)

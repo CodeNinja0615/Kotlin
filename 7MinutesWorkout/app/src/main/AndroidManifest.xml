@@ -19,8 +19,17 @@
         android:theme="@style/Theme._7MinutesWorkout"
         tools:targetApi="31">
         <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".BMIActivity"
+            android:exported="false"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".FinishWorkoutActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ExerciseActivity"
             android:exported="false"

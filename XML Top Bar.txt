@@ -97,3 +97,41 @@
     <color name="white_translucent_70">#B3FFFFFF</color>
     <color name="black_translucent_70">#B3000000</color>
 </resources>
+
+
+
+
+
+-------------------------------ActionBar-------------------------------
+
+
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolBarHistory"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/deep_orange"
+        android:theme="@style/ToolBarTheme"
+        android:titleTextColor="@color/textColorPrimary"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+
+<style name="ToolBarTheme" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
+        <item name="colorControlNormal">@color/white</item>
+    </style>
+    <style name="Theme._7MinutesWorkout.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme._7MinutesWorkout.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+
+
+        if(supportActionBar != null){
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.title = "HISTORY"
+            binding?.toolBarHistory?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+	}
+binding?.toolBarExercise?.setNavigationOnClickListener {
+            //onBackPressed()
+        }

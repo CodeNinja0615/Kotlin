@@ -22,7 +22,7 @@
     </style>
 
     <style name="ToolBarTheme" parent="@style/ThemeOverlay.MaterialComponents.ActionBar">
-        <item name="colorControlNormal">@color/black</item>
+        <item name="colorControlNormal">@color/white</item>
     </style>
     <style name="Theme._7MinutesWorkout.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
