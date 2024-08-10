@@ -136,7 +136,7 @@
             android:layout_height="100dp"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_gravity="center"
-            android:max="30"
+            android:max="60"
             android:progress="300"
             android:rotation="-90"
             android:background="@drawable/circular_progress_grey"

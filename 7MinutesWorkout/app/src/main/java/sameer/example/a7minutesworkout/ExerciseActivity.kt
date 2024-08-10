@@ -30,7 +30,7 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
     private var restProgress = 0 // Time elapsed during pause
 
     private var exerciseTimer: CountDownTimer? = null
-    private var exerciseTimerDuration: Long = 30
+    private var exerciseTimerDuration: Long = 60
     private var exerciseProgress = 0 // Time elapsed during pause
 
     private var exerciseList: ArrayList<ExerciseModel>? = null
@@ -184,8 +184,8 @@ class ExerciseActivity : AppCompatActivity(), TextToSpeech.OnInitListener {
         exerciseTimer = object: CountDownTimer(exerciseTimerDuration*1000, 1000){
             override fun onTick(millisUntilFinished: Long) {
                 exerciseProgress++
-                binding?.progressBarExercise?.progress = 30 - exerciseProgress
-                binding?.tvTimerExercise?.text = (30 - exerciseProgress).toString()
+                binding?.progressBarExercise?.progress = 60 - exerciseProgress
+                binding?.tvTimerExercise?.text = (60 - exerciseProgress).toString()
             }
 
             @SuppressLint("NotifyDataSetChanged")
