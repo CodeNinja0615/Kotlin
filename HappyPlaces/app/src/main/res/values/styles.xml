@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Customize your TextInputLayout here -->
+    <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/indigo</item>
+        <item name="hintTextColor">@color/indigo</item>
+        <item name="hintAnimationEnabled">true</item>
+    </style>
+
+</resources>
