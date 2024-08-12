@@ -5,10 +5,7 @@
     <uses-feature
         android:name="android.hardware.camera"
         android:required="false" />
-
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
     <uses-permission android:name="android.permission.CAMERA"/>
-
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -17,12 +14,8 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HappyPlaces"
+        android:theme="@style/Theme.CameraImageSelection"
         tools:targetApi="31">
-        <activity
-            android:name=".AddHappyPlaceActivity"
-            android:exported="false"
-            android:screenOrientation="portrait"/>
         <activity
             android:name=".MainActivity"
             android:exported="true">

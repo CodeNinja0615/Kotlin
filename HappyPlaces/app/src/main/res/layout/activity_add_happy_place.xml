@@ -88,6 +88,8 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/edit_text_hint_date"
                     android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:textColor="@color/indigo"
                     android:textColorHint="@color/indigo"
                     android:textSize="@dimen/edit_text_text_size" />
@@ -145,7 +147,7 @@
                 app:layout_constraintHorizontal_bias="0.45"
                 app:layout_constraintStart_toEndOf="@id/iv_place_image"
                 app:layout_constraintTop_toBottomOf="@id/til_location"
-                app:layout_constraintVertical_bias="0.019" />`
+                app:layout_constraintVertical_bias="0.019" />
 
             <Button
                 android:id="@+id/btn_save"

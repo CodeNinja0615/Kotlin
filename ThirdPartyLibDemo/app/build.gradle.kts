@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.happyplaces"
+    namespace = "com.example.thirdpartylibdemo"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.happyplaces"
+        applicationId = "com.example.thirdpartylibdemo"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -33,14 +33,12 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
-    buildFeatures{
-        viewBinding = true
-    }
 }
 
 dependencies {
 
-    implementation("com.karumi:dexter:6.2.3")
+    implementation("de.hdodenhof:circleimageview:3.1.0")//--------------------ThirdParty---------------//
+
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")
