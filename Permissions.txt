@@ -35,3 +35,10 @@ android:name=".WishListApp"  //---- Remember this for Room Data base in Wishlist
             <action android:name="android.intent.action.TTS_SERVICE"/>  //----Only for Android 11 or below
         </intent>
     </queries>
+
+
+
+
+---------------------------DB Inspector-----------------------------
+<activity android:name="im.dino.dbinspector.activities.DbInspectorActivity"
+            android:exported="true"/>

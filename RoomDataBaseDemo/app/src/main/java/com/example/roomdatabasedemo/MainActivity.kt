@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateRecordDialog(id:Int, employeeDao: EmployeeDao){
         // Create a Dialog instance
-        val updateDialog = Dialog(this, com.google.android.material.R.style.Theme_AppCompat_Dialog)
+        val updateDialog = Dialog(this, androidx.appcompat.R.style.Theme_AppCompat_Dialog)
 
         updateDialog.setCancelable(false)
 
@@ -143,6 +143,12 @@ class MainActivity : AppCompatActivity() {
         val alertDialog = builder.create()
         alertDialog.setCancelable(false)
         alertDialog.show()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding!=null){
+            binding = null
+        }
     }
 
 }

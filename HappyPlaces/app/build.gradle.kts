@@ -40,6 +40,10 @@ android {
 
 dependencies {
 
+    implementation("de.hdodenhof:circleimageview:3.0.1")
+    // Database inspector
+    debugImplementation ("com.infinum.dbinspector:dbinspector:5.4.8")
+    releaseImplementation ("com.infinum.dbinspector:dbinspector-no-op:5.4.8")
     implementation("com.karumi:dexter:6.2.3")
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.appcompat:appcompat:1.7.0")
