@@ -128,20 +128,22 @@ class DatabaseHandler(context:Context): SQLiteOpenHelper(context, DATABASE_NAME,
         }
 
         // Update record with the given ID
-        val result = db.update(TABLE_HAPPY_PLACE, contentValues, "$KEY_ID = ?", arrayOf(happyPlace.id.toString()))
+
+//        val result = db.update(TABLE_HAPPY_PLACE, contentValues, "$KEY_ID = ?", arrayOf(happyPlace.id.toString()))
+        val success = db.update(TABLE_HAPPY_PLACE, contentValues, KEY_ID + "=" +  happyPlace.id , null)
 
         db.close()
-        return result
+        return success
     }
 
     fun deleteHappyPlace(happyPlace: HappyPlaceModel): Int {
         val db = this.writableDatabase
 
         // Delete record with the given ID
-        val result = db.delete(TABLE_HAPPY_PLACE, "$KEY_ID = ?", arrayOf(happyPlace.id.toString()))
+        val success = db.delete(TABLE_HAPPY_PLACE, KEY_ID + "=" +  happyPlace.id , null)
 
         db.close()
-        return result
+        return success
     }
 
 

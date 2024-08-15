@@ -5,7 +5,6 @@ import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.ActivityNotFoundException
-import android.content.ContentValues
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -14,7 +13,6 @@ import android.graphics.Matrix
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Environment
 import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
@@ -25,7 +23,6 @@ import com.example.happyplaces.R
 import com.example.happyplaces.database.DatabaseHandler
 import com.example.happyplaces.databinding.ActivityAddHappyPlaceBinding
 import com.example.happyplaces.models.HappyPlaceModel
-import com.infinum.dbinspector.DbInspector
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -47,12 +44,15 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private val cal = Calendar.getInstance()
-    private lateinit var datesetListener: DatePickerDialog.OnDateSetListener
+    private lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     private var binding: ActivityAddHappyPlaceBinding? = null
 
     private var saveImageToInternalStorage: Uri? = null
     private var mLatitude: Double = 0.0
     private var mLongitude: Double = 0.0
+
+
+    private var mHappyPlaceDetails: HappyPlaceModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,13 +67,35 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             binding?.toolbarAddPlace?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
-        datesetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        if (intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){ //-----------------------------For Swipe to Edit
+            mHappyPlaceDetails = intent.getParcelableExtra(MainActivity.EXTRA_PLACE_DETAILS)!! //------ (as HappyPlaceModel) <- This is needed in serializable
+        }
+
+        dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
             cal.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateDateInView()
         }
+
         updateDateInView()
+
+        if (mHappyPlaceDetails != null){  //-----------------------------For Swipe to Edit
+            supportActionBar?.title = "EDIT HAPPY PLACE"
+
+            binding?.etTitle?.setText(mHappyPlaceDetails!!.title)
+            binding?.etDescription?.setText(mHappyPlaceDetails!!.description)
+            binding?.etDate?.setText(mHappyPlaceDetails!!.date)
+            binding?.etLocation?.setText(mHappyPlaceDetails!!.location)
+
+            mLatitude = mHappyPlaceDetails!!.latitude
+            mLongitude = mHappyPlaceDetails!!.longitude
+
+            saveImageToInternalStorage = Uri.parse(mHappyPlaceDetails!!.image)
+            binding?.ivPlaceImage?.setImageURI(saveImageToInternalStorage)
+
+        }
+
         binding?.toolbarAddPlace?.setNavigationOnClickListener {
             onBackPressed()
         }
@@ -89,7 +111,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             R.id.et_date -> {
                 DatePickerDialog(
                     this@AddHappyPlaceActivity,
-                    datesetListener,
+                    dateSetListener,
                     cal.get(Calendar.YEAR),
                     cal.get(Calendar.MONTH),
                     cal.get(Calendar.DAY_OF_MONTH)
@@ -135,7 +157,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     else -> {
                         val happyPlaceModel = HappyPlaceModel(
-                            0,
+                            if (mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id, // it used 0 if Adding entry else the ID of updating entry
                             binding?.etTitle?.text.toString(),
                             saveImageToInternalStorage.toString(),
                             binding?.etDescription?.text.toString(),
@@ -144,13 +166,24 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                             mLatitude,
                             mLongitude
                             )
+
                         val dbHandler = DatabaseHandler(this)
-                        val addHappyPlace = dbHandler.addHappyPlace(happyPlaceModel)
-                        if (addHappyPlace>0){
-                            //Toast.makeText(this, "The Happy Place details are inserted successfully", Toast.LENGTH_LONG).show()
-                            setResult(Activity.RESULT_OK)
-                            finish()
+
+                        if (mHappyPlaceDetails == null) { //----To check if Updating or Adding, null means adding
+                            val addHappyPlace = dbHandler.addHappyPlace(happyPlaceModel)
+                            if (addHappyPlace>0){
+                                //Toast.makeText(this, "The Happy Place details are inserted successfully", Toast.LENGTH_LONG).show()
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            }
+                        }else{
+                            val updateHappyPlace = dbHandler.updateHappyPlace(happyPlaceModel)
+                            if (updateHappyPlace>0) {
+                                setResult(Activity.RESULT_OK)
+                                finish()
+                            }
                         }
+
                         //DbInspector.show() //-------In case you wnt to see Data base entries
                     }
                 }
@@ -160,6 +193,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
     }
 
 
+    @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK){
