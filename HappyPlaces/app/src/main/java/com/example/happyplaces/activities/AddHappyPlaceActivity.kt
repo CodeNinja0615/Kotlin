@@ -1,6 +1,7 @@
 package com.example.happyplaces.activities
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.DatePickerDialog
@@ -10,11 +11,15 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
+import android.location.Location
+import android.location.LocationManager
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
+import android.renderscript.ScriptGroup.Binding
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -23,6 +28,16 @@ import com.example.happyplaces.R
 import com.example.happyplaces.database.DatabaseHandler
 import com.example.happyplaces.databinding.ActivityAddHappyPlaceBinding
 import com.example.happyplaces.models.HappyPlaceModel
+import com.example.happyplaces.utils.GetAddressFromLatLng
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
+import com.google.android.libraries.places.api.Places
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.MultiplePermissionsReport
 import com.karumi.dexter.PermissionToken
@@ -41,6 +56,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         private const val GALLERY = 1
         private const val CAMERA = 2
         private const val IMAGE_DIRECTORY = "HappyPlacesImages"
+        private const val PLACE_AUTOCOMPLETE_REQUEST_CODE = 3
     }
 
     private val cal = Calendar.getInstance()
@@ -53,6 +69,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private var mHappyPlaceDetails: HappyPlaceModel? = null
+
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +85,18 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             binding?.toolbarAddPlace?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         }
 
+        //-----------------------------------------Fused Location----------------------------------//-------used in function requestNewLocationData below
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
+
+
+        //-------------------If joining this with Swipe to Edit-----------------//
         if (intent.hasExtra(MainActivity.EXTRA_PLACE_DETAILS)){ //-----------------------------For Swipe to Edit
             mHappyPlaceDetails = intent.getParcelableExtra(MainActivity.EXTRA_PLACE_DETAILS)!! //------ (as HappyPlaceModel) <- This is needed in serializable
         }
 
+
+        //-------------------Date Picker Dialog-----------------//
         dateSetListener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
             cal.set(Calendar.YEAR, year)
             cal.set(Calendar.MONTH, month)
@@ -80,6 +106,8 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
 
         updateDateInView()
 
+
+        //-------------------Check If Editing-----------------//
         if (mHappyPlaceDetails != null){  //-----------------------------For Swipe to Edit
             supportActionBar?.title = "EDIT HAPPY PLACE"
 
@@ -94,18 +122,79 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             saveImageToInternalStorage = Uri.parse(mHappyPlaceDetails!!.image)
             binding?.ivPlaceImage?.setImageURI(saveImageToInternalStorage)
 
+            binding?.btnSave?.text = "UPDATE"
         }
 
         binding?.toolbarAddPlace?.setNavigationOnClickListener {
             onBackPressed()
         }
 
+        //-------------------------------------Maps Places Initialize---------------------------//
+
+        //-----------The Places API is not using any Location Services
+        //------ It is just using Google Places API i.e. about the places data available on google maps
+        if (!Places.isInitialized()){ //----To initialize Places API
+            Places.initialize(this@AddHappyPlaceActivity, resources.getString(R.string.google_maps_api_key)) //----Putting the API key in Places
+        }
 
         binding?.etDate?.setOnClickListener(this)
         binding?.tvAddImage?.setOnClickListener(this)
         binding?.btnSave?.setOnClickListener(this)
+        binding?.etLocation?.setOnClickListener(this)
+        binding?.tvSelectCurrentLocation?.setOnClickListener(this)
     }
 
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------//
+
+
+
+    private fun isLocationEnabled(): Boolean{
+        val locationManager: LocationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
+    }
+
+
+    //------------------------------------------------------------------------------------------------------------------------------------------------//
+
+    @SuppressLint("MissingPermission")
+    private fun requestNewLocationData(){ //-----------------------Location Request
+        val mLocationRequest = LocationRequest()
+        mLocationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest.interval = 1000
+        mLocationRequest.numUpdates = 1
+
+        //-----This will request location update from mLocationCallback i.e. an object of LocationCallback
+        mFusedLocationClient.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()) //---------Using FusedLocation Client
+
+    }
+
+    private val mLocationCallback = object :LocationCallback(){
+        override fun onLocationResult(locationResult: LocationResult) {
+            //super.onLocationResult(p0)
+            val mLastLocation: Location? = locationResult.lastLocation
+            mLatitude = mLastLocation!!.latitude
+            mLongitude = mLastLocation.longitude
+            Log.i("Current Lat","$mLatitude")
+            Log.i("Current Lng","$mLongitude")
+
+            //------To get address from LatLng to Geocode and in form of Address string
+            val addressTask = GetAddressFromLatLng(this@AddHappyPlaceActivity, mLatitude, mLongitude)
+            addressTask.setAddressListener(object: GetAddressFromLatLng.AddressListener{ //-------Using the setAddressListener function to execute the functions interface
+                override fun onAddressFound(address: String) {
+                    binding?.etLocation?.setText(address)
+                }
+
+                override fun onError() {
+                    Log.e("get address","Something went wrong")
+                }
+            })
+            addressTask.getAddress() //-------------To execute the Async task
+
+        }
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------------------------------------------//
     override fun onClick(v: View?) {
         when (v!!.id) {
             R.id.et_date -> {
@@ -157,7 +246,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                     else -> {
                         val happyPlaceModel = HappyPlaceModel(
-                            if (mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id, // it used 0 if Adding entry else the ID of updating entry
+                            if (mHappyPlaceDetails == null) 0 else mHappyPlaceDetails!!.id, // it uses 0 if Adding entry else the ID of updating entry
                             binding?.etTitle?.text.toString(),
                             saveImageToInternalStorage.toString(),
                             binding?.etDescription?.text.toString(),
@@ -168,6 +257,9 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                             )
 
                         val dbHandler = DatabaseHandler(this)
+
+
+                        //-------------------Check If Editing or Adding new data-----------------//
 
                         if (mHappyPlaceDetails == null) { //----To check if Updating or Adding, null means adding
                             val addHappyPlace = dbHandler.addHappyPlace(happyPlaceModel)
@@ -188,10 +280,50 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }
+            //-------------------------------------Putting Location from Places API------------------------------//
+            R.id.et_location -> {//-------------Using Places API to gather place data
+                try {
+                    val fields = listOf(
+                        Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, //-----Using the same from onCreate with API Key
+                        Place.Field.ADDRESS
+                    )
+
+                    //------------------------------------- Open Places API intent to get data ---------------------------//
+                    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this@AddHappyPlaceActivity)
+                    startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+                }catch (e: Exception){
+                    e.printStackTrace()
+                }
+            }
+            //-------------------------------------Putting Location from GeoLocation API-----------------------------//
+            R.id.tv_select_current_location -> {
+                if (!isLocationEnabled()){
+                    // Create the AlertDialog
+                    val alertDialog = AlertDialog.Builder(this)
+                        .setTitle("Enable Location Service")
+                        .setMessage("Your location service is turned off. Please enable it.")
+                        .setPositiveButton("OK") { dialog, _ ->
+
+                            // Navigate to the location settings
+                            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+                            startActivity(intent)
+
+                            dialog.dismiss()
+                        }
+                        .setNegativeButton("No Thanks") { dialog, _ ->
+                            // Just dismiss the dialog
+                            dialog.dismiss()
+                        }
+                        .create()
+                    alertDialog.show()
+                }else{
+                    locationPermission() //-----------------Location permission with current Location Data
+                }
+            }
             else -> {}
         }
     }
-
+//---------------------------------------------------------------------------------------------------------------------------------------------------------//
 
     @Deprecated("Deprecated in Java")
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -199,9 +331,9 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         if (resultCode == Activity.RESULT_OK){
             if(requestCode == GALLERY){
                 if (data!=null){
-                    val contentURI = data.data
+                    val contentURI = data.data //------Getting the data from gallery Intent as Uri/Image paths
                     try {
-                        val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)
+                        val selectedImageBitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, contentURI)//------Converting the data at Uri from Image as bitmap
                         saveImageToInternalStorage = saveImageToInternalStorage(selectedImageBitmap) //---Save the image
                         Log.e("Saved Image", "Path:: $saveImageToInternalStorage")
                         binding?.ivPlaceImage?.setImageBitmap(selectedImageBitmap)
@@ -211,21 +343,49 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     }
                 }
             }else if(requestCode == CAMERA){
-                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap
+                val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap //------Getting the data from camera Intent as bitmap
                 val rotatedBitmap = rotateBitmap(thumbnail, 90f) //---- Because the image is -90 degree rotated
                 saveImageToInternalStorage = saveImageToInternalStorage(rotatedBitmap) //---Save the image
                 Log.e("Saved Image", "Path:: $saveImageToInternalStorage")
                 binding?.ivPlaceImage?.setImageBitmap(rotatedBitmap)
+            }else if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE){
+                val place: Place = Autocomplete.getPlaceFromIntent(data!!) //------Getting the data from Place API Intent
+                binding?.etLocation?.setText(place.address)
+                mLatitude = place.latLng!!.latitude
+                mLongitude = place.latLng!!.longitude
             }
         }
     }
+    //------------------------------------------------------------------------------------------------------------------------------------------------//
 
+    //-----------------------To ask location permission permission---------------//
+    private fun locationPermission(){ //-------------------Dexter Permission for camera----------------------//
+        Dexter.withActivity(this).withPermissions(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ).withListener(object: MultiplePermissionsListener {
+            override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
+                if(report!!.areAllPermissionsGranted()){
+                    //Toast.makeText(this@AddHappyPlaceActivity, "Location permission granted", Toast.LENGTH_LONG).show()
+                    requestNewLocationData()//-----------Setting the location data post permission grant
+                }else{
+                    Toast.makeText(this@AddHappyPlaceActivity, "Permission Denied", Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onPermissionRationaleShouldBeShown(permissions:List<PermissionRequest>, token: PermissionToken) {
+                showRationalDialogForPermissions()
+            }
+        }).onSameThread().check();
+    }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
     private fun rotateBitmap(bitmap: Bitmap, degrees: Float): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(degrees)
         return Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
+    //-----------------------To Capture Image using camera with camera permission---------------//
     private fun takePhotoFromCamera(){ //-------------------Dexter Permission for camera----------------------//
         Dexter.withActivity(this).withPermissions(
             Manifest.permission.READ_MEDIA_IMAGES,
@@ -234,7 +394,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if(report!!.areAllPermissionsGranted()){
                     //Toast.makeText(this@AddHappyPlaceActivity, "Select the image from gallery", Toast.LENGTH_LONG).show()
-                    val cameraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+                    val cameraIntent= Intent(MediaStore.ACTION_IMAGE_CAPTURE) //-------Opens Camera and after capture returns RESULT_OK post permission grant
                     startActivityForResult(cameraIntent, CAMERA)
                 }else{
                     Toast.makeText(this@AddHappyPlaceActivity, "Permission Denied", Toast.LENGTH_LONG).show()
@@ -245,7 +405,9 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             }
         }).onSameThread().check();
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
+    //-----------------------To Choose Image from gallery with Image read permission---------------//
     private fun choosePhotoFromGallery() { //-------------------Dexter Permission for gallery----------------------//
         Dexter.withActivity(this).withPermissions(
             Manifest.permission.READ_MEDIA_IMAGES,
@@ -254,6 +416,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             override fun onPermissionsChecked(report: MultiplePermissionsReport?) {
                 if(report!!.areAllPermissionsGranted()){
                     //Toast.makeText(this@AddHappyPlaceActivity, "Select the image from gallery", Toast.LENGTH_LONG).show()
+                    //---------------------------Opens Gallery and after image selection returns RESULT_OK with image path post permission grant-----------------------------//
                     val galleryIntent= Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                     startActivityForResult(galleryIntent, GALLERY)
                 }else{
@@ -265,8 +428,10 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
             }
         }).onSameThread().check();
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
-    private fun showRationalDialogForPermissions() {
+    //--------------Common for all permissions----------------------------//
+    private fun showRationalDialogForPermissions() { //------- In case permission is denied
         AlertDialog.Builder(this).setMessage("It looks like you have not enabled the permission request for this feature." +
                 " It can enabled under application settings").setPositiveButton("GO TO SETTINGS"){
                     _,_ ->
@@ -283,12 +448,13 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                     dialog.dismiss()
                 }.show()
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
 
     private fun saveImageToInternalStorage(bitmap: Bitmap):Uri{
         val wrapper = ContextWrapper(applicationContext)
-        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE)
-        file = File(file, "${UUID.randomUUID()}.jpg")
+        var file = wrapper.getDir(IMAGE_DIRECTORY, Context.MODE_PRIVATE) //-----Path as default path i.e. data for the app
+        file = File(file, "${UUID.randomUUID()}.jpg") //-----generating random name for every image
 
         try {
             val stream: OutputStream = FileOutputStream(file)
@@ -300,6 +466,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         }
         return Uri.parse(file.absolutePath)
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
 
 //    private fun saveImageToInternalStorage(bitmap: Bitmap): Uri? {
@@ -352,6 +519,7 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
         val sdf = SimpleDateFormat(myFormat, Locale.getDefault())
         binding?.etDate?.setText(sdf.format(cal.time).toString())
     }
+//------------------------------------------------------------------------------------------------------------------------------------------------//
 
     override fun onDestroy() {
         super.onDestroy()

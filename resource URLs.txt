@@ -1,3 +1,9 @@
 https://pixabay.com/sound-effects/search/sound/
 
 https://colorhunt.co/
+
+
+https://developer.android.com/guide
+
+
+https://developers.google.com/location-context/fused-location-provider

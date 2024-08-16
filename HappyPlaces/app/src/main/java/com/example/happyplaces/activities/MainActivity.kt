@@ -35,6 +35,8 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.title = "Happy Place"
             binding?.toolbarMain?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
         }
+
+        //---------------------------------Add Data-------------------------------//
         binding?.fabAddHappyPlace?.setOnClickListener {
             val intent = Intent(this@MainActivity, AddHappyPlaceActivity::class.java)
             startActivityForResult(intent, ADD_PLACE_ACTIVITY_REQUEST_CODE)
@@ -60,7 +62,8 @@ class MainActivity : AppCompatActivity() {
         binding?.recyclerViewHappyPlaces?.setHasFixedSize(true)
         binding?.recyclerViewHappyPlaces?.adapter = placesAdapter
 
-        placesAdapter.setOnClickListener(object : HappyPlaceAdapter.OnClickListener{ //--- To click on a particular list item //-------For detail page
+        //--- To click on a particular list item //-------For detail page
+        placesAdapter.setOnClickListener(object : HappyPlaceAdapter.OnClickListener{ //-------Using the setOnClickListener function to execute the functions interface
             override fun onClick(position: Int, model: HappyPlaceModel) {
                 val intent = Intent(this@MainActivity, HappyPlaceDetailActivity::class.java)
                 intent.putExtra(EXTRA_PLACE_DETAILS, model)
@@ -68,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val editSwipeHandler = object : SwipeToEditCallback(this){ //-----------------------------For Swipe to Edit
+        val editSwipeHandler = object : SwipeToEditCallback(this){ //-----------------------------Object For Swipe to Edit
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = binding?.recyclerViewHappyPlaces?.adapter as HappyPlaceAdapter
                 adapter.notifyEditItem(this@MainActivity, viewHolder.adapterPosition, ADD_PLACE_ACTIVITY_REQUEST_CODE, this@MainActivity)
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        val deleteSwipeHandler = object : SwipeToDeleteCallback(this){ //-----------------------------For Swipe to Delete
+        val deleteSwipeHandler = object : SwipeToDeleteCallback(this){ //-----------------------------Object For Swipe to Delete
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val adapter = binding?.recyclerViewHappyPlaces?.adapter as HappyPlaceAdapter
                 adapter.removeAt(viewHolder.adapterPosition,this@MainActivity)
@@ -114,4 +117,10 @@ class MainActivity : AppCompatActivity() {
         return getHappyPlacesList
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        if (binding!=null){
+            binding = null
+        }
+    }
 }

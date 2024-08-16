@@ -111,10 +111,32 @@
                     android:layout_height="wrap_content"
                     android:hint="@string/edit_text_hint_location"
                     android:inputType="text"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
                     android:textColor="@color/indigo"
                     android:textColorHint="@color/indigo"
                     android:textSize="@dimen/edit_text_text_size" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- New Clickable TextView for "SELECT CURRENT LOCATION" -->
+            <TextView
+                android:id="@+id/tv_select_current_location"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/shape_image_view_border"
+                android:foreground="?attr/selectableItemBackground"
+                android:elevation="4dp"
+                android:text="@string/select_current_location"
+                android:textColor="@color/indigo"
+                android:textSize="@dimen/btn_text_size"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="12dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/til_location" />
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_place_image"
@@ -128,7 +150,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/til_location" />
+                app:layout_constraintTop_toBottomOf="@id/tv_select_current_location" />
 
             <TextView
                 android:id="@+id/tv_add_image"
@@ -146,7 +168,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.45"
                 app:layout_constraintStart_toEndOf="@id/iv_place_image"
-                app:layout_constraintTop_toBottomOf="@id/til_location"
+                app:layout_constraintTop_toBottomOf="@id/tv_select_current_location"
                 app:layout_constraintVertical_bias="0.019" />
 
             <Button

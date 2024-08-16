@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.android.libraries.mapsplatform.secrets-gradle-plugin")
 }
 
 android {
@@ -40,7 +41,10 @@ android {
 
 dependencies {
 
+    implementation("com.google.android.libraries.places:places:3.5.0")
     implementation("de.hdodenhof:circleimageview:3.0.1")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-location:21.3.0")
     // Database inspector
     debugImplementation ("com.infinum.dbinspector:dbinspector:5.4.8")
     releaseImplementation ("com.infinum.dbinspector:dbinspector-no-op:5.4.8")

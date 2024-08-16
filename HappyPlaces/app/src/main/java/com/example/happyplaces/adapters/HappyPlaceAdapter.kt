@@ -25,6 +25,7 @@ class HappyPlaceAdapter(
         val tvDescription = binding.tvDescription
     }
 
+    //------------Below function will be used to access the interface below
     fun setOnClickListener(onClickListener: OnClickListener){//-------For detail page
         this.onClickListener = onClickListener
     }

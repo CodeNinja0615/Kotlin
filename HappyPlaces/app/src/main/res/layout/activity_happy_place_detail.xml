@@ -73,6 +73,20 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_description"
                 tools:text="Location" />
+            <Button
+                android:id="@+id/btn_ViewOnMap"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:backgroundTint="@color/colorAccentYellow"
+                android:text="@string/view_on_map"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:padding="10dp"
+                app:cornerRadius="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_location"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
     <!--END-->
