@@ -23,3 +23,6 @@ https://jsonviewer.stack.hu/
 
 
 https://github.com/lilkevinrobert/visystem/tree/42d264320e534ec030c0994147194bf3cdce326e
+
+
+https://openweathermap.org/

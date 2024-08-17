@@ -96,6 +96,14 @@
     <color name="black_translucent_50">#80000000</color>
     <color name="white_translucent_70">#B3FFFFFF</color>
     <color name="black_translucent_70">#B3000000</color>
+    <color name="cloudy_gray">#4A4A4A</color>
+    <color name="stormy_blue">#394867</color>
+    <color name="misty_lavender">#7D8597</color>
+    <color name="rainy_teal">#5D737E</color>
+    <color name="dull_slate">#2E3B4E</color>
+    <color name="foggy_gray">#9E9E9E</color>
+    <color name="muted_olive">#646E68</color>
+    <color name="overcast_beige">#B2A89F</color>
 </resources>
 
 
@@ -137,14 +145,17 @@ binding?.toolBarExercise?.setNavigationOnClickListener {
         }
 
 
-window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION // Hide navigation bar (home, back buttons)
-            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY // Keep the app in immersive mode
-            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN // Extend content to cover the status bar
-            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION // Extend content to cover the navigation bar
-            or View.SYSTEM_UI_FLAG_LAYOUT_STABLE // Keep layout stable during transitions
+override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        if (hasFocus) {
+            hideSystemUI()
+        }
+    }
+
+    private fun hideSystemUI() {
+        window.decorView.systemUiVisibility = (
+            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             or View.STATUS_BAR_HIDDEN // Hides the status bar
         )
-
-
-        window.statusBarColor = ContextCompat.getColor(this, R.color.red)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.stormy_blue)
+    }
