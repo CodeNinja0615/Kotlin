@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
@@ -39,6 +40,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -76,11 +78,17 @@ fun  ShoppingItemEditor(item: ShoppingItem, onEditComplete: (String,Int) -> Unit
                 singleLine = true,
                 modifier= Modifier
                     .wrapContentSize()
-                    .padding(8.dp))
+                    .padding(8.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    keyboardType = KeyboardType.Number
+                ))
         }
         Button(onClick = {
             isEditing = false
-            onEditComplete(editedName, editedQuantity.toIntOrNull() ?: 1)
+            val roundedQuantity = editedQuantity.toDoubleOrNull()?.let {
+                kotlin.math.round(it).toInt()
+            } ?: 1
+            onEditComplete(editedName, roundedQuantity)
         }) {
             Text(text = "Save")
         }
@@ -171,11 +179,16 @@ fun ShoppingListApp(locationUtils: LocationUtils,
                                 .padding(8.dp),
                                 horizontalArrangement = Arrangement.SpaceBetween){
                                 Button(onClick = {
-                                    if(itemName.isNotBlank()){
+                                    if(itemName.isNotBlank() && itemQuantity.isNotEmpty()){
+                                        // Convert itemQuantity to Double, round it to the nearest integer, and then convert to Int
+                                        val quantity = itemQuantity.toDoubleOrNull()?.let {
+                                            kotlin.math.round(it).toInt()
+                                        } ?: 0
                                         val newItem = ShoppingItem(
                                             id= sItems.size+1,
                                             name = itemName,
-                                            quantity = itemQuantity.toInt(),
+                                            quantity= quantity,
+                                            //quantity = itemQuantity.toIntOrNull()?: 0,
                                             isEditing = false,
                                             address = address
                                         )
@@ -183,6 +196,8 @@ fun ShoppingListApp(locationUtils: LocationUtils,
                                         showDialog = false
                                         itemName = ""
                                         itemQuantity = ""
+                                    }else{
+                                        Toast.makeText(context,"Add Item and Quantity", Toast.LENGTH_LONG).show()
                                     }
                                 }) {
                                     Text(text = "Add")
@@ -209,7 +224,11 @@ fun ShoppingListApp(locationUtils: LocationUtils,
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(8.dp),
-                        label = {Text("Quantity")}
+                        label = {Text("Quantity")},
+                        keyboardOptions = KeyboardOptions.Default.copy(
+                            keyboardType = KeyboardType.Number
+                        )
+
                     )
 
                     Button(onClick = {

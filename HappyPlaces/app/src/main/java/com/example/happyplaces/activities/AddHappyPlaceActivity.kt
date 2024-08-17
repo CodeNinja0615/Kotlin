@@ -287,7 +287,6 @@ class AddHappyPlaceActivity : AppCompatActivity(), View.OnClickListener {
                         Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG, //-----Using the same from onCreate with API Key
                         Place.Field.ADDRESS
                     )
-
                     //------------------------------------- Open Places API intent to get data ---------------------------//
                     val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.FULLSCREEN, fields).build(this@AddHappyPlaceActivity)
                     startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
