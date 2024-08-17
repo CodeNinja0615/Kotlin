@@ -7,7 +7,7 @@
     <string name="edit_text_hint_location">Location</string>
     <string name="text_add_image">ADD IMAGE</string>
     <string name="btn_text_save">SAVE</string>
-    <string name="google_maps_api_key">AIzaSyC3x7yp4h64s2e5IjingUQKVwKkUUfZfAN</string>
+    <string name="google_maps_api_key">AIzaSyC3x7yp4h64s2e5IjingUQKVwKkUUfZfAM</string>
     <string name="view_on_map">VIEW ON MAP</string>
     <string name="select_current_location">SELECT CURRENT LOCATION</string>
 </resources>
