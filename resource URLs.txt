@@ -1,4 +1,11 @@
+https://jsonformatter.org/
+
+
+https://www.themealdb.com/
+
+
 https://pixabay.com/sound-effects/search/sound/
+
 
 https://colorhunt.co/
 
@@ -7,3 +14,12 @@ https://developer.android.com/guide
 
 
 https://developers.google.com/location-context/fused-location-provider
+
+
+https://designer.mocky.io/
+
+
+https://jsonviewer.stack.hu/
+
+
+https://github.com/lilkevinrobert/visystem/tree/42d264320e534ec030c0994147194bf3cdce326e

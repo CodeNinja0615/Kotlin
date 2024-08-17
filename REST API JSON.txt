@@ -1,0 +1,25 @@
+{
+  "message": "You have successfully logged in.",
+  "user_id": 123,
+  "name": "Sameer Akhtar",
+  "email": "info@gmail.com",
+  "mobile": 6387374031,
+  "profile_details": {
+    "is_profile_completed": true,
+    "rating": 4.7
+  },
+  "data_list": [
+    {
+      "id": 1,
+      "value": "One"
+    },
+    {
+      "id": 2,
+      "value": "Two"
+    },
+    {
+      "id": 3,
+      "value": "Three"
+    }
+  ]
+}

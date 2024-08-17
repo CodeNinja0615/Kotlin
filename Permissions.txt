@@ -1,3 +1,4 @@
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
@@ -42,3 +43,8 @@ android:name=".WishListApp"  //---- Remember this for Room Data base in Wishlist
 ---------------------------DB Inspector-----------------------------
 <activity android:name="im.dino.dbinspector.activities.DbInspectorActivity"
             android:exported="true"/>
+
+
+
+
+        android:usesCleartextTraffic="true" //----To access website
