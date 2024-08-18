@@ -26,3 +26,15 @@ https://github.com/lilkevinrobert/visystem/tree/42d264320e534ec030c0994147194bf3
 
 
 https://openweathermap.org/
+
+
+https://square.github.io/retrofit/
+
+
+https://fonts.google.com/icons
+
+
+https://pictogrammers.com/library/mdi/
+
+
+https://shapeshifter.design/

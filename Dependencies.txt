@@ -6,11 +6,8 @@
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.8.2")
     // If you use Kotlin extensions for the lifecycle components
     implementation ("androidx.lifecycle:lifecycle-runtime-ktx:2.8.2")
-    // Json to kotlin object mapping
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.google.code.gson:gson:2.11.0")
-    // Network Calls
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    
+    
     //Image loading
     implementation("io.coil-kt:coil-compose:2.6.0")
 
@@ -72,3 +69,9 @@ add DbInspector.show() to code
 
 implementation("de.hdodenhof:circleimageview:3.1.0")
 implementation("com.karumi:dexter:6.2.3")
+
+// Json to kotlin object mapping
+implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+implementation("com.google.code.gson:gson:2.11.0")
+// Network Calls
+implementation("com.squareup.retrofit2:retrofit:2.9.0")
