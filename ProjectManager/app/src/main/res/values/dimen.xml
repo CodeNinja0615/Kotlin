@@ -1,0 +1,14 @@
+<resources>
+    <!-- Text Sizes -->
+    <dimen name="edit_text_text_size">16sp</dimen>
+    <dimen name="instruction_text_size">18sp</dimen>
+    <dimen name="toolbar_title_size">20sp</dimen>
+
+    <!-- Padding and Margins -->
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="card_corner_radius">8dp</dimen>
+    <dimen name="card_elevation">4dp</dimen>
+    <dimen name="text_input_layout_margin_top">12dp</dimen>
+    <dimen name="instruction_text_margin_top">16dp</dimen>
+    <dimen name="sign_up_button_margin_top">24dp</dimen>
+</resources>

@@ -135,6 +135,17 @@
 
 
 
+private fun setupActionBar(){
+        setSupportActionBar(binding?.toolbarSignUpActivity)
+        if (supportActionBar != null){
+            supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
+            binding?.toolbarSignUpActivity?.setNavigationOnClickListener {
+                onBackPressed()
+            }
+        }
+    }
+
         if(supportActionBar != null){
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.title = "HISTORY"
