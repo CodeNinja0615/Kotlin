@@ -5,4 +5,7 @@
     <string name="please_wait">Please wait....</string>
     <string name="enter_your_name_email_and_password_to_register_with_us">Enter your name, email and password to register with us</string>
     <string name="enter_your_email_and_password_to_sign_in">Enter your email and password to sign in</string>
+    <string name="profile_picture">Profile Picture</string>
+    <string name="my_profile">My Profile</string>
+    <string name="sign_out">Sign Out</string>
 </resources>
