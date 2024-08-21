@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/splash_screen"
-    tools:context=".activities.SignUpActivity">
+    tools:context=".activities.SignInActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar_sign_up_activity"
+        android:id="@+id/toolbar_sign_in_activity"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize">
 
@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:text="@string/sign_up"
+            android:text="@string/sign_in"
             android:textColor="@color/white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -39,7 +39,7 @@
             android:layout_marginStart="15dp"
             android:layout_marginEnd="15dp"
             android:gravity="center"
-            android:text="@string/enter_your_name_email_and_password_to_register_with_us"
+            android:text="@string/enter_your_email_and_password_to_sign_in"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -64,24 +64,6 @@
                     android:layout_height="wrap_content"
                     style="@style/CustomTextInputLayout"
                     android:layout_marginStart="5dp"
-                    android:layout_marginEnd="5dp">
-
-                    <androidx.appcompat.widget.AppCompatEditText
-                        android:id="@+id/et_name"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textColor="@color/grey"
-                        android:hint='Name'
-                        android:inputType="textEmailAddress"
-                        android:textSize="15sp" />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/CustomTextInputLayout"
-                    android:layout_marginStart="5dp"
-                    android:layout_marginTop="5sp"
                     android:layout_marginEnd="5dp">
 
                     <androidx.appcompat.widget.AppCompatEditText
@@ -113,7 +95,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <TextView
-                    android:id="@+id/btn_sign_up"
+                    android:id="@+id/btn_sign_in"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
@@ -125,7 +107,7 @@
                     android:foreground="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:padding="12dp"
-                    android:text="@string/sign_up"
+                    android:text="@string/sign_in"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:textStyle="bold"/>
@@ -134,4 +116,3 @@
 
     </LinearLayout>
 </LinearLayout>
-    <!--END-->

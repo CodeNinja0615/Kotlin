@@ -163,10 +163,21 @@ override fun onWindowFocusChanged(hasFocus: Boolean) {
         }
     }
 
-    private fun hideSystemUI() {
+   private fun hideSystemUI() {
         window.decorView.systemUiVisibility = (
-            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            or View.STATUS_BAR_HIDDEN // Hides the status bar
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_FULLSCREEN
+                        or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                )
+        window.statusBarColor = ContextCompat.getColor(this, R.color.light_blue)
+    }
+
+private fun hideSystemUI() {
+        window.decorView.systemUiVisibility = (
+                View.STATUS_BAR_HIDDEN
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
         )
         window.statusBarColor = ContextCompat.getColor(this, R.color.stormy_blue)
     }
