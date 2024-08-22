@@ -55,37 +55,31 @@
         android:textColor="@color/white" />
 
     <!-- SIGN IN Button -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:padding="15dp"
         android:text="SIGN IN"
         android:background="@drawable/shape_button_rounded"
         android:gravity="center"
         android:foreground="?attr/selectableItemBackground"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/white"
-        android:clickable="true"
-        android:focusable="true" />
+        android:textColor="@color/white" />
 
     <!-- SIGN UP Button with Stroke -->
-    <TextView
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btnSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:padding="15dp"
         android:text="SIGN UP"
         android:foreground="?attr/selectableItemBackground"
         android:background="@drawable/button_sign_up"
         android:gravity="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:textColor="@color/light_blue"
-        android:clickable="true"
-        android:focusable="true" />
+        android:textColor="@color/light_blue" />
 
 </LinearLayout>

@@ -4,4 +4,4 @@ id("kotlin-kapt")
 id("com.google.gms.google-services") //---app gradle
 
 
-id("com.google.gms.google-services") *version* "4.4.0" *apply* false //-- Project gradle
+id("com.google.gms.google-services") version "4.4.0" apply false //-- Project gradle

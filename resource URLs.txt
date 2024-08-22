@@ -44,3 +44,6 @@ https://svg2vector.com/
 
 
 https://www.1001fonts.com/
+
+
+https://github.com/bumptech/glide

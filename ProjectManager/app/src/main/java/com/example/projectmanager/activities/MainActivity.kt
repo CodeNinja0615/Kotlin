@@ -1,23 +1,19 @@
 package com.example.projectmanager.activities
 
 import android.annotation.SuppressLint
-import android.content.ClipData.Item
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.CheckBox
-import android.widget.Toast
-import android.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
+import com.bumptech.glide.Glide
 import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivityMainBinding
-import com.example.projectmanager.databinding.AppBarMainBinding
 import com.example.projectmanager.databinding.MainContentBinding
+import com.example.projectmanager.databinding.NavHeaderMainBinding
+import com.example.projectmanager.firebase.FireStoreClass
+import com.example.projectmanager.models.User
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 
@@ -44,10 +40,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
 //        val mainContentBind = binding?.mainContent?.tvUserName //-------can Also Use this
 
+
         if (binding != null) {
             binding?.navView?.setNavigationItemSelectedListener(this)
         }
 
+        FireStoreClass().loadUserData(this)
 
     }
 
@@ -91,7 +89,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         when (item.itemId) {
             R.id.nav_my_profile -> {
                 // Handle "My Profile" action
-                Toast.makeText(this, "My Profile", Toast.LENGTH_LONG).show()
+//                Toast.makeText(this, "My Profile", Toast.LENGTH_LONG).show()
+                val intent = Intent(this, MyProfileActivity::class.java )
+                startActivity(intent)
             }
 
             R.id.nav_sign_out -> {
@@ -106,5 +106,26 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Close the drawer after item is selected
         binding?.drawerLayout?.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun updateNavigationUserDetails(user: User){
+
+//        val navUserImg: CircleImageView? = findViewById(R.id.nav_user_img)
+
+        // Access the NavigationView header using View Binding
+        val headerBinding = NavHeaderMainBinding.bind(binding?.navView!!.getHeaderView(0))
+
+        // Access the views from nav_header_main.xml
+        val navUserImg = headerBinding.navUserImg
+        val tvUsername = headerBinding.tvUsername
+
+        Glide
+            .with(this)
+            .load(user.image)
+            .centerCrop()
+            .placeholder(R.drawable.ic_user_placeholder)
+            .into(navUserImg);
+        tvUsername.text = user.name
+
     }
 }
