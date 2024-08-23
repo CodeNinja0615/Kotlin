@@ -25,18 +25,18 @@ import com.example.projectmanager.R
 import com.example.projectmanager.databinding.ActivityMyProfileBinding
 import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.models.User
+import com.example.projectmanager.utils.Constants
+import com.example.projectmanager.utils.Constants.PICK_IMAGE_REQUEST_CODE
+import com.example.projectmanager.utils.Constants.READ_STORAGE_PERMISSION_CODE
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
-    companion object{
-        private const val READ_STORAGE_PERMISSION_CODE = 1
-        private const val PICK_IMAGE_REQUEST_CODE = 2
-    }
     private var binding: ActivityMyProfileBinding? = null
     private var mSelectedImageFileUri: Uri? = null
     private var mProfileImageUrl: String? = null
+    private lateinit var mUserDetails: User
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,17 +53,20 @@ class MyProfileActivity : BaseActivity() {
            if (ContextCompat.checkSelfPermission(this,
                    Manifest.permission.READ_MEDIA_IMAGES)
                == PackageManager.PERMISSION_GRANTED){
-               showImageChooser()
+               Constants.showImageChooser(this)
            }else{
                ActivityCompat.requestPermissions(
                    this, arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
-                   READ_STORAGE_PERMISSION_CODE
+                   Constants.READ_STORAGE_PERMISSION_CODE
                )
            }
         }
         binding?.btnUpdate?.setOnClickListener {
             if (mSelectedImageFileUri != null){
                 uploadUserImage()
+            }else{
+                showProgressDialog("Please wait....")
+                updateUserProfileData()
             }
         }
     }
@@ -96,35 +99,13 @@ class MyProfileActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == READ_STORAGE_PERMISSION_CODE){
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
-                showImageChooser()
+                Constants.showImageChooser(this)
             }
         }else{
-            showRationalDialogForPermissions()
+            Constants.showRationalDialogForPermissions(this)
         }
     }
 
-    private fun showImageChooser(){
-        val galleryIntent= Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST_CODE)
-    }
-
-    private fun showRationalDialogForPermissions() { //------- In case permission is denied
-        AlertDialog.Builder(this).setMessage("It looks like you have not enabled the permission request for this feature." +
-                " It can enabled under application settings").setPositiveButton("GO TO SETTINGS"){
-                _,_ ->
-            try {
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
-                val uri = Uri.fromParts("package", packageName, null)
-                intent.data = uri
-                startActivity(intent)
-            }catch (e: ActivityNotFoundException){
-                e.printStackTrace()
-            }
-        }.setNegativeButton("Cancel"){
-                dialog, _ ->
-            dialog.dismiss()
-        }.show()
-    }
 
     private fun setupActionBar(){
         setSupportActionBar(binding?.toolbarMyProfile)
@@ -155,6 +136,8 @@ class MyProfileActivity : BaseActivity() {
     }
 
     fun setUserDataInUI(user: User){
+        mUserDetails = user
+
         val profileImg = binding?.civProfileImage
         Glide
             .with(this)
@@ -162,6 +145,7 @@ class MyProfileActivity : BaseActivity() {
             .centerCrop()
             .placeholder(R.drawable.ic_user_placeholder)
             .into(profileImg!!)
+
         binding?.etName?.setText(user.name)
         binding?.etEmail?.setText(user.email)
         if (user.mobile != 0L) {
@@ -173,7 +157,7 @@ class MyProfileActivity : BaseActivity() {
         showProgressDialog("Please wait....")
         if (mSelectedImageFileUri != null){
             val sRef: StorageReference = FirebaseStorage.getInstance().reference
-                .child("USER_IMAGE" + System.currentTimeMillis() + "." + getFileExtension(mSelectedImageFileUri))
+                .child("USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this, mSelectedImageFileUri))
             sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener {
                 taskSnapShot->
                 Log.e("Firebase Image Url:", taskSnapShot.metadata!!.reference!!.downloadUrl.toString())
@@ -181,8 +165,7 @@ class MyProfileActivity : BaseActivity() {
                     uri->
                     Log.e("Downloadable Image Url:", uri.toString())
                     mProfileImageUrl = uri.toString()
-
-                    // TODO Update user profile data
+                    updateUserProfileData()
                 }
             }.addOnFailureListener {
                 exception->
@@ -192,8 +175,34 @@ class MyProfileActivity : BaseActivity() {
         }
     }
 
-    private fun getFileExtension(uri: Uri?): String? {
-        return MimeTypeMap.getSingleton().getExtensionFromMimeType(contentResolver.getType(uri!!))
+
+    private fun updateUserProfileData(){
+        val userHashMap = HashMap<String, Any>()
+        var anyChangesMade = false
+        if(mProfileImageUrl != null && mProfileImageUrl != mUserDetails.image){
+            userHashMap[Constants.IMAGE] = mProfileImageUrl!!
+            anyChangesMade = true
+        }
+        if (binding?.etName?.text.toString() != mUserDetails.name){
+            userHashMap[Constants.NAME] = binding?.etName?.text.toString()
+            anyChangesMade = true
+        }
+        if (binding?.etMobile?.text.toString() != mUserDetails.mobile.toString()){
+            userHashMap[Constants.MOBILE] = binding?.etMobile?.text.toString().toLong()
+            anyChangesMade = true
+        }
+        if (anyChangesMade) {
+            FireStoreClass().updateUserProfileData(this, userHashMap)
+        }else{
+            hideProgressDialog()
+            finish()
+        }
+    }
+
+    fun profileUpdateSuccess(){
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
 
