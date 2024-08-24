@@ -9,12 +9,16 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.bumptech.glide.Glide
 import com.example.projectmanager.R
+import com.example.projectmanager.adapters.BoardItemsAdapter
 import com.example.projectmanager.databinding.ActivityMainBinding
 import com.example.projectmanager.databinding.MainContentBinding
 import com.example.projectmanager.databinding.NavHeaderMainBinding
 import com.example.projectmanager.firebase.FireStoreClass
+import com.example.projectmanager.models.Board
 import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
 import com.google.android.material.navigation.NavigationView
@@ -52,12 +56,30 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             binding?.navView?.setNavigationItemSelectedListener(this)
         }
 
-        FireStoreClass().loadUserData(this)
+        FireStoreClass().loadUserData(this, true)
 
         binding?.appBarMain?.fabCreateBoard?.setOnClickListener {
             val intent = Intent(this, CreateBoardActivity::class.java)
             intent.putExtra(Constants.NAME, mUserName)
             startActivity(intent)
+        }
+    }
+
+    fun populateBoardsListToUI(boardsList: ArrayList<Board>){//------Just Displaying not downloading
+        hideProgressDialog()
+        if (boardsList.size > 0){
+            contentBinding?.rvBoardsList?.visibility = View.VISIBLE
+            contentBinding?.tvNoBoards?.visibility = View.GONE
+
+            contentBinding?.rvBoardsList?.layoutManager = LinearLayoutManager(this)
+            contentBinding?.rvBoardsList?.setHasFixedSize(true)
+
+            val adapter = BoardItemsAdapter(this, boardsList)
+            contentBinding?.rvBoardsList?.adapter = adapter
+
+        }else{
+            contentBinding?.rvBoardsList?.visibility = View.GONE
+            contentBinding?.tvNoBoards?.visibility = View.VISIBLE
         }
     }
 
@@ -145,7 +167,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    fun updateNavigationUserDetails(user: User){
+    fun updateNavigationUserDetails(user: User, readBoardsList: Boolean){
 
 //        val navUserImg: CircleImageView? = findViewById(R.id.nav_user_img)
 
@@ -165,6 +187,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .placeholder(R.drawable.ic_user_placeholder)
             .into(navUserImg);
         tvUsername.text = user.name
-
+        if (readBoardsList){
+            showProgressDialog("Please wait....")
+            FireStoreClass().getBoardsList(this)
+        }
     }
 }

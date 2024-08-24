@@ -35,7 +35,7 @@ import java.io.IOException
 class MyProfileActivity : BaseActivity() {
     private var binding: ActivityMyProfileBinding? = null
     private var mSelectedImageFileUri: Uri? = null
-    private var mProfileImageUrl: String? = null
+    private var mProfileImageUrl: String = ""
     private lateinit var mUserDetails: User
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -81,7 +81,7 @@ class MyProfileActivity : BaseActivity() {
                     .with(this)
                     .load(mSelectedImageFileUri)
                     .centerCrop()
-                    .placeholder(R.drawable.ic_user_placeholder)
+                    .placeholder(R.drawable.user_place_holder_black)
                     .into(profileImg!!)
             }catch (e: IOException){
                 e.printStackTrace()
@@ -143,7 +143,7 @@ class MyProfileActivity : BaseActivity() {
             .with(this)
             .load(user.image)
             .centerCrop()
-            .placeholder(R.drawable.ic_user_placeholder)
+            .placeholder(R.drawable.user_place_holder_black)
             .into(profileImg!!)
 
         binding?.etName?.setText(user.name)
@@ -179,8 +179,8 @@ class MyProfileActivity : BaseActivity() {
     private fun updateUserProfileData(){
         val userHashMap = HashMap<String, Any>()
         var anyChangesMade = false
-        if(mProfileImageUrl != null && mProfileImageUrl != mUserDetails.image){
-            userHashMap[Constants.IMAGE] = mProfileImageUrl!!
+        if(mProfileImageUrl.isNotEmpty() && mProfileImageUrl != mUserDetails.image){
+            userHashMap[Constants.IMAGE] = mProfileImageUrl
             anyChangesMade = true
         }
         if (binding?.etName?.text.toString() != mUserDetails.name){

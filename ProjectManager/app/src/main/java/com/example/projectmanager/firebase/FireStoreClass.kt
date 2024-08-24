@@ -14,6 +14,7 @@ import com.example.projectmanager.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.toObject
 
 class FireStoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
@@ -40,7 +41,31 @@ class FireStoreClass {
                 activity.boardCreatedSuccessfully()
             }.addOnFailureListener { e->
                 activity.hideProgressDialog()
+                Toast.makeText(activity, "Error while creating board", Toast.LENGTH_SHORT).show()
                 Log.e(activity.javaClass.simpleName, "Error while creating board", e)
+            }
+    }
+
+    fun getBoardsList(activity: MainActivity){
+        mFireStore.collection(Constants.BOARDS)
+//            .whereEqualTo(Constants.ASSIGNED_TO, getCurrentUserId())
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserId())
+            .get()
+            .addOnSuccessListener {
+                document->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+                val boardList: ArrayList<Board> = ArrayList()
+                for (i in document.documents){
+                    val board = i.toObject(Board::class.java)!!
+                    board.documentId = i.id
+                    boardList.add(board)
+                }
+                activity.populateBoardsListToUI(boardList) //----- To update the data in adapter
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while fetching board data", e)
+
             }
     }
 
@@ -71,7 +96,7 @@ class FireStoreClass {
             }
     }
 
-    fun loadUserData(activity: Activity){
+    fun loadUserData(activity: Activity, readBoardsList: Boolean = false){
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId()).get()
             .addOnSuccessListener {document ->
@@ -81,7 +106,7 @@ class FireStoreClass {
                         activity.signInSuccess(loggedInUser)
                     }
                     is MainActivity ->{
-                        activity.updateNavigationUserDetails(loggedInUser)
+                        activity.updateNavigationUserDetails(loggedInUser, readBoardsList)
                     }
                     is MyProfileActivity ->{
                         activity.setUserDataInUI(loggedInUser)
