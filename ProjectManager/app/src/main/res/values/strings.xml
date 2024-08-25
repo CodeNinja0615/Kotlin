@@ -11,4 +11,27 @@
     <string name="update">UPDATE</string>
     <string name="create">CREATE</string>
     <string name="no_boards_to_show">No Boards to show</string>
+    <string name="action_add_list">Add List</string>
+    <string name="hint_list_name">List Name</string>
+    <string name="action_add_card">Add Card</string>
+    <string name="hint_card_name">Card Name</string>
+    <string name="add_list">Add List</string>
+    <string name="confirm_card_name">Confirm card name</string>
+    <string name="enter_card_name">Enter card name</string>
+    <string name="cancel_card_name_input">Cancel card name input</string>
+    <string name="add_card_input">Add card input</string>
+    <string name="add_card">Add card</string>
+    <string name="task_card_list">Task card list</string>
+    <string name="confirm_edited_task_list_name">Confirm edited task list name</string>
+    <string name="edit_task_list_name">Edit task list name</string>
+    <string name="cancel_editing_task_list_name">Cancel editing task list name</string>
+    <string name="edit_task_list_input">Edit task list input</string>
+    <string name="divider_line">Divider line</string>
+    <string name="delete_task_list">Delete task list</string>
+    <string name="task_list_title">Task list title</string>
+    <string name="confirm_task_list_name">Confirm task list name</string>
+    <string name="enter_task_list_name">Enter task list name</string>
+    <string name="cancel_task_list_name_input">Cancel task list name input</string>
+    <string name="task_list_input">Task list input</string>
+    <string name="add_task_list">Add task list</string>
 </resources>

@@ -36,7 +36,6 @@ open class BoardItemsAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val model = list[position]
-//            holder.binding.apply {
         if(holder is MyViewHolder) {
 //            holder.ivBoardImage.setImageURI(Uri.parse(model.image))//---Using Glide instead
             Glide
@@ -54,8 +53,6 @@ open class BoardItemsAdapter(
                 }
             }
         }
-
-//        }
 
     }
 

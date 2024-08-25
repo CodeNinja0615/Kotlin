@@ -8,6 +8,7 @@ import com.example.projectmanager.activities.MainActivity
 import com.example.projectmanager.activities.MyProfileActivity
 import com.example.projectmanager.activities.SignInActivity
 import com.example.projectmanager.activities.SignUpActivity
+import com.example.projectmanager.activities.TaskListActivity
 import com.example.projectmanager.models.Board
 import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
@@ -51,8 +52,7 @@ class FireStoreClass {
 //            .whereEqualTo(Constants.ASSIGNED_TO, getCurrentUserId())
             .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserId())
             .get()
-            .addOnSuccessListener {
-                document->
+            .addOnSuccessListener {document->
                 Log.e(activity.javaClass.simpleName, document.documents.toString())
                 val boardList: ArrayList<Board> = ArrayList()
                 for (i in document.documents){
@@ -69,13 +69,29 @@ class FireStoreClass {
             }
     }
 
+
+    fun getBoardsDetails(activity: TaskListActivity, documentID: String){
+        mFireStore.collection(Constants.BOARDS)
+            .document(documentID)
+            .get()
+            .addOnSuccessListener {document->
+                Log.e(activity.javaClass.simpleName, document.toString())
+                activity.boardDetails(document.toObject(Board::class.java)!!)
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error while fetching board data", e)
+
+            }
+    }
+
+
     fun getCurrentUserId(): String{
         val currentUser = FirebaseAuth.getInstance().currentUser
         var currentUserID = ""
         if(currentUser != null){
             currentUserID = currentUser.uid
         }
-
         return currentUserID
     }
 
