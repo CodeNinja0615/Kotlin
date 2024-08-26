@@ -75,13 +75,35 @@ class FireStoreClass {
             .document(documentID)
             .get()
             .addOnSuccessListener {document->
-                Log.e(activity.javaClass.simpleName, document.toString())
-                activity.boardDetails(document.toObject(Board::class.java)!!)
+                Log.i(activity.javaClass.simpleName, document.toString())
+                val board = document.toObject(Board::class.java)!!
+                board.documentId = document.id
+                activity.boardDetails(board)
             }
             .addOnFailureListener {e->
                 activity.hideProgressDialog()
                 Log.e(activity.javaClass.simpleName, "Error while fetching board data", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
 
+
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board){
+        val taskListHashmap = HashMap<String, Any>()
+
+        taskListHashmap[Constants.TASK_LIST] = board.taskList
+
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)
+            .update(taskListHashmap)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "TaskList Updated Successfully")
+                activity.addUpdateTaskListSuccess()
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "error while updating task list", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }
 
