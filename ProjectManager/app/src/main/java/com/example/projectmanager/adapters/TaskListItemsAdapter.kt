@@ -8,9 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.view.setMargins
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.projectmanager.R
 import com.example.projectmanager.activities.TaskListActivity
 import com.example.projectmanager.databinding.ItemTaskBinding
 import com.example.projectmanager.models.Task
@@ -37,6 +36,11 @@ open class TaskListItemsAdapter(
         val ibDoneEditListName = binding.ibDoneEditListName
         val cvEditTaskListName = binding.cvEditTaskListName
         val llTitleView = binding.llTitleView
+        val rvCardList = binding.rvCardList
+        val cvAddCard = binding.cvAddCard
+        val ibCloseCardName = binding.ibCloseCardName
+        val etCardName = binding.etCardName
+        val ibDoneCardName = binding.ibDoneCardName
     }
 
 
@@ -48,9 +52,9 @@ open class TaskListItemsAdapter(
         )
 
         layoutParams.setMargins(
-            (15.ToDp().ToPx())
+            (15.toDp().toPx())
             ,0
-            , (40.ToDp().ToPx())
+            , (40.toDp().toPx())
             ,0)
         binding.root.layoutParams = layoutParams
         return MyViewHolder(binding)
@@ -82,6 +86,7 @@ open class TaskListItemsAdapter(
                 val listName = holder.etTaskListName.text.toString()
                 if (listName.isNotEmpty()){
                     if (context is TaskListActivity){
+//                        context.createTaskList(position,listName)
                         context.createTaskList(listName)
                     }
                 }else{
@@ -114,6 +119,33 @@ open class TaskListItemsAdapter(
                 alertDialogToDeleteTask(position, model.title)
             }
 
+            holder.tvAddCard.setOnClickListener {
+                holder.tvAddCard.visibility = View.GONE
+                holder.cvAddCard.visibility = View.VISIBLE
+//                holder.etCardName.visibility = View.VISIBLE
+            }
+
+            holder.ibCloseCardName.setOnClickListener {
+                holder.tvAddCard.visibility = View.VISIBLE
+                holder.cvAddCard.visibility = View.GONE
+            }
+
+            holder.ibDoneCardName.setOnClickListener {
+                val cardName = holder.etCardName.text.toString()
+                if (cardName.isNotEmpty()){
+                    if (context is TaskListActivity){
+                        context.addCardToTaskList(position, cardName)
+                    }
+                }else{
+                    Toast.makeText(context, "Can not create card with no name", Toast.LENGTH_LONG).show()
+                }
+            }
+
+            holder.rvCardList.layoutManager = LinearLayoutManager(context)
+            holder.rvCardList.setHasFixedSize(true)
+
+            val adapter = CardListItemsAdapter(context, model.cards)
+            holder.rvCardList.adapter = adapter
         }
     }
 
@@ -151,8 +183,8 @@ open class TaskListItemsAdapter(
     override fun getItemCount(): Int = list.size
 
 
-    private fun Int.ToDp():Int = (this/Resources.getSystem().displayMetrics.density).toInt()
+    private fun Int.toDp():Int = (this/Resources.getSystem().displayMetrics.density).toInt()
 
-    private fun Int.ToPx():Int = (this*Resources.getSystem().displayMetrics.density).toInt()
+    private fun Int.toPx():Int = (this*Resources.getSystem().displayMetrics.density).toInt()
 
 }

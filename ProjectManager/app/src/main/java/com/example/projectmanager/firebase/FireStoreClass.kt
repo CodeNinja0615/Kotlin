@@ -20,10 +20,10 @@ import com.google.firebase.firestore.toObject
 class FireStoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
 
-
-    fun registerUser(activity: SignUpActivity, userInfo: User){
+    fun registerUser(activity: SignUpActivity, userInfo: User){ //------------To Create/Store user data in firestore with name and user's details
         mFireStore.collection(Constants.USERS)
-            .document(getCurrentUserId()).set(userInfo, SetOptions.merge())
+            .document(getCurrentUserId())//----- Creating document with current user ID
+            .set(userInfo, SetOptions.merge())
             .addOnSuccessListener {
                 activity.userRegisteredSuccess()
             }.addOnFailureListener { e ->
@@ -31,9 +31,9 @@ class FireStoreClass {
             }
     }
 
-    fun createBoard(activity: CreateBoardActivity, board: Board){
+    fun createBoard(activity: CreateBoardActivity, board: Board){ //------------To Create/Store Board data in firestore with name and user's details
         mFireStore.collection(Constants.BOARDS)
-            .document()
+            .document()//----- Creating document with with random ID
             .set(board, SetOptions.merge())
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "Board Created successfully")
@@ -47,10 +47,10 @@ class FireStoreClass {
             }
     }
 
-    fun getBoardsList(activity: MainActivity){
+    fun getBoardsList(activity: MainActivity){ //------------To Fetch list of Boards from firestore which the user is assigned to
         mFireStore.collection(Constants.BOARDS)
 //            .whereEqualTo(Constants.ASSIGNED_TO, getCurrentUserId())
-            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserId())
+            .whereArrayContains(Constants.ASSIGNED_TO, getCurrentUserId())//---- Fetching the data from board document where the assignedTo(array list) has user's ID
             .get()
             .addOnSuccessListener {document->
                 Log.e(activity.javaClass.simpleName, document.documents.toString())
@@ -60,7 +60,7 @@ class FireStoreClass {
                     board.documentId = i.id
                     boardList.add(board)
                 }
-                activity.populateBoardsListToUI(boardList) //----- To update the data in adapter
+                activity.populateBoardsListToUI(boardList) //----- To update the data in adapter via MainActivity for recycler view
             }
             .addOnFailureListener {e->
                 activity.hideProgressDialog()
@@ -70,14 +70,14 @@ class FireStoreClass {
     }
 
 
-    fun getBoardsDetails(activity: TaskListActivity, documentID: String){
+    fun getBoardsDetails(activity: TaskListActivity, documentID: String){//------------To get board details
         mFireStore.collection(Constants.BOARDS)
-            .document(documentID)
+            .document(documentID)//-----Getting documentID(not in Firestore but from the document ID itself) from getBoardsList to the Board model then via TaskListActivity
             .get()
             .addOnSuccessListener {document->
                 Log.i(activity.javaClass.simpleName, document.toString())
                 val board = document.toObject(Board::class.java)!!
-                board.documentId = document.id
+                board.documentId = document.id //-----No need I think
                 activity.boardDetails(board)
             }
             .addOnFailureListener {e->
@@ -88,10 +88,10 @@ class FireStoreClass {
     }
 
 
-    fun addUpdateTaskList(activity: TaskListActivity, board: Board){
+    fun addUpdateTaskList(activity: TaskListActivity, board: Board){//------To add/update data in taskList
         val taskListHashmap = HashMap<String, Any>()
 
-        taskListHashmap[Constants.TASK_LIST] = board.taskList
+        taskListHashmap[Constants.TASK_LIST] = board.taskList //------Hash map to update task list(array list) from Board Model
 
         mFireStore.collection(Constants.BOARDS)
             .document(board.documentId)

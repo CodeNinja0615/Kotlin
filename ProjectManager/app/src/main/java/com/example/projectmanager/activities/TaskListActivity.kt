@@ -1,7 +1,10 @@
 package com.example.projectmanager.activities
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -10,6 +13,7 @@ import com.example.projectmanager.adapters.TaskListItemsAdapter
 import com.example.projectmanager.databinding.ActivityTaskListBinding
 import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.models.Board
+import com.example.projectmanager.models.Card
 import com.example.projectmanager.models.Task
 import com.example.projectmanager.utils.Constants
 
@@ -40,13 +44,13 @@ class TaskListActivity : BaseActivity() {
     }
 
 
-    fun createTaskList(taskListName: String){
+    fun createTaskList(/*position: Int,*/ taskListName: String){
         val task = Task(
             taskListName,
             FireStoreClass().getCurrentUserId()
         )
-        mBoardDetails.taskList.add(0, task)
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)
+        mBoardDetails.taskList.add(/*position, */0,task) //-----Add task at 0 index can also create at position value
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1) //----Removing Dummy Task from last index at first
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
@@ -55,7 +59,7 @@ class TaskListActivity : BaseActivity() {
     fun updateTaskList(position: Int, listName: String, model: Task){
         val task = Task(listName, model.createdBy)
         mBoardDetails.taskList[position] = task
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
@@ -63,7 +67,33 @@ class TaskListActivity : BaseActivity() {
 
     fun deleteTaskList(position: Int){
         mBoardDetails.taskList.removeAt(position)
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
+        showProgressDialog("Please wait....")
+        FireStoreClass().addUpdateTaskList(this, mBoardDetails)
+    }
+
+
+    fun addCardToTaskList(position: Int, cardName: String){
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
+//        showProgressDialog("Please wait....")
+        val cardAssignedUsersList: ArrayList<String> = ArrayList()
+        cardAssignedUsersList.add(FireStoreClass().getCurrentUserId())
+        val card = Card(
+            cardName,
+            FireStoreClass().getCurrentUserId(),
+            cardAssignedUsersList
+        )
+
+        val cardList = mBoardDetails.taskList[position].cards
+        cardList.add(card)
+
+        val task = Task(
+            mBoardDetails.taskList[position].title,
+            mBoardDetails.taskList[position].createdBy,
+            cardList
+        )
+
+        mBoardDetails.taskList[position] = task
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
@@ -74,7 +104,7 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         setupActionBar()
 
-        val addTaskList = Task("Add List")
+        val addTaskList = Task("Add List")//------Dummy task always at last
         board.taskList.add(addTaskList)
 
         binding?.rvTaskList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
@@ -84,6 +114,20 @@ class TaskListActivity : BaseActivity() {
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean { //------For three dot on the right side of TopBar
+        menuInflater.inflate(R.menu.menu_members, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_members->{
+                val intent = Intent(this, MembersActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
     private fun setupActionBar(){
         setSupportActionBar(binding?.toolbarTaskListActivity)
         if (supportActionBar != null){
@@ -102,7 +146,6 @@ class TaskListActivity : BaseActivity() {
             hideSystemUI()
         }
     }
-
 
     private fun hideSystemUI() {
         window.decorView.systemUiVisibility = (
