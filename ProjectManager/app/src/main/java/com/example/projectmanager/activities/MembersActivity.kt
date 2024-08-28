@@ -1,29 +1,111 @@
 package com.example.projectmanager.activities
 
+import android.app.Dialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectmanager.R
+import com.example.projectmanager.adapters.MemberListItemAdapter
 import com.example.projectmanager.databinding.ActivityMembersBinding
+import com.example.projectmanager.databinding.DialogSearchMemberBinding
+import com.example.projectmanager.firebase.FireStoreClass
+import com.example.projectmanager.models.Board
+import com.example.projectmanager.models.User
+import com.example.projectmanager.utils.Constants
 
-class MembersActivity : AppCompatActivity() {
+class MembersActivity : BaseActivity() {
     private var binding: ActivityMembersBinding? = null
+    private lateinit var mBoardDetails: Board
+    private lateinit var mAssignedMembersList: ArrayList<User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMembersBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         hideSystemUI()
         setupActionBar()
+
+        if (intent.hasExtra(Constants.BOARD_DETAIL)){
+            mBoardDetails = intent.getParcelableExtra<Board>(Constants.BOARD_DETAIL)!!
+        }
+        showProgressDialog("Please wait....")
+        FireStoreClass().getAssignedMemberListDetails(this, mBoardDetails.assignedTo)
     }
+
+    fun setUpMembersList(list: ArrayList<User>){
+        mAssignedMembersList = list //----To initialize the value right after entering the Activity
+        hideProgressDialog()
+        binding?.rvMembersList?.layoutManager = LinearLayoutManager(this)
+        binding?.rvMembersList?.setHasFixedSize(true)
+        val adapter = MemberListItemAdapter(this, list)
+        binding?.rvMembersList?.adapter = adapter
+
+    }
+
+
+    fun memberDetails(user: User){
+        mBoardDetails.assignedTo.add(user.id)
+        FireStoreClass().assignMemberTOBoard(this, mBoardDetails, user)
+    }
+
+
+
+    private fun dialogSearchMember(){
+        val dialog = Dialog(this)
+        val dialogBinding = DialogSearchMemberBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogBinding.root)
+        dialogBinding.tvAdd.setOnClickListener {
+            val email = dialogBinding.etEmailSearchMember.text.toString()
+            if (email.isNotEmpty()){
+                dialog.dismiss()
+                showProgressDialog("Please wait....")
+                FireStoreClass().getMemberDetails(this, email)
+            }else{
+                Toast.makeText(this, "type an email to search for member", Toast.LENGTH_LONG).show()
+            }
+        }
+        dialogBinding.tvCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.show()
+    }
+
+
+    fun memberAssignSuccess(user: User){
+        hideProgressDialog()
+        mAssignedMembersList.add(user)
+        setUpMembersList(mAssignedMembersList) //--------To pass on the updated value to recycler view
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean { //------For three dot on the right side of TopBar
+        menuInflater.inflate(R.menu.menu_add_member, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.actionAddMember->{
+                dialogSearchMember()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
     private fun setupActionBar(){
         setSupportActionBar(binding?.toolbarMembersActivity)
         if (supportActionBar != null){
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.title = "Members"
+            supportActionBar?.title = resources.getString(R.string.members)
             binding?.toolbarMembersActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24) //------ No need for this
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
         }
         binding?.toolbarMembersActivity?.setNavigationOnClickListener { onBackPressed() }
     }

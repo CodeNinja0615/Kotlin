@@ -35,4 +35,8 @@
     <string name="task_list_input">Task list input</string>
     <string name="add_task_list">Add task list</string>
     <string name="members">Members</string>
+    <string name="add_member">Add Member</string>
+    <string name="cancel">CANCEL</string>
+    <string name="add">ADD</string>
+    <string name="search_member">Search Member</string>
 </resources>

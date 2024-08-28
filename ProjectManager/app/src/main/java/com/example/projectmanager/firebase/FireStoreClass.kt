@@ -5,10 +5,12 @@ import android.util.Log
 import android.widget.Toast
 import com.example.projectmanager.activities.CreateBoardActivity
 import com.example.projectmanager.activities.MainActivity
+import com.example.projectmanager.activities.MembersActivity
 import com.example.projectmanager.activities.MyProfileActivity
 import com.example.projectmanager.activities.SignInActivity
 import com.example.projectmanager.activities.SignUpActivity
 import com.example.projectmanager.activities.TaskListActivity
+import com.example.projectmanager.adapters.MemberListItemAdapter
 import com.example.projectmanager.models.Board
 import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
@@ -72,7 +74,8 @@ class FireStoreClass {
 
     fun getBoardsDetails(activity: TaskListActivity, documentID: String){//------------To get board details
         mFireStore.collection(Constants.BOARDS)
-            .document(documentID)//-----Getting documentID(not in Firestore but from the document ID itself) from getBoardsList to the Board model then via TaskListActivity
+            .document(documentID)//---The board that user has clicked on
+            //-----Getting documentID(not in Firestore but from the document ID itself) from getBoardsList to the Board model then via TaskListActivity
             .get()
             .addOnSuccessListener {document->
                 Log.i(activity.javaClass.simpleName, document.toString())
@@ -94,7 +97,7 @@ class FireStoreClass {
         taskListHashmap[Constants.TASK_LIST] = board.taskList //------Hash map to update task list(array list) from Board Model
 
         mFireStore.collection(Constants.BOARDS)
-            .document(board.documentId)
+            .document(board.documentId)//---The board that user has clicked on
             .update(taskListHashmap)
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "TaskList Updated Successfully")
@@ -107,8 +110,74 @@ class FireStoreClass {
             }
     }
 
+    fun getAssignedMemberListDetails(activity: MembersActivity, assignedTo: ArrayList<String>){//------To fetch members details LIST assigned to board for RV
+        mFireStore.collection(Constants.USERS)//----- "Users" document in firestore
+            .whereIn(Constants.ID, assignedTo)
+            .get()
+            .addOnSuccessListener {
+                document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
 
-    fun getCurrentUserId(): String{
+                val usersList: ArrayList<User> = ArrayList() //----------List of users
+
+                for(i in document.documents){
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)//----adding every data to the array list
+                }
+                activity.setUpMembersList(usersList)
+            }.addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "error while fetching members list", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun getMemberDetails(activity: MembersActivity, email: String){//------To get the member data from Firestore with email search to assign board
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.EMAIL, email)
+            .get()
+            .addOnSuccessListener {
+                document->
+                if (document.documents.size > 0){
+                    val user = document.documents[0].toObject(User::class.java)!!
+                    activity.memberDetails(user)
+                }else{
+                    activity.hideProgressDialog()
+                    activity.showErrorSnackBar("No such member!")
+                }
+            }.addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error",
+                    e
+                )
+            }
+    }
+
+
+    fun assignMemberTOBoard(activity: MembersActivity, board: Board, user: User){//------Assigning member to board from Board collection
+        val assignedToHashMap = HashMap<String, Any>()
+        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo
+        mFireStore.collection(Constants.BOARDS)
+            .document(board.documentId)//---The board that user has clicked on
+            .update(assignedToHashMap)
+            .addOnSuccessListener {
+                activity.memberAssignSuccess(user)
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(
+                    activity.javaClass.simpleName,
+                    "Error",
+                    e
+                )
+            }
+
+    }
+
+
+    fun getCurrentUserId(): String{ //-----------To get the signed in user ID
         val currentUser = FirebaseAuth.getInstance().currentUser
         var currentUserID = ""
         if(currentUser != null){
@@ -118,7 +187,7 @@ class FireStoreClass {
     }
 
     fun updateUserProfileData(activity: MyProfileActivity,
-                              userHashMap: HashMap<String, Any>){
+                              userHashMap: HashMap<String, Any>){ //-------------------To update user's profile information
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId())
             .update(userHashMap)
@@ -134,7 +203,7 @@ class FireStoreClass {
             }
     }
 
-    fun loadUserData(activity: Activity, readBoardsList: Boolean = false){
+    fun loadUserData(activity: Activity, readBoardsList: Boolean = false){ //---------------To load user's data in different activity
         mFireStore.collection(Constants.USERS)
             .document(getCurrentUserId()).get()
             .addOnSuccessListener {document ->
