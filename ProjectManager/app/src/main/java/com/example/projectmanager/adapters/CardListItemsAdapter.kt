@@ -10,7 +10,7 @@ import com.example.projectmanager.models.Card
 
 open class CardListItemsAdapter(
     private val context: Context,
-    private val list: ArrayList<Card>,
+    private val list: ArrayList<Card>
 ) : RecyclerView.Adapter<CardListItemsAdapter.MyViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
@@ -37,7 +37,7 @@ open class CardListItemsAdapter(
 
             holder.itemView.setOnClickListener {
                 if (onClickListener != null){
-                    onClickListener!!.onClick(position, model)
+                    onClickListener!!.onClick(position)
                 }
             }
         }
@@ -45,7 +45,7 @@ open class CardListItemsAdapter(
     }
 
     interface OnClickListener{
-        fun onClick(position: Int, model: Card)
+        fun onClick(cardPosition: Int)
     }
 
     override fun getItemCount(): Int = list.size

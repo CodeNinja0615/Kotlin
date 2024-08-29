@@ -40,8 +40,7 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:boxStrokeColor="@color/light_blue"
-                android:textColorHint="@color/light_blue"
+                style="@style/CustomTextInputLayout"
                 android:layout_marginTop="@dimen/member_dialog_til_email_marginTop">
 
                 <androidx.appcompat.widget.AppCompatEditText

@@ -144,8 +144,19 @@ open class TaskListItemsAdapter(
             holder.rvCardList.layoutManager = LinearLayoutManager(context)
             holder.rvCardList.setHasFixedSize(true)
 
-            val adapter = CardListItemsAdapter(context, model.cards)
+            val adapter = CardListItemsAdapter(context, model.cards) //------card list adapter
             holder.rvCardList.adapter = adapter
+
+            adapter.setOnClickListener(
+                object: CardListItemsAdapter.OnClickListener{
+                    override fun onClick(cardPosition: Int) {
+                        if (context is TaskListActivity){
+                            context.cardDetails(position, cardPosition)
+                        }
+                    }
+                }
+            )
+
         }
     }
 

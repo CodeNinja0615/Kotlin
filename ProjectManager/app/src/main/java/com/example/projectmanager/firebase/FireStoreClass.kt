@@ -139,8 +139,8 @@ class FireStoreClass {
             .addOnSuccessListener {
                 document->
                 if (document.documents.size > 0){
-                    val user = document.documents[0].toObject(User::class.java)!!
-                    activity.memberDetails(user)
+                    val user = document.documents[0].toObject(User::class.java)!! //---- Type casting
+                    activity.memberDetails(user)  //-----------This function will will assign the new found data to board model
                 }else{
                     activity.hideProgressDialog()
                     activity.showErrorSnackBar("No such member!")
@@ -158,10 +158,10 @@ class FireStoreClass {
 
     fun assignMemberTOBoard(activity: MembersActivity, board: Board, user: User){//------Assigning member to board from Board collection
         val assignedToHashMap = HashMap<String, Any>()
-        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo
+        assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo //----------adding all the values in board model object to hash map
         mFireStore.collection(Constants.BOARDS)
             .document(board.documentId)//---The board that user has clicked on
-            .update(assignedToHashMap)
+            .update(assignedToHashMap)//------adding new user to assigned to list using hashmap
             .addOnSuccessListener {
                 activity.memberAssignSuccess(user)
             }

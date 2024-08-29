@@ -1,8 +1,10 @@
 package com.example.projectmanager.activities
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -21,6 +23,11 @@ class TaskListActivity : BaseActivity() {
     private var binding: ActivityTaskListBinding? = null
 
     private lateinit var mBoardDetails: Board
+    private lateinit var mBoardDocumentId: String
+    companion object{
+        const val MEMBERS_REQUEST_CODE: Int = 13
+        const val CARD_DETAIL_REQUEST_CODE: Int = 14
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,19 +35,37 @@ class TaskListActivity : BaseActivity() {
         setContentView(binding?.root)
         hideSystemUI()
 
-        var boardDocumentId = ""
+
         if (intent.hasExtra(Constants.DOCUMENT_ID)){
-            boardDocumentId = intent.getStringExtra(Constants.DOCUMENT_ID)!!
+            mBoardDocumentId = intent.getStringExtra(Constants.DOCUMENT_ID)!!
         }
         showProgressDialog("Please wait....")
-        FireStoreClass().getBoardsDetails(this, boardDocumentId)
+        FireStoreClass().getBoardsDetails(this, mBoardDocumentId)//----------To load the page
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == MEMBERS_REQUEST_CODE || requestCode == CARD_DETAIL_REQUEST_CODE){
+            showProgressDialog("Please wait....")
+            FireStoreClass().getBoardsDetails(this, mBoardDocumentId)//----------To reload the page
+        }else{
+            Log.e("Cancelled", "Cancelled")
+        }
+    }
+
+    fun cardDetails(taskListPosition: Int, cardPosition: Int){ //----------To get the card detail associated to task list item
+        val intent = Intent(this, CardDetailsActivity::class.java)
+        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        startActivityForResult(intent, CARD_DETAIL_REQUEST_CODE)
     }
 
     fun addUpdateTaskListSuccess(){
         hideProgressDialog()
         showProgressDialog("Please wait....")
-        FireStoreClass().getBoardsDetails(this, mBoardDetails.documentId)
+        FireStoreClass().getBoardsDetails(this, mBoardDetails.documentId)//----------To reload the page upon adding new task or card
     }
 
 
@@ -124,7 +149,7 @@ class TaskListActivity : BaseActivity() {
             R.id.action_members->{
                 val intent = Intent(this, MembersActivity::class.java)
                 intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
-                startActivity(intent)
+                startActivityForResult(intent, MEMBERS_REQUEST_CODE)
             }
         }
         return super.onOptionsItemSelected(item)

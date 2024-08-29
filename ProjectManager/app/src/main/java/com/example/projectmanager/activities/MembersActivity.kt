@@ -1,5 +1,6 @@
 package com.example.projectmanager.activities
 
+import android.app.Activity
 import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ class MembersActivity : BaseActivity() {
     private var binding: ActivityMembersBinding? = null
     private lateinit var mBoardDetails: Board
     private lateinit var mAssignedMembersList: ArrayList<User>
+    private var anyChangesMade: Boolean = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMembersBinding.inflate(layoutInflater)
@@ -49,8 +51,8 @@ class MembersActivity : BaseActivity() {
 
 
     fun memberDetails(user: User){
-        mBoardDetails.assignedTo.add(user.id)
-        FireStoreClass().assignMemberTOBoard(this, mBoardDetails, user)
+        mBoardDetails.assignedTo.add(user.id) //-------putting the new found user id in board model
+        FireStoreClass().assignMemberTOBoard(this, mBoardDetails, user) //----------------updating the Board in firestore with the new value
     }
 
 
@@ -79,9 +81,17 @@ class MembersActivity : BaseActivity() {
     fun memberAssignSuccess(user: User){
         hideProgressDialog()
         mAssignedMembersList.add(user)
+        anyChangesMade = true
         setUpMembersList(mAssignedMembersList) //--------To pass on the updated value to recycler view
+
     }
 
+    override fun onBackPressed() {
+        if (anyChangesMade){
+            setResult(Activity.RESULT_OK)
+        }
+        super.onBackPressed()
+    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean { //------For three dot on the right side of TopBar
         menuInflater.inflate(R.menu.menu_add_member, menu)
