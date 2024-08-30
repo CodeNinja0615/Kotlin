@@ -75,7 +75,7 @@ class TaskListActivity : BaseActivity() {
             FireStoreClass().getCurrentUserId()
         )
         mBoardDetails.taskList.add(/*position, */0,task) //-----Add task at 0 index can also create at position value
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1) //----Removing Dummy Task from last index at first
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1) //----Removing Dummy Task from last index before updating FireStore
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
@@ -84,7 +84,7 @@ class TaskListActivity : BaseActivity() {
     fun updateTaskList(position: Int, listName: String, model: Task){
         val task = Task(listName, model.createdBy)
         mBoardDetails.taskList[position] = task
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index before updating FireStore
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
@@ -92,14 +92,14 @@ class TaskListActivity : BaseActivity() {
 
     fun deleteTaskList(position: Int){
         mBoardDetails.taskList.removeAt(position)
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index before updating FireStore
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateTaskList(this, mBoardDetails)
     }
 
 
     fun addCardToTaskList(position: Int, cardName: String){
-        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index at first
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index before updating FireStore
 //        showProgressDialog("Please wait....")
         val cardAssignedUsersList: ArrayList<String> = ArrayList()
         cardAssignedUsersList.add(FireStoreClass().getCurrentUserId())

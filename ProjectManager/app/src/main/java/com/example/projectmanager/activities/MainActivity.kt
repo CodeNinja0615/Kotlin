@@ -194,7 +194,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .with(this)
             .load(user.image)
             .centerCrop()
-            .placeholder(R.drawable.ic_user_placeholder)
+            .placeholder(R.drawable.user_place_holder)
             .into(navUserImg);
         tvUsername.text = user.name
         if (readBoardsList){

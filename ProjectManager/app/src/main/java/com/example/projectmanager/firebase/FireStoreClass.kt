@@ -3,6 +3,7 @@ package com.example.projectmanager.firebase
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import com.example.projectmanager.activities.CardDetailsActivity
 import com.example.projectmanager.activities.CreateBoardActivity
 import com.example.projectmanager.activities.MainActivity
 import com.example.projectmanager.activities.MembersActivity
@@ -91,7 +92,7 @@ class FireStoreClass {
     }
 
 
-    fun addUpdateTaskList(activity: TaskListActivity, board: Board){//------To add/update data in taskList
+    fun addUpdateTaskList(activity: Activity, board: Board){//------To add/update data in taskList
         val taskListHashmap = HashMap<String, Any>()
 
         taskListHashmap[Constants.TASK_LIST] = board.taskList //------Hash map to update task list(array list) from Board Model
@@ -101,10 +102,18 @@ class FireStoreClass {
             .update(taskListHashmap)
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "TaskList Updated Successfully")
-                activity.addUpdateTaskListSuccess()
+                if (activity is TaskListActivity) {
+                    activity.addUpdateTaskListSuccess()
+                }else if(activity is CardDetailsActivity){
+                    activity.addUpdateTaskListSuccess()
+                }
             }
             .addOnFailureListener {e->
-                activity.hideProgressDialog()
+                if (activity is TaskListActivity) {
+                    activity.hideProgressDialog()
+                }else if(activity is CardDetailsActivity){
+                    activity.hideProgressDialog()
+                }
                 Log.e(activity.javaClass.simpleName, "error while updating task list", e)
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
