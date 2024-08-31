@@ -2,8 +2,6 @@ package com.example.projectmanager.activities
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -12,7 +10,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projectmanager.R
-import com.example.projectmanager.adapters.MemberListItemAdapter
+import com.example.projectmanager.adapters.MemberListItemsAdapter
 import com.example.projectmanager.databinding.ActivityMembersBinding
 import com.example.projectmanager.databinding.DialogSearchMemberBinding
 import com.example.projectmanager.firebase.FireStoreClass
@@ -44,7 +42,7 @@ class MembersActivity : BaseActivity() {
         hideProgressDialog()
         binding?.rvMembersList?.layoutManager = LinearLayoutManager(this)
         binding?.rvMembersList?.setHasFixedSize(true)
-        val adapter = MemberListItemAdapter(this, list)
+        val adapter = MemberListItemsAdapter(this, list)
         binding?.rvMembersList?.adapter = adapter
 
     }
@@ -52,7 +50,7 @@ class MembersActivity : BaseActivity() {
 
     fun memberDetails(user: User){
         mBoardDetails.assignedTo.add(user.id) //-------putting the new found user id in board model
-        FireStoreClass().assignMemberTOBoard(this, mBoardDetails, user) //----------------updating the Board in firestore with the new value
+        FireStoreClass().assignMemberToBoard(this, mBoardDetails, user) //----------------updating the Board in firestore with the new value
     }
 
 

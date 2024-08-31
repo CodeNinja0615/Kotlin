@@ -17,6 +17,7 @@ import com.example.projectmanager.firebase.FireStoreClass
 import com.example.projectmanager.models.Board
 import com.example.projectmanager.models.Card
 import com.example.projectmanager.models.Task
+import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
 
 class TaskListActivity : BaseActivity() {
@@ -24,6 +25,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
+    private lateinit var mAssignedMemberDetailList: ArrayList<User>
     companion object{
         const val MEMBERS_REQUEST_CODE: Int = 13
         const val CARD_DETAIL_REQUEST_CODE: Int = 14
@@ -44,6 +46,11 @@ class TaskListActivity : BaseActivity() {
 
     }
 
+    fun boardMembersDetailsList(list: ArrayList<User>){
+        mAssignedMemberDetailList = list
+        hideProgressDialog()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == MEMBERS_REQUEST_CODE || requestCode == CARD_DETAIL_REQUEST_CODE){
@@ -54,11 +61,12 @@ class TaskListActivity : BaseActivity() {
         }
     }
 
-    fun cardDetails(taskListPosition: Int, cardPosition: Int){ //----------To get the card detail associated to task list item
+    fun cardDetails(taskListPosition: Int, cardPosition: Int){ //----------To get the card detail associated to task list item and pass to the next activity
         val intent = Intent(this, CardDetailsActivity::class.java)
-        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)
-        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)
-        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)
+        intent.putExtra(Constants.BOARD_DETAIL, mBoardDetails)  //-----Parcelable class object
+        intent.putExtra(Constants.TASK_LIST_ITEM_POSITION, taskListPosition)  //------Int for Index Positions
+        intent.putExtra(Constants.CARD_LIST_ITEM_POSITION, cardPosition)  //------Int for Index Positions
+        intent.putExtra(Constants.BOARD_MEMBERS_LIST, mAssignedMemberDetailList)  //-----Parcelable class object
         startActivityForResult(intent, CARD_DETAIL_REQUEST_CODE)
     }
 
@@ -102,7 +110,10 @@ class TaskListActivity : BaseActivity() {
         mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size-1)//----Removing Dummy Task from last index before updating FireStore
 //        showProgressDialog("Please wait....")
         val cardAssignedUsersList: ArrayList<String> = ArrayList()
-        cardAssignedUsersList.add(FireStoreClass().getCurrentUserId())
+        cardAssignedUsersList.add(FireStoreClass().getCurrentUserId()) //----Adding the creator to "assigned to" in card(Not board)
+//        for (i in Board().assignedTo){//---- To assign all the current board users to the card "assigned to" (no need doing it later)
+//            cardAssignedUsersList.add(i)
+//        }
         val card = Card(
             cardName,
             FireStoreClass().getCurrentUserId(),
@@ -124,7 +135,7 @@ class TaskListActivity : BaseActivity() {
     }
 
 
-    fun boardDetails(board: Board){
+    fun boardDetails(board: Board){ //------------To get the tasks from the Board model/collection
         mBoardDetails = board
         hideProgressDialog()
         setupActionBar()
@@ -136,6 +147,9 @@ class TaskListActivity : BaseActivity() {
         binding?.rvTaskList?.setHasFixedSize(true)
         val adapter = TaskListItemsAdapter(this, board.taskList)
         binding?.rvTaskList?.adapter = adapter
+
+        showProgressDialog("Please wait....")
+        FireStoreClass().getAssignedMemberListDetails(this, mBoardDetails.assignedTo)
     }
 
 

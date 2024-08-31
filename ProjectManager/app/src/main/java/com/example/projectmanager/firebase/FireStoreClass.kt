@@ -11,14 +11,12 @@ import com.example.projectmanager.activities.MyProfileActivity
 import com.example.projectmanager.activities.SignInActivity
 import com.example.projectmanager.activities.SignUpActivity
 import com.example.projectmanager.activities.TaskListActivity
-import com.example.projectmanager.adapters.MemberListItemAdapter
 import com.example.projectmanager.models.Board
 import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import com.google.firebase.firestore.toObject
 
 class FireStoreClass {
     private val mFireStore = FirebaseFirestore.getInstance()
@@ -119,9 +117,9 @@ class FireStoreClass {
             }
     }
 
-    fun getAssignedMemberListDetails(activity: MembersActivity, assignedTo: ArrayList<String>){//------To fetch members details LIST assigned to board for RV
+    fun getAssignedMemberListDetails(activity: Activity, assignedTo: ArrayList<String>){//------To fetch members details LIST assigned to board for RV
         mFireStore.collection(Constants.USERS)//----- "Users" document in firestore
-            .whereIn(Constants.ID, assignedTo)
+            .whereIn(Constants.ID, assignedTo)//--------- Matching all the assigned to IDs to User collection IDs
             .get()
             .addOnSuccessListener {
                 document ->
@@ -133,9 +131,17 @@ class FireStoreClass {
                     val user = i.toObject(User::class.java)!!
                     usersList.add(user)//----adding every data to the array list
                 }
-                activity.setUpMembersList(usersList)
+                if (activity is MembersActivity){
+                    activity.setUpMembersList(usersList)
+                }else if (activity is TaskListActivity){
+                    activity.boardMembersDetailsList(usersList)
+                }
             }.addOnFailureListener {e->
+                if (activity is MembersActivity){
+                    activity.hideProgressDialog()
+                }else if (activity is TaskListActivity){
                 activity.hideProgressDialog()
+            }
                 Log.e(activity.javaClass.simpleName, "error while fetching members list", e)
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
@@ -165,7 +171,7 @@ class FireStoreClass {
     }
 
 
-    fun assignMemberTOBoard(activity: MembersActivity, board: Board, user: User){//------Assigning member to board from Board collection
+    fun assignMemberToBoard(activity: MembersActivity, board: Board, user: User){//------Assigning member to board from Board collection
         val assignedToHashMap = HashMap<String, Any>()
         assignedToHashMap[Constants.ASSIGNED_TO] = board.assignedTo //----------adding all the values in board model object to hash map
         mFireStore.collection(Constants.BOARDS)
