@@ -2,6 +2,7 @@ package com.example.projectmanager.activities
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -22,6 +23,10 @@ import com.example.projectmanager.models.SelectedMembers
 import com.example.projectmanager.models.Task
 import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 class CardDetailsActivity : BaseActivity() {
     private var binding: ActivityCardDetailsBinding? = null
@@ -30,6 +35,7 @@ class CardDetailsActivity : BaseActivity() {
     private var mTaskListPosition = -1
     private var mCardPosition = -1
     private lateinit var mMembersDetailsList: ArrayList<User>
+    private var mSelectedDueDateMilliSeconds: Long = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityCardDetailsBinding.inflate(layoutInflater)
@@ -63,6 +69,16 @@ class CardDetailsActivity : BaseActivity() {
         }
 
         setupSelectedMembersList()
+
+        mSelectedDueDateMilliSeconds = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].dueDate
+        if (mSelectedDueDateMilliSeconds > 0){
+            val simpleDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+            val selectedDate = simpleDateFormat.format(Date(mSelectedDueDateMilliSeconds))
+            binding?.tvSelectDueDate?.text = selectedDate
+        }
+        binding?.tvSelectDueDate?.setOnClickListener {
+            showDatePicker()
+        }
     }
 
 
@@ -81,16 +97,18 @@ class CardDetailsActivity : BaseActivity() {
         }
     }
 
-    private fun updateCardDetails(){
+    private fun updateCardDetails(){ //-----------Adding data to FireStore boards collection
         val card = Card( //-----------card details with corresponding task
             binding?.etNameCardDetails?.text.toString(),
             mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].createdBy,
-            mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo,
-            mSelectedColor
+            mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo, //-----To assign the new member to the card is selected
+            mSelectedColor,
+            mSelectedDueDateMilliSeconds
         )
 
         val taskList: ArrayList<Task> = mBoardDetails.taskList
         taskList.removeAt(taskList.size-1) //----Removing Dummy Task from last index before updating FireStore
+        
         mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition] = card
 
         showProgressDialog("Please wait....")
@@ -196,6 +214,7 @@ class CardDetailsActivity : BaseActivity() {
 
     private fun setupSelectedMembersList(){
         val cardAssignedMembersList = mBoardDetails.taskList[mTaskListPosition].cards[mCardPosition].assignedTo
+
         val selectedMembersList: ArrayList<SelectedMembers> = ArrayList()
         for (i in mMembersDetailsList.indices){
             for (j in cardAssignedMembersList){
@@ -207,28 +226,54 @@ class CardDetailsActivity : BaseActivity() {
                     selectedMembersList.add(selectedMember)
                 }
             }
-            if (selectedMembersList.size > 0){
-                selectedMembersList.add((SelectedMembers("",""))) //----For + btn
-                binding?.tvSelectMembers?.visibility = View.GONE
-                binding?.rvSelectedMembersList?.visibility = View.VISIBLE
-
-                binding?.rvSelectedMembersList?.layoutManager = GridLayoutManager(this, 6)
-
-                val adapter = CardMemberListItemsAdapter(this, selectedMembersList)
-                binding?.rvSelectedMembersList?.adapter = adapter
-
-                adapter.setOnClickListener(object: CardMemberListItemsAdapter.OnClickListener{
-                    override fun onClick() {
-                        membersListDialog()
-                    }
-                })
-
-            }else{
-                binding?.tvSelectMembers?.visibility = View.VISIBLE
-                binding?.rvSelectedMembersList?.visibility = View.GONE
-            }
         }
+        if (selectedMembersList.size > 0){
+            selectedMembersList.add((SelectedMembers("", ""))) //----For + btn
+            binding?.tvSelectMembers?.visibility = View.GONE
+            binding?.rvSelectedMembersList?.visibility = View.VISIBLE
 
+            binding?.rvSelectedMembersList?.layoutManager = GridLayoutManager(this, 6)
+
+            val adapter = CardMemberListItemsAdapter(this, selectedMembersList, true)
+            binding?.rvSelectedMembersList?.adapter = adapter
+
+            adapter.setOnClickListener(object: CardMemberListItemsAdapter.OnClickListener{
+                override fun onClick() {
+                    membersListDialog()
+                }
+            })
+
+        }else{
+            binding?.tvSelectMembers?.visibility = View.VISIBLE
+            binding?.rvSelectedMembersList?.visibility = View.GONE
+        }
+    }
+
+    private fun showDatePicker(){
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        val dpd = DatePickerDialog(
+            this,
+            DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                val sDayOfMonth = if (dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
+                val sMonthOfYear = if ((monthOfYear + 1) < 10) "0${monthOfYear+1}" else "${monthOfYear+1}"
+                val selectedDate = "$sDayOfMonth/$sMonthOfYear/$year"
+
+                binding?.tvSelectDueDate?.text = selectedDate
+
+                val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.UK)
+                val theDate = sdf.parse(selectedDate)
+
+                mSelectedDueDateMilliSeconds = theDate!!.time
+            },
+            year,
+            month,
+            day
+        )
+        dpd.show()
     }
 
     private fun alertDialogToDeleteCard(cardName: String){

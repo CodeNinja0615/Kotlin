@@ -25,7 +25,7 @@ class TaskListActivity : BaseActivity() {
 
     private lateinit var mBoardDetails: Board
     private lateinit var mBoardDocumentId: String
-    private lateinit var mAssignedMemberDetailList: ArrayList<User>
+    lateinit var mAssignedMemberDetailList: ArrayList<User>
     companion object{
         const val MEMBERS_REQUEST_CODE: Int = 13
         const val CARD_DETAIL_REQUEST_CODE: Int = 14
@@ -46,10 +46,6 @@ class TaskListActivity : BaseActivity() {
 
     }
 
-    fun boardMembersDetailsList(list: ArrayList<User>){
-        mAssignedMemberDetailList = list
-        hideProgressDialog()
-    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
@@ -140,17 +136,36 @@ class TaskListActivity : BaseActivity() {
         hideProgressDialog()
         setupActionBar()
 
-        val addTaskList = Task("Add List")//------Dummy task always at last
-        board.taskList.add(addTaskList)
-
-        binding?.rvTaskList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding?.rvTaskList?.setHasFixedSize(true)
-        val adapter = TaskListItemsAdapter(this, board.taskList)
-        binding?.rvTaskList?.adapter = adapter
-
         showProgressDialog("Please wait....")
         FireStoreClass().getAssignedMemberListDetails(this, mBoardDetails.assignedTo)
     }
+
+    fun boardMembersDetailsList(list: ArrayList<User>){
+        mAssignedMemberDetailList = list
+        hideProgressDialog()
+
+        val addTaskList = Task("Add List")//------Adding Dummy task always at last
+        mBoardDetails.taskList.add(addTaskList)
+
+        binding?.rvTaskList?.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding?.rvTaskList?.setHasFixedSize(true)
+
+        val adapter = TaskListItemsAdapter(this, mBoardDetails.taskList)
+        binding?.rvTaskList?.adapter = adapter
+
+    }
+
+
+    fun updateCardsInTaskList(taskListPosition: Int, cards: ArrayList<Card>){ //--------------Drag Drop Card
+        mBoardDetails.taskList.removeAt(mBoardDetails.taskList.size - 1)//----Removing Dummy Task from last index before updating FireStore
+
+        mBoardDetails.taskList[taskListPosition].cards = cards
+
+        showProgressDialog("Please wait....")
+        FireStoreClass().addUpdateTaskList(this, mBoardDetails)
+
+    }
+
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean { //------For three dot on the right side of TopBar

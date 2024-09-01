@@ -16,6 +16,7 @@ import com.example.projectmanager.utils.Constants
 open class CardMemberListItemsAdapter(
     private val context: Context,
     private val list: ArrayList<SelectedMembers>,
+    private val assignMembers: Boolean
 ) : RecyclerView.Adapter<CardMemberListItemsAdapter.MyViewHolder>() {
 
     private var onClickListener: OnClickListener? = null
@@ -38,7 +39,7 @@ open class CardMemberListItemsAdapter(
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         val model = list[position]
         if(holder is MyViewHolder) {
-            if (position == list.size - 1){
+            if (position == list.size - 1 && assignMembers){
                 holder.ivAddMember.visibility = View.VISIBLE
                 holder.ivSelectedMemberImage.visibility = View.GONE
             }else{
