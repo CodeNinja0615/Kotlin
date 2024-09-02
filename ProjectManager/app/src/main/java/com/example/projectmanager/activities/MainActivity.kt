@@ -2,7 +2,9 @@ package com.example.projectmanager.activities
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
@@ -23,6 +25,7 @@ import com.example.projectmanager.models.User
 import com.example.projectmanager.utils.Constants
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.installations.FirebaseInstallations
 import java.util.Objects
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -35,7 +38,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private lateinit var mUserName: String
-
+    private lateinit var mSharedPreferences: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -44,6 +47,20 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         hideSystemUI()
         setupActionBar()
 
+        mSharedPreferences = this
+            .getSharedPreferences(Constants.PROJECT_MANAGER_PREFERENCES, Context.MODE_PRIVATE)
+
+        val tokenUpdated = mSharedPreferences.getBoolean(Constants.FCM_TOKEN_UPDATED, false)
+
+        if (tokenUpdated){
+            showProgressDialog("Please wait....")
+            FireStoreClass().loadUserData(this, true)
+        }else{
+            FirebaseInstallations.getInstance().getToken(true).addOnSuccessListener(this@MainActivity) {
+                instanceResult ->
+                updateFCMToken(instanceResult.token)
+            }
+        }
         // Access the main_content binding through the include ID
         contentBinding = MainContentBinding.bind(binding?.appBarMain!!.mainContent.root)
 
@@ -63,6 +80,25 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             intent.putExtra(Constants.NAME, mUserName)
             startActivityForResult(intent, CREATE_BOARD_REQUEST_CODE)
         }
+
+    }
+
+    fun tokenUpdateSuccess(){
+        hideProgressDialog()
+        val editor: SharedPreferences.Editor = mSharedPreferences.edit()
+        editor.putBoolean(Constants.FCM_TOKEN_UPDATED, true)
+        editor.apply()
+        showProgressDialog("Please wait....")
+        FireStoreClass().loadUserData(this, true)
+    }
+
+
+    private fun updateFCMToken(token: String){
+        val userHashMap = HashMap<String, Any>()
+
+        userHashMap[Constants.FCM_TOKEN] = token
+        showProgressDialog("Please wait....")
+        FireStoreClass().updateUserProfileData(this, userHashMap)
     }
 
     fun populateBoardsListToUI(boardsList: ArrayList<Board>){//------Just Displaying not downloading
@@ -166,6 +202,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             R.id.nav_sign_out -> {
                 // Handle sign-out action
                 FirebaseAuth.getInstance().signOut()
+                mSharedPreferences.edit().clear().apply()
                 val intent = Intent(this, IntroActivity::class.java)
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -178,7 +215,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     fun updateNavigationUserDetails(user: User, readBoardsList: Boolean){
-
+        hideProgressDialog()
 //        val navUserImg: CircleImageView? = findViewById(R.id.nav_user_img)
 
         mUserName = user.name

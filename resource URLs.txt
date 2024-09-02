@@ -47,3 +47,6 @@ https://www.1001fonts.com/
 
 
 https://github.com/bumptech/glide
+
+
+https://api.openweathermap.org/data/2.5/weather?lat=69.9&lon=69.9&appid=3517f0ad8fadd69a6cbaf4e5e52f0c57
