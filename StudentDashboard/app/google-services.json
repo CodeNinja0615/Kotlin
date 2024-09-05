@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491427302992",
+    "project_id": "student-dashboard-c0886",
+    "storage_bucket": "student-dashboard-c0886.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491427302992:android:f3cf9bb4fe2ca2cfab8b55",
+        "android_client_info": {
+          "package_name": "com.example.studentdashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwfbTdA1G_gpaJT3lWJgNft4lF2LPKMHs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

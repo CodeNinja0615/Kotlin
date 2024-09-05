@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/ic_background"
+    tools:context=".activities.IntroActivity">
+
+    <!-- Project Manager TextView -->
+    <TextView
+        android:id="@+id/textViewTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Project Manager"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        android:textColor="@color/white" />
+
+    <!-- Top ImageView -->
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/mm_img" />
+
+    <!-- First TextView -->
+    <TextView
+        android:id="@+id/textViewSubtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Let's get started"
+        android:textSize="24sp"
+        android:layout_marginTop="24dp"
+        android:textStyle="bold"
+        android:textColor="@color/white" />
+
+    <!-- Second TextView -->
+    <TextView
+        android:id="@+id/textViewDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Class, Attandance, and Result all in one app"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_marginTop="24dp"
+        android:textColor="@color/white" />
+
+    <!-- Code Input Layout with Refresh Button -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="24dp"
+        android:orientation="horizontal"
+        android:paddingBottom="5dp">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/CustomTextInputLayout"
+            android:layout_marginStart="5dp"
+            android:layout_weight="1"
+            android:layout_marginEnd="5dp">
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/et_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:textSize="15sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Refresh Button -->
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/btn_refresh_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:src="@drawable/ic_refresh"
+            android:contentDescription="@string/refresh_button"
+            android:padding="10dp"
+            android:layout_gravity="center_vertical"
+            android:tint="@color/grey"/>
+    </LinearLayout>
+
+    <!-- SIGN IN Button -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSignIn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="SIGN IN"
+        android:background="@drawable/shape_button_rounded"
+        android:gravity="center"
+        android:foreground="?attr/selectableItemBackground"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/white" />
+
+    <!-- SIGN UP Button with Stroke -->
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnSignUp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="SIGN UP"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@drawable/button_sign_up"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:textColor="@color/light_blue" />
+
+</LinearLayout>
