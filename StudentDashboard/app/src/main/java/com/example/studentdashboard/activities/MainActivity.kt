@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.CheckBox
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
@@ -63,6 +64,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Access the toolbar using the binding object
         setSupportActionBar(binding?.appBarMain?.toolbarMainActivity)
         supportActionBar?.let {
+            binding?.appBarMain?.toolbarMainActivity?.title = "Home"
             binding?.appBarMain?.toolbarMainActivity?.setNavigationIcon(R.drawable.ic_hamburger_menu)
             binding?.appBarMain?.toolbarMainActivity?.setNavigationOnClickListener {
                 toggleDrawer()
@@ -113,11 +115,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         Log.d("MainActivity", "MenuItem clicked: ${item.itemId}")
         when (item.itemId) {
-            R.id.nav_my_profile -> {
-                // Handle "My Profile" action
-//                Toast.makeText(this, "My Profile", Toast.LENGTH_LONG).show()
+            R.id.nav_MyDashboard -> {
+                // Handle "My Dashboard" action
                 val intent = Intent(this, MyProfileActivity::class.java )
-                startActivityForResult(intent, MY_PROFILE_REQUEST_CODE)
+                startActivity(intent)
             }
 
             R.id.nav_sign_out -> {

@@ -7,6 +7,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
     android:fitsSystemWindows="true"
+    android:background="@color/off_white"
     tools:openDrawer="start">
 
     <include

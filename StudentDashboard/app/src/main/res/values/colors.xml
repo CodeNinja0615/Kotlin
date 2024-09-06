@@ -40,6 +40,8 @@
     <color name="random">#FF5722</color>
     <color name="brown">#795548</color>
     <color name="blue_gray">#607D8B</color>
+    <color name="off_white">#CCCCCC</color>
+
 
     <!-- Transparency Variants -->
     <color name="transparent">#00000000</color>

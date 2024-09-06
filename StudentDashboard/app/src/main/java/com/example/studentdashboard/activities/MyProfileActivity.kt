@@ -26,8 +26,6 @@ import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
     private var binding: ActivityMyProfileBinding? = null
-    private var mSelectedImageFileUri: Uri? = null
-    private var mProfileImageUrl: String = ""
     private lateinit var mUserDetails: User
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -38,8 +36,23 @@ class MyProfileActivity : BaseActivity() {
         hideSystemUI()
         setupActionBar()
 
-
         FireStoreClass().loadUserData(this)
+
+        binding?.cardAttendance?.setOnClickListener {
+            val intent = Intent(this, AttendanceActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding?.cardContent?.setOnClickListener {
+            val intent = Intent(this, ContentActivity::class.java)
+            startActivity(intent)
+        }
+
+        binding?.cardTimeTable?.setOnClickListener {
+            val intent = Intent(this, TimeTableActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
 
     }
 
@@ -54,6 +67,7 @@ class MyProfileActivity : BaseActivity() {
         }
         binding?.toolbarMyProfile?.setNavigationOnClickListener {
             onBackPressed()
+            finish()
         }
     }
 
@@ -84,13 +98,13 @@ class MyProfileActivity : BaseActivity() {
             .into(profileImg!!)
 
 
-        binding?.tvName?.text = "Name: ${user.name}"
-        binding?.tvEmail?.text = "Email: ${user.email}"
+        binding?.tvName?.text = user.name
+        binding?.tvEmail?.text = user.email
         if (user.mobile != 0L) {
-            binding?.tvMobile?.text = "Mobile: ${user.mobile}"
+            binding?.tvMobile?.text = user.mobile.toString()
         }
-        binding?.tvClass?.text = "Class: ${user.grade}"
-        binding?.tvStudentID?.text = "Student ID: ${user.studentId}"
+        binding?.tvClass?.text = user.grade
+        binding?.tvStudentID?.text = user.studentId.toString()
     }
 
     override fun onDestroy() {

@@ -8,4 +8,5 @@
     <string name="refresh_button">Refresh Button</string>
     <string name="my_profile">My Profile</string>
     <string name="sign_out">Sign Out</string>
+    <string name="my_dashboard">My Dashboard</string>
 </resources>

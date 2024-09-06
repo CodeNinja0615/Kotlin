@@ -2,10 +2,13 @@ package com.example.studentdashboard.firebase
 
 import android.app.Activity
 import android.util.Log
+import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.MainActivity
 import com.example.studentdashboard.activities.MyProfileActivity
 import com.example.studentdashboard.activities.SignInActivity
 import com.example.studentdashboard.activities.SignUpActivity
+import com.example.studentdashboard.activities.TimeTableActivity
+import com.example.studentdashboard.models.TimeTable
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
@@ -49,6 +52,9 @@ class FireStoreClass() {
                     is MyProfileActivity ->{
                         activity.setUserDataInUI(loggedInUser)
                     }
+                    is AttendanceActivity ->{
+                        activity.getAbsence(loggedInUser)
+                    }
 
                 }
             }.addOnFailureListener { e ->
@@ -59,12 +65,22 @@ class FireStoreClass() {
                     is MainActivity ->{
                         activity.hideProgressDialog()
                     }
-//                    is MyProfileActivity ->{
-//                        activity.hideProgressDialog()
-//                    }
-
+                    is MyProfileActivity ->{
+                        activity.hideProgressDialog()
+                    }
                 }
                 Log.e("SignInUser", "Error getting the document: $e")
+            }
+    }
+
+    fun loadTimeTable(activity: TimeTableActivity, grade: String){ //---------------To load user's data in different activity
+        mFireStore.collection(Constants.TIMETABLE)
+            .document(grade).get()
+            .addOnSuccessListener {document ->
+                val timeTable = document.toObject(TimeTable::class.java)!!
+                activity.getTimetable(timeTable)
+            }.addOnFailureListener { e ->
+                Log.e("TimeTable", "Error getting the document: $e")
             }
     }
 }

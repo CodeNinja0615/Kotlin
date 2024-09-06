@@ -10,7 +10,8 @@ data class User(
     val image: String = "",
     val mobile: Long = 0,
     val grade: String = "", //----Class of student e.g. 12-A
-    val studentId: Long = 0
+    val studentId: Long = 0,
+    val absenceDate: ArrayList<String> = ArrayList()
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -19,7 +20,8 @@ data class User(
         parcel.readString()!!,
         parcel.readLong(),
         parcel.readString()!!,
-        parcel.readLong()
+        parcel.readLong(),
+        parcel.createStringArrayList()!!
     ) {
     }
 
@@ -31,6 +33,7 @@ data class User(
         parcel.writeLong(mobile)
         parcel.writeString(grade)
         parcel.writeLong(studentId)
+        parcel.writeStringList(absenceDate)
     }
 
     override fun describeContents(): Int {

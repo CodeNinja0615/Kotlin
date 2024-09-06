@@ -33,6 +33,8 @@ https://square.github.io/retrofit/
 
 https://fonts.google.com/icons
 
+https://www.flaticon.com/
+
 
 https://pictogrammers.com/library/mdi/
 
