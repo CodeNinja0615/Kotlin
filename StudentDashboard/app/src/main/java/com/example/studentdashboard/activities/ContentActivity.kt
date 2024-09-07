@@ -6,7 +6,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivityContentBinding
-import com.example.studentdashboard.databinding.ActivityMyProfileBinding
 
 class ContentActivity : AppCompatActivity() {
     private var binding: ActivityContentBinding? = null
@@ -44,7 +43,7 @@ class ContentActivity : AppCompatActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.light_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
     }
 
     override fun onDestroy() {

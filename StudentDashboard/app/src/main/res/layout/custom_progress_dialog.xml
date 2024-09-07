@@ -12,7 +12,7 @@
         android:layout_height="50dp"
         android:layout_marginEnd="16dp"
         android:indeterminate="true"
-        android:indeterminateTint="@color/light_blue"/>
+        android:indeterminateTint="@color/holo_red_dark"/>
 
     <!-- Loading Message -->
     <TextView

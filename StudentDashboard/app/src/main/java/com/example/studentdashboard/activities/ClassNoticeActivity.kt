@@ -5,46 +5,50 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
-import com.example.studentdashboard.adapters.AbsenceAdapter
-import com.example.studentdashboard.databinding.ActivityAttendanceBinding
+import com.example.studentdashboard.adapters.ClassNoticeAdapter
+import com.example.studentdashboard.databinding.ActivityClassNoticeBinding
 import com.example.studentdashboard.firebase.FireStoreClass
-import com.example.studentdashboard.models.User
+import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.utils.Constants
 
-class AttendanceActivity : BaseActivity() {
-    private var binding: ActivityAttendanceBinding? = null
+class ClassNoticeActivity : BaseActivity() {
+    private var binding: ActivityClassNoticeBinding? = null
+    private lateinit var mClass: String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAttendanceBinding.inflate(layoutInflater)
+        binding = ActivityClassNoticeBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         hideSystemUI()
         setupActionBar()
 
-        FireStoreClass().loadUserData(this)
+        if (intent.hasExtra(Constants.USER_CLASS)){
+            mClass = intent.getStringExtra(Constants.USER_CLASS)!!
+        }
+
+        FireStoreClass().loadClassRoomData(this, mClass)
     }
 
 
-    fun getAbsence(loggedInUser: User) {
-        val absenceDateList: ArrayList<String> = loggedInUser.absenceDate
+    fun getClassNotice(classRoom: ClassRoom) {
+        val listNotice = classRoom.notice
 
-        binding?.rvAbsenceDates?.layoutManager = LinearLayoutManager(this)
-        binding?.rvAbsenceDates?.setHasFixedSize(true)
-        val adapter = AbsenceAdapter(this, absenceDateList)
+        binding?.rvClassNotice?.layoutManager = LinearLayoutManager(this)
+        binding?.rvClassNotice?.setHasFixedSize(true)
+        val adapter = ClassNoticeAdapter(this, listNotice)
 
-        binding?.rvAbsenceDates?.adapter = adapter
+        binding?.rvClassNotice?.adapter = adapter
     }
-
-
 
 
     private fun setupActionBar(){
-        setSupportActionBar(binding?.toolbarAttendanceActivity)
+        setSupportActionBar(binding?.toolbarClassNotice)
         if (supportActionBar != null){
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.title = "Absence Dates"
-            binding?.toolbarAttendanceActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+            supportActionBar?.title = "Class Notice"
+            binding?.toolbarClassNotice?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
             supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24) //------ No need for this
         }
-        binding?.toolbarAttendanceActivity?.setNavigationOnClickListener {
+        binding?.toolbarClassNotice?.setNavigationOnClickListener {
             onBackPressed()
             finish()
         }
@@ -69,4 +73,6 @@ class AttendanceActivity : BaseActivity() {
         super.onDestroy()
         binding = null
     }
+
+
 }

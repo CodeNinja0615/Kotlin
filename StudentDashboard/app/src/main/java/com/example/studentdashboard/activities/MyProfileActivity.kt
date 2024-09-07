@@ -1,18 +1,10 @@
 package com.example.studentdashboard.activities
 
-import android.Manifest
-import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
@@ -20,9 +12,6 @@ import com.example.studentdashboard.databinding.ActivityMyProfileBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
-import com.google.firebase.storage.FirebaseStorage
-import com.google.firebase.storage.StorageReference
-import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
     private var binding: ActivityMyProfileBinding? = null
@@ -50,6 +39,12 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardTimeTable?.setOnClickListener {
             val intent = Intent(this, TimeTableActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
+
+        binding?.cardClassNotice?.setOnClickListener {
+            val intent = Intent(this, ClassNoticeActivity::class.java)
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
         }
@@ -83,7 +78,7 @@ class MyProfileActivity : BaseActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.light_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
     }
 
     fun setUserDataInUI(user: User){

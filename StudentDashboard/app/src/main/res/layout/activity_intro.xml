@@ -76,7 +76,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/grey"
-                android:hint="Name"
+                android:hint="Code"
                 android:inputType="textPersonName"
                 android:textSize="15sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -122,6 +122,6 @@
         android:textStyle="bold"
         android:visibility="gone"
         tools:visibility="visible"
-        android:textColor="@color/light_blue" />
+        android:textColor="@color/holo_red_dark" />
 
 </LinearLayout>

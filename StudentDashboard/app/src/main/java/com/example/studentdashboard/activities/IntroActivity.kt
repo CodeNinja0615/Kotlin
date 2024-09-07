@@ -48,7 +48,7 @@ class IntroActivity : AppCompatActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.light_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
     }
 
     override fun onDestroy() {

@@ -1,6 +1,5 @@
 package com.example.studentdashboard.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -8,9 +7,8 @@ import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivityTimeTableBinding
 import com.example.studentdashboard.firebase.FireStoreClass
-import com.example.studentdashboard.models.TimeTable
+import com.example.studentdashboard.models.ClassRoom
 import com.example.studentdashboard.utils.Constants
-import com.google.firebase.firestore.DocumentSnapshot
 
 class TimeTableActivity : BaseActivity() {
     private var binding: ActivityTimeTableBinding? = null
@@ -27,38 +25,38 @@ class TimeTableActivity : BaseActivity() {
         }
 
         showProgressDialog(resources.getString(R.string.please_wait))
-        FireStoreClass().loadTimeTable(this, mClass)
+        FireStoreClass().loadClassRoomData(this, mClass)
 
     }
 
-    fun getTimetable(timeTable: TimeTable) {
+    fun getTimetable(classRoom: ClassRoom) {
         hideProgressDialog()
-        if (timeTable.classTimeTable.isNotEmpty()){
+        if (classRoom.classTimeTable.isNotEmpty()){
             val classTimeTable = binding?.ivClassTimeTable
             binding?.cvClassTT?.visibility = View.VISIBLE
             Glide
                 .with(this)
-                .load(timeTable.classTimeTable)
+                .load(classRoom.classTimeTable)
                 .fitCenter()
                 .placeholder(R.drawable.ic_timetabelplaceholder)
                 .into(classTimeTable!!)
         }
-        if (timeTable.midTerm.isNotEmpty()){
+        if (classRoom.midTerm.isNotEmpty()){
             val classTimeTable = binding?.ivMidTerm
             binding?.cvMidTT?.visibility = View.VISIBLE
             Glide
                 .with(this)
-                .load(timeTable.midTerm)
+                .load(classRoom.midTerm)
                 .fitCenter()
                 .placeholder(R.drawable.ic_timetabelplaceholder)
                 .into(classTimeTable!!)
         }
-        if (timeTable.finalTerm.isNotEmpty()){
+        if (classRoom.finalTerm.isNotEmpty()){
             val classTimeTable = binding?.ivFinalTerm
             binding?.cvFinalTT?.visibility = View.VISIBLE
             Glide
                 .with(this)
-                .load(timeTable.finalTerm)
+                .load(classRoom.finalTerm)
                 .fitCenter()
                 .placeholder(R.drawable.ic_timetabelplaceholder)
                 .into(classTimeTable!!)
@@ -91,7 +89,7 @@ class TimeTableActivity : BaseActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.light_blue)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
     }
 
     override fun onDestroy() {
