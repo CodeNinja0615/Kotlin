@@ -3,7 +3,10 @@ package com.example.studentdashboard.models
 import android.os.Parcel
 import android.os.Parcelable
 
-data class PdfFile(val name: String, val url: String): Parcelable {
+data class SchoolImages(
+    val title: String = "",
+    val image: String = ""
+):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!
@@ -11,20 +14,20 @@ data class PdfFile(val name: String, val url: String): Parcelable {
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(url)
+        parcel.writeString(title)
+        parcel.writeString(image)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<PdfFile> {
-        override fun createFromParcel(parcel: Parcel): PdfFile {
-            return PdfFile(parcel)
+    companion object CREATOR : Parcelable.Creator<SchoolImages> {
+        override fun createFromParcel(parcel: Parcel): SchoolImages {
+            return SchoolImages(parcel)
         }
 
-        override fun newArray(size: Int): Array<PdfFile?> {
+        override fun newArray(size: Int): Array<SchoolImages?> {
             return arrayOfNulls(size)
         }
     }

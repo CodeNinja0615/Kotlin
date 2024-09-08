@@ -29,7 +29,7 @@ class ClassNoticeActivity : BaseActivity() {
     }
 
 
-    fun getClassNotice(classRoom: ClassRoom) {
+    fun setClassNotice(classRoom: ClassRoom) {
         val listNotice = classRoom.notice
 
         binding?.rvClassNotice?.layoutManager = LinearLayoutManager(this)

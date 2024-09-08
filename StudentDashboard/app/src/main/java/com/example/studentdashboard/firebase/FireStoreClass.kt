@@ -55,7 +55,7 @@ class FireStoreClass() {
                         activity.setUserDataInUI(loggedInUser)
                     }
                     is AttendanceActivity ->{
-                        activity.getAbsence(loggedInUser)
+                        activity.setAbsence(loggedInUser)
                     }
 
                 }
@@ -76,16 +76,16 @@ class FireStoreClass() {
     }
 
     fun loadClassRoomData(activity: Activity, grade: String){ //---------------To load user's data in different activity
-        mFireStore.collection(Constants.TIMETABLE)
+        mFireStore.collection(Constants.CLASS_CONTENT)
             .document(grade).get()
             .addOnSuccessListener {document ->
                 val classRoom = document.toObject(ClassRoom::class.java)!!
                 when(activity) {
                     is TimeTableActivity -> {
-                        activity.getTimetable(classRoom)
+                        activity.setTimetable(classRoom)
                     }
                     is ClassNoticeActivity ->{
-                        activity.getClassNotice(classRoom)
+                        activity.setClassNotice(classRoom)
                     }
                 }
             }.addOnFailureListener { e ->
@@ -98,7 +98,7 @@ class FireStoreClass() {
             .document(Constants.SCHOOL).get()
             .addOnSuccessListener {document ->
                 val school = document.toObject(School::class.java)!!
-                activity.getNotices(school)
+                activity.setSchoolData(school)
             }.addOnFailureListener { e ->
                 Log.e("Class Room Data", "Error getting the document: $e")
             }

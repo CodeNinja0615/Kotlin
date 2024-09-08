@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="300dp"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- ImageView for the background image -->
+    <ImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:src="@drawable/school_img"
+        android:scaleType="centerCrop" />
+
+    <!-- TextView on top-left side of the ImageView -->
+    <TextView
+        android:id="@+id/text_overlay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        tools:text="School Name"
+        android:textSize="18sp"
+        android:textColor="@android:color/holo_red_light"
+        android:textStyle="bold"
+        android:background="@android:color/transparent" />
+</FrameLayout>

@@ -29,7 +29,7 @@ class TimeTableActivity : BaseActivity() {
 
     }
 
-    fun getTimetable(classRoom: ClassRoom) {
+    fun setTimetable(classRoom: ClassRoom) {
         hideProgressDialog()
         if (classRoom.classTimeTable.isNotEmpty()){
             val classTimeTable = binding?.ivClassTimeTable

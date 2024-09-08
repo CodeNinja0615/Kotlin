@@ -23,7 +23,7 @@ class AttendanceActivity : BaseActivity() {
     }
 
 
-    fun getAbsence(loggedInUser: User) {
+    fun setAbsence(loggedInUser: User) {
         val absenceDateList: ArrayList<String> = loggedInUser.absenceDate
 
         binding?.rvAbsenceDates?.layoutManager = LinearLayoutManager(this)

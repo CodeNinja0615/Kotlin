@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:layout_marginTop="25dp"
+    android:layout_marginTop="35dp"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
@@ -14,14 +14,13 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <!-- School Photo ImageView -->
-        <ImageView
-            android:id="@+id/img_school_photo"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_image_slider"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginBottom="16dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/school_img" />
+            android:orientation="horizontal"
+            tools:listitem="@layout/item_image_slider" />
 
         <!-- Notice Board TextView -->
         <TextView

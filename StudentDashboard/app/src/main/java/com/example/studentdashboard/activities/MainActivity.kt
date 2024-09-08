@@ -3,14 +3,18 @@ package com.example.studentdashboard.activities
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
+import com.example.studentdashboard.adapters.ImageSliderAdapter
 import com.example.studentdashboard.adapters.SchoolNoticeAdapter
 import com.example.studentdashboard.databinding.ActivityMainBinding
 import com.example.studentdashboard.databinding.MainContentBinding
@@ -30,6 +34,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private lateinit var mUserName: String
+    private lateinit var imageAdapter:ImageSliderAdapter
+    private lateinit var recyclerView: RecyclerView
+    private val handler = Handler(Looper.getMainLooper())
+    private var currentPosition = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -56,14 +64,38 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     }
 
-    fun getNotices(school: School){
+    fun setSchoolData(school: School){
         contentBinding?.rvNotice?.layoutManager = LinearLayoutManager(this)
         contentBinding?.rvNotice?.setHasFixedSize(true)
         val adapter = SchoolNoticeAdapter(this, school.notice)
         contentBinding?.rvNotice?.adapter = adapter
+
+        recyclerView = contentBinding?.rvImageSlider!!
+        recyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        recyclerView.setHasFixedSize(true)
+        imageAdapter = ImageSliderAdapter(this, school.images)
+        recyclerView.adapter = imageAdapter
+
+        startAutoScroll()
     }
 
-
+    private fun startAutoScroll() {
+        // Ensure RecyclerView and Adapter are initialized
+        if (::recyclerView.isInitialized && ::imageAdapter.isInitialized && imageAdapter.itemCount > 0) {
+            val runnable = object : Runnable {
+                override fun run() {
+                    if (currentPosition == imageAdapter.itemCount) {
+                        currentPosition = 0
+                    }
+                    recyclerView.smoothScrollToPosition(currentPosition++)
+                    handler.postDelayed(this, 10000) // Scroll every 10 seconds
+                }
+            }
+            handler.post(runnable)
+        } else {
+            Log.e("AutoScroll", "RecyclerView or Adapter not initialized properly.")
+        }
+    }
     private fun setupActionBar() {
         // Access the toolbar using the binding object
         setSupportActionBar(binding?.appBarMain?.toolbarMainActivity)
@@ -114,6 +146,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         if (binding != null){
             binding = null
         }
+        handler.removeCallbacksAndMessages(null) // Stop handler to prevent memory leaks
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

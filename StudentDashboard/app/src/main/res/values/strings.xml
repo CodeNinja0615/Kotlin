@@ -3,10 +3,11 @@
     <string name="sign_in">SIGN IN</string>
     <string name="sign_up">SIGN UP</string>
     <string name="please_wait">Please wait....</string>
-    <string name="enter_your_name_email_and_password_to_register_with_us">Enter your name, email and password to register with us</string>
+    <string name="enter_your_name_email_and_password_to_register_with_us">Enter your details to register with us</string>
     <string name="enter_your_email_and_password_to_sign_in">Enter your email and password to sign in</string>
     <string name="refresh_button">Refresh Button</string>
     <string name="my_profile">My Profile</string>
     <string name="sign_out">Sign Out</string>
     <string name="my_dashboard">My Dashboard</string>
+    <string name="student_dashboard">Student Dashboard</string>
 </resources>

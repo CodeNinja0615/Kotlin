@@ -7,13 +7,15 @@ data class ClassRoom( //--- This will take in all the images from the FireStore 
     val classTimeTable: String = "",
     val midTerm: String = "",
     val finalTerm: String = "",
-    val notice: ArrayList<Notice> = ArrayList()
+    val notice: ArrayList<Notice> = ArrayList(),
+    val content: ArrayList<PdfFile> = ArrayList()
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.createTypedArrayList(Notice.CREATOR)!!
+        parcel.createTypedArrayList(Notice.CREATOR)!!,
+        parcel.createTypedArrayList(PdfFile.CREATOR)!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -21,6 +23,7 @@ data class ClassRoom( //--- This will take in all the images from the FireStore 
         parcel.writeString(midTerm)
         parcel.writeString(finalTerm)
         parcel.writeTypedList(notice)
+        parcel.writeTypedList(content)
     }
 
     override fun describeContents(): Int {
