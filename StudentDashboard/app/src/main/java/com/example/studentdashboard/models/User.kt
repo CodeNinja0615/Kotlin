@@ -11,7 +11,8 @@ data class User(
     val mobile: Long = 0,
     val grade: String = "", //----Class of student e.g. 12-A
     val studentId: Long = 0,
-    val absenceDate: ArrayList<String> = ArrayList()
+    val absenceDate: ArrayList<String> = ArrayList(),
+    val marks: ArrayList<Marks> = ArrayList()
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,

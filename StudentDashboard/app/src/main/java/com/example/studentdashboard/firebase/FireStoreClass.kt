@@ -6,6 +6,7 @@ import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.MainActivity
 import com.example.studentdashboard.activities.MyProfileActivity
+import com.example.studentdashboard.activities.ResultActivity
 import com.example.studentdashboard.activities.SignInActivity
 import com.example.studentdashboard.activities.SignUpActivity
 import com.example.studentdashboard.activities.TimeTableActivity
@@ -56,6 +57,9 @@ class FireStoreClass() {
                     }
                     is AttendanceActivity ->{
                         activity.setAbsence(loggedInUser)
+                    }
+                    is ResultActivity -> {
+                        activity.setResultData(loggedInUser)
                     }
 
                 }

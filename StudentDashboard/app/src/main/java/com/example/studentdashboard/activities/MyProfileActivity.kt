@@ -49,6 +49,11 @@ class MyProfileActivity : BaseActivity() {
             startActivity(intent)
         }
 
+        binding?.cardResult?.setOnClickListener {
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
     }
 
 
