@@ -2,8 +2,8 @@
 <resources>
     <!-- Customize your TextInputLayout here -->
     <style name="CustomTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
-        <item name="boxStrokeColor">@color/holo_red_dark</item>
-        <item name="hintTextColor">@color/holo_red_dark</item>
+        <item name="boxStrokeColor">@color/deep_blue</item>
+        <item name="hintTextColor">@color/deep_blue</item>
         <item name="hintAnimationEnabled">true</item>
     </style>
 </resources>

@@ -6,24 +6,36 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/ic_background"
-    tools:context=".activities.ResultActivity">
+    tools:context=".activities.LibraryActivity">
+
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarResultActivity"
+        android:id="@+id/toolbarLibraryActivity"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/deep_blue"
         android:theme="@style/ToolBarTheme"
-        android:titleTextColor="@color/textColorPrimary" />
+        android:titleTextColor="@color/textColorPrimary">
 
+        <!-- Tooltip Icon -->
+        <ImageView
+            android:id="@+id/iv_tooltip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_info"
+            android:contentDescription="Info"
+            android:layout_gravity="end"
+            android:padding="8dp" />
 
+    </androidx.appcompat.widget.Toolbar>
+
+    <!-- RecyclerView for Library -->
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_result_data"
+        android:id="@+id/rv_library"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="4dp"
         android:clipToPadding="false"
-        tools:listitem="@layout/marks_item"
+        tools:listitem="@layout/library_item"
         android:layout_marginTop="8dp" />
-
 </LinearLayout>

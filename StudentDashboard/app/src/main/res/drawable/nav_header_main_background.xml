@@ -5,8 +5,8 @@
     <!-- Gradient with enhanced styling -->
     <gradient
         android:angle="360"
-        android:startColor="@color/holo_red_dark"
-        android:centerColor="@color/holo_red_dark"
+        android:startColor="@color/deep_blue"
+        android:centerColor="@color/deep_blue"
         android:endColor="@color/indigo"
         android:type="linear"
         android:gradientRadius="300dp"

@@ -1,13 +1,10 @@
 package com.example.studentdashboard.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
-import com.example.studentdashboard.adapters.ClassNoticeAdapter
 import com.example.studentdashboard.adapters.MarksAdapter
 import com.example.studentdashboard.databinding.ActivityResultBinding
 import com.example.studentdashboard.firebase.FireStoreClass
@@ -115,7 +112,7 @@ class ResultActivity : BaseActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.deep_blue)
     }
 
     override fun onDestroy() {

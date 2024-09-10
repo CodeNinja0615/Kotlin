@@ -1,8 +1,10 @@
 package com.example.studentdashboard.adapters
 
+import android.app.Dialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -55,6 +57,31 @@ open class MarksAdapter(
             .placeholder(R.drawable.ic_result_placeholder)
             .into(holder.ivResultImage)
 
+        holder.tvViewFullImage.setOnClickListener {
+            showFullImageDialog(model.imageResult)
+        }
+    }
+    private fun showFullImageDialog(imageUrl: String) {
+        // Create a dialog with full screen
+        val dialog = Dialog(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen)
+        dialog.setContentView(R.layout.dialog_result_fullimage)
+
+        // Reference the ImageView in the dialog
+        val imageView: ImageView = dialog.findViewById(R.id.iv_full_image)
+
+        // Load the image into the ImageView using Glide
+        Glide
+            .with(context)
+            .load(imageUrl)
+            .fitCenter()
+            .placeholder(R.drawable.ic_result_placeholder)
+            .into(imageView)
+
+        imageView.setOnClickListener {
+            dialog.dismiss()
+        }
+        // Show the dialog
+        dialog.show()
     }
 
     override fun getItemCount(): Int = list.size

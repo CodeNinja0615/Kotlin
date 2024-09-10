@@ -7,13 +7,15 @@ data class School (
     val schoolImage: String = "",
     val notice: ArrayList<String> = ArrayList(),
 //    val post: ArrayList<String> = ArrayList(),
-    val images: ArrayList<SchoolImages> = ArrayList()
+    val images: ArrayList<SchoolImages> = ArrayList(),
+    val books: ArrayList<Library> = ArrayList()
 ):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
 //        parcel.createStringArrayList()!!,
-        parcel.createTypedArrayList(SchoolImages.CREATOR)!!
+        parcel.createTypedArrayList(SchoolImages.CREATOR)!!,
+        parcel.createTypedArrayList(Library.CREATOR)!!
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -21,6 +23,7 @@ data class School (
         parcel.writeStringList(notice)
 //        parcel.writeStringList(post)
         parcel.writeTypedList(images)
+        parcel.writeTypedList(books)
     }
 
     override fun describeContents(): Int {

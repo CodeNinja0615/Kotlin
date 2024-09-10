@@ -110,7 +110,7 @@ class SignInActivity : BaseActivity() {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         or View.STATUS_BAR_HIDDEN
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.deep_blue)
     }
 
     override fun onDestroy() {

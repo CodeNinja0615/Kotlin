@@ -122,6 +122,6 @@
         android:textStyle="bold"
         android:visibility="gone"
         tools:visibility="visible"
-        android:textColor="@color/holo_red_dark" />
+        android:textColor="@color/deep_blue" />
 
 </LinearLayout>

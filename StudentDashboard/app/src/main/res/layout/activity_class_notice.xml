@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/ic_background"
     android:orientation="vertical"
     tools:context=".activities.ClassNoticeActivity">
 
@@ -12,7 +13,7 @@
         android:id="@+id/toolbarClassNotice"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/holo_red_dark"
+        android:background="@color/deep_blue"
         android:theme="@style/ToolBarTheme"
         android:titleTextColor="@color/textColorPrimary" />
 

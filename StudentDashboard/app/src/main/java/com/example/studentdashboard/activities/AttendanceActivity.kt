@@ -42,7 +42,7 @@ class AttendanceActivity : BaseActivity() {
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.title = "Absence Dates"
             binding?.toolbarAttendanceActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24) //------ No need for this
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
         }
         binding?.toolbarAttendanceActivity?.setNavigationOnClickListener {
             onBackPressed()
@@ -62,7 +62,7 @@ class AttendanceActivity : BaseActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.deep_blue)
     }
 
     override fun onDestroy() {

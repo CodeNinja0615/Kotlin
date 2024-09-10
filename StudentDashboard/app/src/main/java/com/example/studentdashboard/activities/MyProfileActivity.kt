@@ -34,6 +34,7 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardContent?.setOnClickListener {
             val intent = Intent(this, ContentActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
         }
 
@@ -51,6 +52,12 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardResult?.setOnClickListener {
             val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
+
+        binding?.cardLibrary?.setOnClickListener {
+            val intent = Intent(this, LibraryActivity::class.java)
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
         }
@@ -83,7 +90,7 @@ class MyProfileActivity : BaseActivity() {
                 View.STATUS_BAR_HIDDEN
                         or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 )
-        window.statusBarColor = ContextCompat.getColor(this, R.color.holo_red_dark)
+        window.statusBarColor = ContextCompat.getColor(this, R.color.deep_blue)
     }
 
     fun setUserDataInUI(user: User){

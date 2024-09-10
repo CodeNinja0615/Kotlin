@@ -5,9 +5,9 @@
     <!-- Gradient with enhanced styling -->
     <gradient
         android:angle="-90"
-        android:startColor="@color/holo_red_dark"
+        android:startColor="@color/deep_blue"
         android:centerColor="@color/colorAccent"
-        android:endColor="@color/indigo"
+        android:endColor="@color/mustard"
         android:type="linear"
         android:gradientRadius="300dp"
         android:useLevel="false" />

@@ -4,6 +4,8 @@ import android.app.Activity
 import android.util.Log
 import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
+import com.example.studentdashboard.activities.ContentActivity
+import com.example.studentdashboard.activities.LibraryActivity
 import com.example.studentdashboard.activities.MainActivity
 import com.example.studentdashboard.activities.MyProfileActivity
 import com.example.studentdashboard.activities.ResultActivity
@@ -91,7 +93,22 @@ class FireStoreClass() {
                     is ClassNoticeActivity ->{
                         activity.setClassNotice(classRoom)
                     }
+                    is ContentActivity ->{
+                        activity.setContentData(classRoom)
+                    }
                 }
+            }.addOnFailureListener { e ->
+                Log.e("Class Room Data", "Error getting the document: $e")
+            }
+    }
+
+    fun loadLibraryData(activity: LibraryActivity, grade: String){ //---------------To load book's data in different LibraryActivity
+        val numericGrade = grade.split("-")[0]
+        mFireStore.collection(Constants.SCHOOL_CONTENT)
+            .document(numericGrade).get()
+            .addOnSuccessListener {document ->
+                val school = document.toObject(School::class.java)!!
+                activity.setLibraryData(school)
             }.addOnFailureListener { e ->
                 Log.e("Class Room Data", "Error getting the document: $e")
             }
