@@ -24,6 +24,9 @@ import com.example.studentdashboard.models.School
 import com.example.studentdashboard.models.User
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
     private var binding: ActivityMainBinding? = null
@@ -34,10 +37,18 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
     }
 
     private lateinit var mUserName: String
-    private lateinit var imageAdapter:ImageSliderAdapter
+    private lateinit var imageAdapter: ImageSliderAdapter
     private lateinit var recyclerView: RecyclerView
     private val handler = Handler(Looper.getMainLooper())
     private var currentPosition = 0
+
+    private val dateTimeRunnable = object : Runnable {
+        override fun run() {
+            updateDateTime()
+            handler.postDelayed(this, 1000) // Update every second
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -45,14 +56,9 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
         hideSystemUI()
         setupActionBar()
-
+        handler.post(dateTimeRunnable)
         // Access the main_content binding through the include ID
         contentBinding = MainContentBinding.bind(binding?.appBarMain!!.mainContent.root)
-
-        // Now you can access views from main_content.xml
-//        contentBinding?.tvUserName?.text = "Welcome, User!"
-//        val mainContentBind = binding?.mainContent?.tvUserName //-------can Also Use this
-
 
         if (binding != null) {
             binding?.navView?.setNavigationItemSelectedListener(this)
@@ -60,8 +66,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         showProgressDialog(resources.getString(R.string.please_wait))
         FireStoreClass().loadUserData(this, true)
         FireStoreClass().loadSchoolData(this)
-
-
     }
 
     fun setSchoolData(school: School){
@@ -79,8 +83,12 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         startAutoScroll()
     }
 
+    private fun updateDateTime() {
+        val currentDateTime = SimpleDateFormat("EEEE, MMM dd, yyyy HH:mm:ss", Locale.getDefault()).format(Date())
+        contentBinding?.tvDateTime?.text = currentDateTime
+    }
+
     private fun startAutoScroll() {
-        // Ensure RecyclerView and Adapter are initialized
         if (::recyclerView.isInitialized && ::imageAdapter.isInitialized && imageAdapter.itemCount > 0) {
             val runnable = object : Runnable {
                 override fun run() {
@@ -96,8 +104,8 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             Log.e("AutoScroll", "RecyclerView or Adapter not initialized properly.")
         }
     }
+
     private fun setupActionBar() {
-        // Access the toolbar using the binding object
         setSupportActionBar(binding?.appBarMain?.toolbarMainActivity)
         supportActionBar?.let {
             supportActionBar?.title = "Home"
@@ -123,7 +131,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         window.statusBarColor = ContextCompat.getColor(this, R.color.deep_blue)
     }
 
-
     private fun toggleDrawer() {
         if (binding?.drawerLayout!!.isDrawerOpen(GravityCompat.START)) {
             binding?.drawerLayout?.closeDrawer(GravityCompat.START)
@@ -143,7 +150,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
 
     override fun onDestroy() {
         super.onDestroy()
-        if (binding != null){
+        if (binding != null) {
             binding = null
         }
         handler.removeCallbacksAndMessages(null) // Stop handler to prevent memory leaks
@@ -172,7 +179,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         return true
     }
 
-    fun updateNavigationUserDetails(user: User){
+    fun updateNavigationUserDetails(user: User) {
         hideProgressDialog()
 
         mUserName = user.name
@@ -189,7 +196,7 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .load(user.image)
             .centerCrop()
             .placeholder(R.drawable.user_place_holder)
-            .into(navUserImg);
+            .into(navUserImg)
         tvUsername.text = user.name
     }
 }

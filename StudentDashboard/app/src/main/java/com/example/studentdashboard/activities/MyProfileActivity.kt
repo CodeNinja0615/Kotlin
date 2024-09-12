@@ -1,10 +1,17 @@
 package com.example.studentdashboard.activities
 
+import android.Manifest
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
@@ -12,9 +19,14 @@ import com.example.studentdashboard.databinding.ActivityMyProfileBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.IOException
 
 class MyProfileActivity : BaseActivity() {
     private var binding: ActivityMyProfileBinding? = null
+    private var mSelectedImageFileUri: Uri? = null
+    private var mProfileImageUrl: String = ""
     private lateinit var mUserDetails: User
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -26,6 +38,19 @@ class MyProfileActivity : BaseActivity() {
         setupActionBar()
 
         FireStoreClass().loadUserData(this)
+
+        binding?.civProfileImage?.setOnClickListener {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.READ_MEDIA_IMAGES)
+                == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this)
+            }else{
+                ActivityCompat.requestPermissions(
+                    this, arrayOf(Manifest.permission.READ_MEDIA_IMAGES),
+                    Constants.READ_STORAGE_PERMISSION_CODE
+                )
+            }
+        }
 
         binding?.cardAttendance?.setOnClickListener {
             val intent = Intent(this, AttendanceActivity::class.java)
@@ -60,6 +85,96 @@ class MyProfileActivity : BaseActivity() {
             val intent = Intent(this, LibraryActivity::class.java)
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
+        }
+    }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE_REQUEST_CODE && data != null){
+            mSelectedImageFileUri = data.data
+            try {
+                val profileImg = binding?.civProfileImage
+                Glide
+                    .with(this)
+                    .load(mSelectedImageFileUri)
+                    .centerCrop()
+                    .placeholder(R.drawable.user_place_holder_black)
+                    .into(profileImg!!)
+                if (mSelectedImageFileUri != null) {
+                    uploadUserImage()
+                }
+            }catch (e: IOException){
+                e.printStackTrace()
+            }
+        }
+    }
+
+
+
+    private fun uploadUserImage(){
+        showProgressDialog("Please wait....")
+        if (mSelectedImageFileUri != null){
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference
+                .child("Profile Pictures/USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this, mSelectedImageFileUri))
+            sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener {
+                    taskSnapShot->
+                Log.e("Firebase Image Url:", taskSnapShot.metadata!!.reference!!.downloadUrl.toString())
+                taskSnapShot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                        uri->
+                    Log.e("Downloadable Image Url:", uri.toString())
+                    mProfileImageUrl = uri.toString()
+                    updateUserProfileData()
+                }
+            }.addOnFailureListener {
+                    exception->
+                Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+            }
+            hideProgressDialog()
+        }
+    }
+
+
+    private fun updateUserProfileData(){
+        val userHashMap = HashMap<String, Any>()
+        var anyChangesMade = false
+        if(mProfileImageUrl.isNotEmpty() && mProfileImageUrl != mUserDetails.image){
+            userHashMap[Constants.IMAGE] = mProfileImageUrl
+            anyChangesMade = true
+        }
+        if (anyChangesMade) {
+            FireStoreClass().updateUserProfileData(this, userHashMap)
+        }else{
+            hideProgressDialog()
+        }
+    }
+
+
+
+    fun profileUpdateSuccess(){
+        Toast.makeText(
+            this,
+            "Image updated successfully",
+            Toast.LENGTH_LONG
+        ).show()
+        hideProgressDialog()
+    }
+
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == Constants.READ_STORAGE_PERMISSION_CODE){
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                Constants.showImageChooser(this)
+            }
+        }else{
+            Constants.showRationalDialogForPermissions(this)
         }
     }
 

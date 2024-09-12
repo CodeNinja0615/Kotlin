@@ -10,4 +10,19 @@
     <string name="sign_out">Sign Out</string>
     <string name="my_dashboard">My Dashboard</string>
     <string name="student_dashboard">Student Dashboard</string>
+    <string name="help_center">Help center</string>
+    <string name="about_us">About us</string>
+    <string name="help_support">Help and Support</string>
+    <string name="help_intro">Welcome to the Help and Support page. Here you can find answers to common questions, contact support, and provide feedback.</string>
+    <string name="common_issues">Common Issues</string>
+    <string name="issue_example">1. How to reset your password? Go to settings and choose "Reset Password".</string>
+    <string name="contact_support">Contact Support</string>
+    <string name="contact_email">Email: support@schooldashboard.com</string>
+    <string name="contact_phone">Phone: +1234567890</string>
+    <string name="user_guide">User Guide</string>
+    <string name="tutorial_info">For detailed tutorials, visit our website or watch the videos below.</string>
+    <string name="feedback">Feedback</string>
+    <string name="enter_feedback">Enter your feedback here…</string>
+    <string name="submit_feedback">Submit Feedback</string>
+
 </resources>

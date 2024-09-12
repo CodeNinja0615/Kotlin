@@ -41,7 +41,7 @@ class AttendanceActivity : BaseActivity() {
         if (supportActionBar != null){
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
             supportActionBar?.title = "Absence Dates"
-            binding?.toolbarAttendanceActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+            binding?.toolbarAttendanceActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white ))
             supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
         }
         binding?.toolbarAttendanceActivity?.setNavigationOnClickListener {

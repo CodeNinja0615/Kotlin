@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/ic_background"
-    android:layout_marginTop="35dp"
+    android:layout_marginTop="50dp"
     tools:context=".activities.MainActivity">
 
     <LinearLayout
@@ -14,6 +14,20 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
+        <!-- Date and Time Display -->
+        <TextView
+            android:id="@+id/tv_date_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="8dp"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@color/deep_blue"
+            android:text="Current Date and Time" />
+
+        <!-- RecyclerView for Image Slider -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_image_slider"
             android:layout_width="match_parent"
@@ -33,6 +47,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- RecyclerView for Notices -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_notice"
             android:layout_width="match_parent"
@@ -42,6 +57,7 @@
             tools:listitem="@layout/notice_item"
             android:layout_marginTop="5dp" />
 
+        <!-- Posts Section -->
         <TextView
             android:id="@+id/tv_post"
             android:layout_width="match_parent"
@@ -52,6 +68,7 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+        <!-- RecyclerView for Posts -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_posts"
             android:layout_width="match_parent"
@@ -60,12 +77,15 @@
             android:clipToPadding="false"
             tools:listitem="@layout/notice_item"
             android:layout_marginTop="5dp" />
+
         <!-- CalendarView to show today's date -->
         <CalendarView
             android:id="@+id/calendar_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"/>
+            android:layout_gravity="center"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/calendar_background"/>
 
     </LinearLayout>
 

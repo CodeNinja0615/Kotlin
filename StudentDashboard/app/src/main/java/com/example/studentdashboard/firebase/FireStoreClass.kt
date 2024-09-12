@@ -2,6 +2,7 @@ package com.example.studentdashboard.firebase
 
 import android.app.Activity
 import android.util.Log
+import android.widget.Toast
 import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.ContentActivity
@@ -124,4 +125,32 @@ class FireStoreClass() {
                 Log.e("Class Room Data", "Error getting the document: $e")
             }
     }
+
+
+    fun updateUserProfileData(activity: Activity,
+                              userHashMap: HashMap<String, Any>){ //-------------------To update user's profile information
+        mFireStore.collection(Constants.USERS)
+            .document(getCurrentEmailId())
+            .update(userHashMap)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "Profile Data Added Successfully")
+                Toast.makeText(activity, "Profile updated successfully!", Toast.LENGTH_LONG).show()
+                when(activity) {
+                    is MyProfileActivity -> {
+                        activity.profileUpdateSuccess()
+                    }
+                }
+            }
+            .addOnFailureListener {e->
+                when(activity) {
+                    is MyProfileActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "error while uploading profile", e)
+                Toast.makeText(activity, "Error updating the profile", Toast.LENGTH_LONG).show()
+            }
+    }
+
+
 }

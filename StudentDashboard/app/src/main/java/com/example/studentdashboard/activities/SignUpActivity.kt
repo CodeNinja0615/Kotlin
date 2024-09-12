@@ -1,16 +1,28 @@
 package com.example.studentdashboard.activities
 
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivitySignUpBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.User
+import com.example.studentdashboard.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import java.io.IOException
 
 class SignUpActivity : BaseActivity() {
     private var binding: ActivitySignUpBinding? = null
@@ -25,6 +37,7 @@ class SignUpActivity : BaseActivity() {
 //        )
         setupActionBar()
     }
+
 
     fun userRegisteredSuccess(){
         Toast.makeText(
@@ -42,10 +55,10 @@ class SignUpActivity : BaseActivity() {
         val email: String = binding?.etEmail?.text.toString().trim { it <= ' ' }.lowercase()
         val password: String = binding?.etPassword?.text.toString().trim{ it <= ' '}
         val confirmPassword: String = binding?.etConfirmPassword?.text.toString().trim{ it <= ' '}
-        val Class:String = binding?.etClass?.text.toString().trim{ it <= ' '}
+        val grade:String = binding?.etClass?.text.toString().trim{ it <= ' '}
         val mobile: Long = binding?.etMobile?.text.toString().trim { it <= ' ' }.toLongOrNull() ?: 0L
         val studentId: Long = binding?.etStudentId?.text.toString().trim { it <= ' ' }.toLongOrNull() ?: 0L
-        if (validateForm(name, email, password, confirmPassword, studentId.toString(), mobile.toString(), Class) && password == confirmPassword){
+        if (validateForm(name, email, password, confirmPassword, studentId.toString(), mobile.toString(), grade) && password == confirmPassword){
             showProgressDialog(resources.getString(R.string.please_wait))
             FirebaseAuth.getInstance().createUserWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
 
@@ -55,7 +68,7 @@ class SignUpActivity : BaseActivity() {
                     val user = User(
                         id = firebaseUser.uid, name = name,
                         email = registeredEmail, mobile = mobile,
-                        grade = Class, studentId = studentId
+                        grade = grade, studentId = studentId
                     )
                     FireStoreClass().registerUser(this, user)
                 } else {
