@@ -24,5 +24,6 @@
     <string name="feedback">Feedback</string>
     <string name="enter_feedback">Enter your feedback here…</string>
     <string name="submit_feedback">Submit Feedback</string>
+    <string name="submit_notice">Submit Notice</string>
 
 </resources>

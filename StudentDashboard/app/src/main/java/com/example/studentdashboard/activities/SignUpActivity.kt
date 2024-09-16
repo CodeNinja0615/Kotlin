@@ -53,6 +53,12 @@ class SignUpActivity : BaseActivity() {
     private fun registerUser(){
         val name: String = binding?.etName?.text.toString().trim{ it <= ' '}
         val email: String = binding?.etEmail?.text.toString().trim { it <= ' ' }.lowercase()
+        var tag: String = ""
+        if (email.contains("teacher", ignoreCase = true)){
+            tag = "teacher"
+        }else{
+            tag = "student"
+        }
         val password: String = binding?.etPassword?.text.toString().trim{ it <= ' '}
         val confirmPassword: String = binding?.etConfirmPassword?.text.toString().trim{ it <= ' '}
         val grade:String = binding?.etClass?.text.toString().trim{ it <= ' '}
@@ -66,7 +72,7 @@ class SignUpActivity : BaseActivity() {
                     val firebaseUser: FirebaseUser = task.result!!.user!!
                     val registeredEmail = firebaseUser.email!!
                     val user = User(
-                        id = firebaseUser.uid, name = name,
+                        id = firebaseUser.uid, name = name, tag = tag,
                         email = registeredEmail, mobile = mobile,
                         grade = grade, studentId = studentId
                     )
@@ -82,7 +88,7 @@ class SignUpActivity : BaseActivity() {
 
 
     private fun validateForm(name: String, email: String, password: String,
-                             confirmPassword: String, studentId: String, mobile: String, Class: String): Boolean{
+                             confirmPassword: String, studentId: String, mobile: String, grade: String): Boolean{
         return when{
             TextUtils.isEmpty(name)-> {
                 showErrorSnackBar("Please enter a name")
@@ -108,7 +114,7 @@ class SignUpActivity : BaseActivity() {
                 showErrorSnackBar("Please enter mobile number")
                 false
             }
-            TextUtils.isEmpty(Class)-> {
+            TextUtils.isEmpty(grade)-> {
                 showErrorSnackBar("Please enter Class")
                 false
             }

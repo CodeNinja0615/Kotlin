@@ -59,7 +59,7 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardContent?.setOnClickListener {
             val intent = Intent(this, ContentActivity::class.java)
-            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            intent.putExtra(Constants.USERS, mUserDetails)
             startActivity(intent)
         }
 
@@ -71,7 +71,7 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardClassNotice?.setOnClickListener {
             val intent = Intent(this, ClassNoticeActivity::class.java)
-            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            intent.putExtra(Constants.USERS, mUserDetails)
             startActivity(intent)
         }
 

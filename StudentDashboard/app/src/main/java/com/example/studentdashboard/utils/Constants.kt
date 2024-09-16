@@ -10,12 +10,17 @@ import android.provider.Settings
 import android.webkit.MimeTypeMap
 
 object Constants {
+
+    const val TEACHER_SIGNED_IN: String = "teacher"
+
+
     const val USERS: String = "Users" //-- Collection name
     const val CLASS_CONTENT: String = "classcontent"
     const val USER_CLASS: String = "class"
     const val SCHOOL_CONTENT: String = "schoolcontent"
     const val SCHOOL: String = "school"
     const val IMAGE: String = "image"
+    const val NOTICE: String = "notice"
 
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2

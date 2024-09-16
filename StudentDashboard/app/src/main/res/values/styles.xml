@@ -5,5 +5,6 @@
         <item name="boxStrokeColor">@color/deep_blue</item>
         <item name="hintTextColor">@color/deep_blue</item>
         <item name="hintAnimationEnabled">true</item>
+        <item name="cursorColor">@color/deep_blue</item>
     </style>
 </resources>

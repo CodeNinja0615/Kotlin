@@ -1,5 +1,6 @@
 package com.example.studentdashboard.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -9,11 +10,12 @@ import com.example.studentdashboard.adapters.ClassNoticeAdapter
 import com.example.studentdashboard.databinding.ActivityClassNoticeBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
 
 class ClassNoticeActivity : BaseActivity() {
     private var binding: ActivityClassNoticeBinding? = null
-    private lateinit var mClass: String
+    private lateinit var mUserDetails: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClassNoticeBinding.inflate(layoutInflater)
@@ -21,11 +23,22 @@ class ClassNoticeActivity : BaseActivity() {
         hideSystemUI()
         setupActionBar()
 
-        if (intent.hasExtra(Constants.USER_CLASS)){
-            mClass = intent.getStringExtra(Constants.USER_CLASS)!!
+        if (intent.hasExtra(Constants.USERS)){
+            mUserDetails = intent.getParcelableExtra(Constants.USERS)!!
         }
 
-        FireStoreClass().loadClassRoomData(this, mClass)
+        if (mUserDetails.tag == "teacher"){
+            binding?.fabCreateNotice?.visibility = View.VISIBLE
+        }
+
+
+        FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
+
+        binding?.fabCreateNotice?.setOnClickListener {
+            val intent = Intent(this, AddClassNoticeActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
     }
 
 

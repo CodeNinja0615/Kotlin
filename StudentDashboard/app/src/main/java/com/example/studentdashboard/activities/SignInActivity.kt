@@ -12,13 +12,14 @@ import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivitySignInBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.User
+import com.example.studentdashboard.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 
 class SignInActivity : BaseActivity() {
     private var binding: ActivitySignInBinding? = null
 
     private lateinit var auth: FirebaseAuth
-
+    private lateinit var email: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +39,14 @@ class SignInActivity : BaseActivity() {
 
     fun signInSuccess(loggedInUser: User?) {
         hideProgressDialog()
-        startActivity(Intent(this, MainActivity::class.java))
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
         finish()
     }
 
 
     private fun signInRegisteredUser(){
-        val email: String = binding?.etEmail?.text.toString().trim{ it <= ' '}.lowercase()
+        email = binding?.etEmail?.text.toString().trim{ it <= ' '}.lowercase()
         val password: String = binding?.etPassword?.text.toString().trim{ it <= ' '}
         if (validateForm(email, password)){
             showProgressDialog(resources.getString(R.string.please_wait))

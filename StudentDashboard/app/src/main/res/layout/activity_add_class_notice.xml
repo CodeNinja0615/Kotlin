@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".activities.AddClassNoticeActivity">
+
+    <!-- Toolbar -->
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbarAddNotice"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:background="@color/deep_blue"
+        android:theme="@style/ToolBarTheme"
+        android:titleTextColor="@color/textColorPrimary" />
+
+    <!-- Notice Title Field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CustomTextInputLayout"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_notice_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:hint="Notice Title"
+            android:textSize="15sp"
+            android:inputType="text" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Notice Description Field -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/CustomTextInputLayout"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15sp"
+        android:layout_marginEnd="5dp">
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_notice_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/grey"
+            android:hint="Notice Description"
+            android:textSize="15sp"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:maxLines="6" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Submit Button -->
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_submit_notice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="15sp"
+        android:layout_marginEnd="5dp"
+        android:background="@drawable/shape_button_rounded"
+        android:foreground="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/submit_notice"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold"/>
+
+</LinearLayout>

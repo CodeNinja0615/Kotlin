@@ -164,7 +164,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
                 val intent = Intent(this, MyProfileActivity::class.java )
                 startActivity(intent)
             }
-
+            R.id.nav_help -> {
+                // Handle "My Dashboard" action
+                val intent = Intent(this, HelpActivity::class.java )
+                startActivity(intent)
+            }
             R.id.nav_sign_out -> {
                 // Handle sign-out action
                 FirebaseAuth.getInstance().signOut()
@@ -197,6 +201,6 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             .centerCrop()
             .placeholder(R.drawable.user_place_holder)
             .into(navUserImg)
-        tvUsername.text = user.name
+        tvUsername.text = mUserName
     }
 }

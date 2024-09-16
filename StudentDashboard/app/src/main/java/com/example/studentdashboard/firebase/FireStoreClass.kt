@@ -3,6 +3,7 @@ package com.example.studentdashboard.firebase
 import android.app.Activity
 import android.util.Log
 import android.widget.Toast
+import com.example.studentdashboard.activities.AddClassNoticeActivity
 import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.ContentActivity
@@ -39,6 +40,16 @@ class FireStoreClass() {
         var currentUserID = ""
         if(currentUser != null){
             currentUserID = currentUser.email.toString()
+        }
+        return currentUserID
+    }
+
+
+    fun getCurrentUserName(): String{ //-----------To get the signed in user ID
+        val currentUser = FirebaseAuth.getInstance().currentUser
+        var currentUserID = ""
+        if(currentUser != null){
+            currentUserID = currentUser.displayName.toString()
         }
         return currentUserID
     }
@@ -152,5 +163,23 @@ class FireStoreClass() {
             }
     }
 
+    fun addUpdateNoticeList(activity: AddClassNoticeActivity, classRoom: ClassRoom, grade: String){//------To add/update data in notice
+        val noticeListHashmap = HashMap<String, Any>()
+
+        noticeListHashmap[Constants.NOTICE] = classRoom.notice //------Hash map to update notice (array list) from ClassRoom Model
+
+        mFireStore.collection(Constants.CLASS_CONTENT)
+            .document(grade)
+            .update(noticeListHashmap)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "TaskList Updated Successfully")
+                activity.noticeAddedSuccessfully()
+            }
+            .addOnFailureListener {e->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "error while updating task list", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
 
 }

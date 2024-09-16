@@ -7,6 +7,7 @@ data class User(
     val id: String = "",
     val name: String = "",
     val email: String = "",
+    val tag: String = "", //----As teacher or student
     val image: String = "",
     val mobile: Long = 0,
     val grade: String = "", //----Class of student e.g. 12-A
@@ -15,6 +16,7 @@ data class User(
     val marks: ArrayList<Marks> = ArrayList()
 ): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
@@ -30,6 +32,7 @@ data class User(
         parcel.writeString(id)
         parcel.writeString(name)
         parcel.writeString(email)
+        parcel.writeString(tag)
         parcel.writeString(image)
         parcel.writeLong(mobile)
         parcel.writeString(grade)

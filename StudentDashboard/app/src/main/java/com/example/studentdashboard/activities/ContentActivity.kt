@@ -7,15 +7,15 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
 import com.example.studentdashboard.adapters.ContentAdapter
-import com.example.studentdashboard.adapters.LibraryAdapter
 import com.example.studentdashboard.databinding.ActivityContentBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
 
 class ContentActivity : AppCompatActivity() {
     private var binding: ActivityContentBinding? = null
-    private lateinit var mClass: String
+    private lateinit var mUserDetails: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityContentBinding.inflate(layoutInflater)
@@ -23,12 +23,12 @@ class ContentActivity : AppCompatActivity() {
         hideSystemUI()
         setupActionBar()
 
-        if (intent.hasExtra(Constants.USER_CLASS)){
-            mClass = intent.getStringExtra(Constants.USER_CLASS)!!
+        if (intent.hasExtra(Constants.USERS)){
+            mUserDetails = intent.getParcelableExtra(Constants.USERS)!!
         }
 
 
-        FireStoreClass().loadClassRoomData(this, mClass)
+        FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
     }
 
 
