@@ -25,5 +25,7 @@
     <string name="enter_feedback">Enter your feedback here…</string>
     <string name="submit_feedback">Submit Feedback</string>
     <string name="submit_notice">Submit Notice</string>
+    <string name="this_is_the_content_of_the_notice_it_can_be_a_long_text">This is the content of the notice. It can be a long text.</string>
+    <string name="students">Students</string>
 
 </resources>

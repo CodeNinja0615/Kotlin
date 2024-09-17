@@ -108,6 +108,9 @@ class FireStoreClass() {
                     is ContentActivity ->{
                         activity.setContentData(classRoom)
                     }
+                    is AddClassNoticeActivity ->{
+                        activity.setClassRoomData(classRoom)
+                    }
                 }
             }.addOnFailureListener { e ->
                 Log.e("Class Room Data", "Error getting the document: $e")
@@ -163,7 +166,7 @@ class FireStoreClass() {
             }
     }
 
-    fun addUpdateNoticeList(activity: AddClassNoticeActivity, classRoom: ClassRoom, grade: String){//------To add/update data in notice
+    fun addUpdateNoticeList(activity: Activity, classRoom: ClassRoom, grade: String){//------To add/update data in notice
         val noticeListHashmap = HashMap<String, Any>()
 
         noticeListHashmap[Constants.NOTICE] = classRoom.notice //------Hash map to update notice (array list) from ClassRoom Model
@@ -173,10 +176,21 @@ class FireStoreClass() {
             .update(noticeListHashmap)
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "TaskList Updated Successfully")
-                activity.noticeAddedSuccessfully()
+                when(activity) {
+                    is ClassNoticeActivity -> {
+                        activity.onDeleteNotice()
+                    }
+                    is AddClassNoticeActivity -> {
+                        activity.noticeAddedSuccessfully()
+                    }
+                }
             }
             .addOnFailureListener {e->
-                activity.hideProgressDialog()
+                when(activity) {
+                    is AddClassNoticeActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
                 Log.e(activity.javaClass.simpleName, "error while updating task list", e)
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }

@@ -17,6 +17,11 @@
         android:theme="@style/Theme.StudentDashboard"
         tools:targetApi="31">
         <activity
+            android:name=".activities.ClassStudentsActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.NoActionBar"  />
+        <activity
             android:name=".activities.AddClassNoticeActivity"
             android:exported="false"
             android:screenOrientation="portrait"

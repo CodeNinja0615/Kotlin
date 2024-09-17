@@ -51,7 +51,11 @@ class MyProfileActivity : BaseActivity() {
                 )
             }
         }
-
+        binding?.cardStudents?.setOnClickListener {
+            val intent = Intent(this, ClassStudentsActivity::class.java)
+            intent.putExtra(Constants.USERS, mUserDetails)
+            startActivity(intent)
+        }
         binding?.cardAttendance?.setOnClickListener {
             val intent = Intent(this, AttendanceActivity::class.java)
             startActivity(intent)

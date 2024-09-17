@@ -1,55 +1,37 @@
 package com.example.studentdashboard.activities
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
-import com.example.studentdashboard.adapters.ContentAdapter
-import com.example.studentdashboard.databinding.ActivityContentBinding
-import com.example.studentdashboard.firebase.FireStoreClass
-import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.databinding.ActivityClassStudentsBinding
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
 
-class ContentActivity : BaseActivity() {
-    private var binding: ActivityContentBinding? = null
+class ClassStudentsActivity : BaseActivity() {
+    private var binding: ActivityClassStudentsBinding? = null
     private lateinit var mUserDetails: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityContentBinding.inflate(layoutInflater)
+        binding = ActivityClassStudentsBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         hideSystemUI()
-        setupActionBar()
-
         if (intent.hasExtra(Constants.USERS)){
             mUserDetails = intent.getParcelableExtra(Constants.USERS)!!
+            setupActionBar()
         }
-
-        FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
     }
 
-
-    fun setContentData(classRoom: ClassRoom) {
-        val listPdf = classRoom.content
-
-        binding?.rvContentData?.layoutManager = LinearLayoutManager(this)
-        binding?.rvContentData?.setHasFixedSize(true)
-        val adapter = ContentAdapter(this, listPdf)
-
-        binding?.rvContentData?.adapter = adapter
-    }
 
     private fun setupActionBar(){
-        setSupportActionBar(binding?.toolbarContentActivity)
+        setSupportActionBar(binding?.toolbarClassStudents)
         if (supportActionBar != null){
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.title = "Content"
-            binding?.toolbarContentActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24) //------ No need for this
+            supportActionBar?.title = "Students(Class: ${mUserDetails.grade})"
+            binding?.toolbarClassStudents?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
         }
-        binding?.toolbarContentActivity?.setNavigationOnClickListener {
+        binding?.toolbarClassStudents?.setNavigationOnClickListener {
             onBackPressed()
             finish()
         }

@@ -1,8 +1,10 @@
 package com.example.studentdashboard.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
@@ -16,6 +18,8 @@ import com.example.studentdashboard.utils.Constants
 class ClassNoticeActivity : BaseActivity() {
     private var binding: ActivityClassNoticeBinding? = null
     private lateinit var mUserDetails: User
+    private lateinit var mClassRoom: ClassRoom
+    private val SET_NEW_NOTICE = 10
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClassNoticeBinding.inflate(layoutInflater)
@@ -31,23 +35,45 @@ class ClassNoticeActivity : BaseActivity() {
             binding?.fabCreateNotice?.visibility = View.VISIBLE
         }
 
-
+        showProgressDialog("Please wait....")
         FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
 
         binding?.fabCreateNotice?.setOnClickListener {
             val intent = Intent(this, AddClassNoticeActivity::class.java)
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
-            startActivity(intent)
+            intent.putExtra(Constants.USERS, mUserDetails)
+            startActivityForResult(intent, SET_NEW_NOTICE)
         }
     }
 
+    fun deleteNotice(position: Int){
+        mClassRoom.notice.removeAt(position)
+        showProgressDialog("Please wait....")
+
+        FireStoreClass().addUpdateNoticeList(this, mClassRoom, mUserDetails.grade)
+    }
+
+    fun onDeleteNotice(){
+        hideProgressDialog()
+        showProgressDialog("Please wait....")
+        FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == SET_NEW_NOTICE){
+            showProgressDialog("Please wait....")
+            FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
+        }
+    }
 
     fun setClassNotice(classRoom: ClassRoom) {
+        hideProgressDialog()
+        mClassRoom = classRoom
         val listNotice = classRoom.notice
 
         binding?.rvClassNotice?.layoutManager = LinearLayoutManager(this)
         binding?.rvClassNotice?.setHasFixedSize(true)
-        val adapter = ClassNoticeAdapter(this, listNotice)
+        val adapter = ClassNoticeAdapter(this@ClassNoticeActivity, listNotice, mUserDetails)
 
         binding?.rvClassNotice?.adapter = adapter
     }

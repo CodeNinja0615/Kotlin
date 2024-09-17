@@ -9,12 +9,14 @@ import com.example.studentdashboard.databinding.ActivityAddClassNoticeBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.ClassRoom
 import com.example.studentdashboard.models.Notice
+import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
 
 class AddClassNoticeActivity : BaseActivity() {
     private var binding: ActivityAddClassNoticeBinding? = null
     private lateinit var mClass: String
-    private lateinit var mClassRoom: ClassRoom //------currently null need to populate from firestore db
+    private lateinit var mClassRoom: ClassRoom
+    private lateinit var mUserDetails: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddClassNoticeBinding.inflate(layoutInflater)
@@ -22,10 +24,11 @@ class AddClassNoticeActivity : BaseActivity() {
         hideSystemUI()
         setupActionBar()
 
-        if (intent.hasExtra(Constants.USER_CLASS)){
+        if (intent.hasExtra(Constants.USER_CLASS) && intent.hasExtra(Constants.USERS)){
             mClass = intent.getStringExtra(Constants.USER_CLASS)!!
+            mUserDetails = intent.getParcelableExtra(Constants.USERS)!!
         }
-
+        FireStoreClass().loadClassRoomData(this, mClass)
 
         binding?.btnSubmitNotice?.setOnClickListener {
             val title: String = binding?.etNoticeTitle?.text.toString()
@@ -36,23 +39,27 @@ class AddClassNoticeActivity : BaseActivity() {
 
     }
 
+    fun setClassRoomData(mClassRoom: ClassRoom){
+        this.mClassRoom = mClassRoom
+    }
+
     private fun addClassNotice(title: String, description: String){
 
         val notice = Notice(
             title,
-            FireStoreClass().getCurrentEmailId(),
+            mUserDetails.name,
             description
         )
 
         mClassRoom.notice.add(0, notice)
-        //showProgressDialog("Please wait....")
+        showProgressDialog("Please wait....")
         FireStoreClass().addUpdateNoticeList(this, mClassRoom, mClass)
     }
 
 
     fun noticeAddedSuccessfully(){
-        //hideProgressDialog()
-        //setResult(Activity.RESULT_OK)
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
         finish()
     }
 

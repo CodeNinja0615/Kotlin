@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
-import com.example.studentdashboard.adapters.ClassNoticeAdapter
 import com.example.studentdashboard.adapters.LibraryAdapter
 import com.example.studentdashboard.databinding.ActivityLibraryBinding
 import com.example.studentdashboard.firebase.FireStoreClass
