@@ -17,4 +17,14 @@
         android:theme="@style/ToolBarTheme"
         android:titleTextColor="@color/textColorPrimary" />
 
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_ClassStudents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="4dp"
+        android:clipToPadding="false"
+        tools:listitem="@layout/item_students"
+        android:layout_marginTop="8dp" />
+
 </LinearLayout>

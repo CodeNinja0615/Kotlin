@@ -6,6 +6,7 @@ import android.widget.Toast
 import com.example.studentdashboard.activities.AddClassNoticeActivity
 import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
+import com.example.studentdashboard.activities.ClassStudentsActivity
 import com.example.studentdashboard.activities.ContentActivity
 import com.example.studentdashboard.activities.LibraryActivity
 import com.example.studentdashboard.activities.MainActivity
@@ -192,6 +193,38 @@ class FireStoreClass() {
                     }
                 }
                 Log.e(activity.javaClass.simpleName, "error while updating task list", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
+
+
+    fun getStudentsByClass(activity: Activity, grade: String){//------To fetch members details LIST assigned to board for RV
+        mFireStore.collection(Constants.USERS)//----- "Users" document in firestore
+            .whereEqualTo(Constants.GRADE, grade)//----Finding the student with desired grade
+            .get()
+            .addOnSuccessListener {
+                    document ->
+                Log.e(activity.javaClass.simpleName, document.documents.toString())
+
+                val usersList: ArrayList<User> = ArrayList() //----------List of users
+
+                for(i in document.documents){
+                    val user = i.toObject(User::class.java)!!
+                    usersList.add(user)//----adding every data to the array list
+                }
+
+                when(activity){
+                    is ClassStudentsActivity -> {
+                        activity.setStudentData(usersList)
+                    }
+                }
+            }.addOnFailureListener {e->
+                when(activity){
+                    is ClassStudentsActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "error while fetching members list", e)
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }

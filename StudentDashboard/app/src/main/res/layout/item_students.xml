@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cardStudent"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="10dp"
+    android:visibility="gone"
+    tools:visibility="visible"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Circular ImageView -->
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ_student_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/user_place_holder_black"
+            android:layout_marginEnd="16dp" />
+
+        <!-- Student Details -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Student Name -->
+            <TextView
+                android:id="@+id/tv_student_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Student Name"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+
+            <!-- Student Email -->
+            <TextView
+                android:id="@+id/tv_student_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="student@example.com"
+                android:textSize="14sp"
+                android:textColor="@color/grey" />
+
+            <!-- Student Mobile -->
+            <TextView
+                android:id="@+id/tv_student_mobile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="+1234567890"
+                android:textSize="14sp"
+                android:textColor="@color/grey" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
