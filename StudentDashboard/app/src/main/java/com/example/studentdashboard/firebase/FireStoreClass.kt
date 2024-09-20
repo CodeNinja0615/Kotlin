@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import android.widget.Toast
 import com.example.studentdashboard.activities.AddClassNoticeActivity
+import com.example.studentdashboard.activities.AddResultActivity
 import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.ClassStudentsActivity
@@ -76,7 +77,6 @@ class FireStoreClass() {
                     is ResultActivity -> {
                         activity.setResultData(loggedInUser)
                     }
-
                 }
             }.addOnFailureListener { e ->
                 when(activity){
@@ -217,10 +217,16 @@ class FireStoreClass() {
                     is ClassStudentsActivity -> {
                         activity.setStudentData(usersList)
                     }
+                    is ResultActivity ->{
+                        activity.setStudentData(usersList)
+                    }
                 }
             }.addOnFailureListener {e->
                 when(activity){
                     is ClassStudentsActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                    is ResultActivity ->{
                         activity.hideProgressDialog()
                     }
                 }
@@ -228,5 +234,39 @@ class FireStoreClass() {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }
+
+    fun getStudentByStudentID(activity: Activity, studentID: Long) {
+        mFireStore.collection(Constants.USERS) // Access the "Users" collection in Firestore
+            .whereEqualTo(Constants.STUDENT_ID, studentID) // Filter by the desired student ID
+            .limit(1) // Fetch only one result
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.documents.isNotEmpty()) {
+                    val studentDoc = document.documents[0] // Get the first (and only) document
+                    val user = studentDoc.toObject(User::class.java) // Convert the document to User object
+
+                    // Pass the single user object back to the UI or activity
+                    when (activity) {
+                        is AddResultActivity -> {
+                            activity.setStudentDataInUI(user!!)
+                        }
+                    }
+                } else {
+                    // Handle the case where no matching student is found
+                    Toast.makeText(activity, "No student found with this ID", Toast.LENGTH_LONG).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                // Handle failure
+                when (activity) {
+                    is AddResultActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "Error while fetching student data", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
+
 
 }

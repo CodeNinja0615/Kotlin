@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
+import com.example.studentdashboard.activities.ResultActivity
 import com.example.studentdashboard.databinding.ItemStudentsBinding
 import com.example.studentdashboard.models.User
 
@@ -16,12 +17,19 @@ open class StudentAdapter(
     private val list: ArrayList<User>,
 ) : RecyclerView.Adapter<StudentAdapter.MyViewHolder>() {
 
+    private var onClickListener: OnClickListener? = null
+
     inner class MyViewHolder(val binding: ItemStudentsBinding) : RecyclerView.ViewHolder(binding.root) {
         val cardStudent = binding.cardStudent
         val civStudentImage = binding.civStudentImage
         val tvStudentName = binding.tvStudentName
         val tvStudentEmail = binding.tvStudentEmail
         val tvStudentMobile = binding.tvStudentMobile
+    }
+
+
+    fun setOnClickListener(onClickListener: OnClickListener){
+        this.onClickListener = onClickListener
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -43,7 +51,19 @@ open class StudentAdapter(
             holder.tvStudentName.text = model.name
             holder.tvStudentEmail.text = model.email
             holder.tvStudentMobile.text = model.mobile.toString()
+
+            if (context is ResultActivity) {
+                holder.itemView.setOnClickListener {
+                    if (onClickListener != null) {
+                        onClickListener!!.onClick(position, model)
+                    }
+                }
+            }
         }
+    }
+
+    interface OnClickListener{
+        fun onClick(position: Int, model: User)
     }
 
     override fun getItemCount(): Int = list.size

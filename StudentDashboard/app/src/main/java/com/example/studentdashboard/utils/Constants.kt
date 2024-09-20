@@ -22,6 +22,7 @@ object Constants {
     const val IMAGE: String = "image"
     const val NOTICE: String = "notice"
     const val GRADE: String = "grade"
+    const val STUDENT_ID: String = "studentId"
 
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2

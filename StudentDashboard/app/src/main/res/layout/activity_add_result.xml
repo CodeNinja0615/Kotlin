@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@drawable/ic_background"
-    tools:context=".activities.ResultActivity">
+    android:orientation="vertical"
+    tools:context=".activities.AddResultActivity">
+
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarResultActivity"
+        android:id="@+id/toolbarAddResultActivity"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/deep_blue"
         android:theme="@style/ToolBarTheme"
         android:titleTextColor="@color/textColorPrimary" />
-
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_result_data"
@@ -24,19 +24,6 @@
         android:padding="4dp"
         android:clipToPadding="false"
         tools:listitem="@layout/marks_item"
-        android:visibility="gone"
-        tools:visibility="visible"
-        android:layout_marginTop="8dp" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_ClassStudents"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="4dp"
-        android:clipToPadding="false"
-        android:visibility="gone"
-        tools:visibility="visible"
-        tools:listitem="@layout/item_students"
         android:layout_marginTop="8dp" />
 
 </LinearLayout>

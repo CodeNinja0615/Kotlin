@@ -1,26 +1,23 @@
 package com.example.studentdashboard.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.studentdashboard.R
 import com.example.studentdashboard.adapters.MarksAdapter
-import com.example.studentdashboard.adapters.StudentAdapter
-import com.example.studentdashboard.databinding.ActivityResultBinding
+import com.example.studentdashboard.databinding.ActivityAddResultBinding
 import com.example.studentdashboard.firebase.FireStoreClass
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
-import java.util.ArrayList
 
-class ResultActivity : BaseActivity() {
-    private var binding: ActivityResultBinding? = null
+class AddResultActivity : BaseActivity() {
+    private var binding: ActivityAddResultBinding? = null
 
     private lateinit var mUserDetails: User
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityResultBinding.inflate(layoutInflater)
+        binding = ActivityAddResultBinding.inflate(layoutInflater)
         setContentView(binding?.root)
         hideSystemUI()
         setupActionBar()
@@ -29,40 +26,14 @@ class ResultActivity : BaseActivity() {
             mUserDetails = intent.getParcelableExtra(Constants.USERS)!!
         }
 
-        if(mUserDetails.tag == "student") {
-            binding?.rvResultData?.visibility = View.VISIBLE
-            showProgressDialog("Please wait....")
-            FireStoreClass().loadUserData(this)
-        }else{
-            binding?.rvClassStudents?.visibility = View.VISIBLE
-            showProgressDialog("Please wait....")
-            FireStoreClass().getStudentsByClass(this, mUserDetails.grade)
-        }
+        showProgressDialog("Please wait....")
+        FireStoreClass().getStudentByStudentID(this, mUserDetails.studentId)
     }
 
-
-    fun setStudentData(usersList: ArrayList<User>) {
-        hideProgressDialog()
-        binding?.rvClassStudents?.layoutManager = LinearLayoutManager(this)
-        binding?.rvClassStudents?.setHasFixedSize(true)
-        val adapter = StudentAdapter(this, usersList)
-
-        binding?.rvClassStudents?.adapter = adapter
-
-        adapter.setOnClickListener(object : StudentAdapter.OnClickListener{
-            override fun onClick(position: Int, model: User) {
-                val intent = Intent(this@ResultActivity, AddResultActivity::class.java)
-                intent.putExtra(Constants.USERS, model)
-                startActivity(intent)
-            }
-        })
-    }
-
-
-    fun setResultData(loggedInUser: User) {
+    fun setStudentDataInUI(students: User){
         hideProgressDialog()
         // Iterate through each Marks object in the User's marks list
-        for (mark in loggedInUser.marks) {
+        for (mark in students.marks) {
             // List of all marks to calculate total
             val marksList = listOf(
                 mark.english,
@@ -113,21 +84,23 @@ class ResultActivity : BaseActivity() {
 
             binding?.rvResultData?.layoutManager = LinearLayoutManager(this)
             binding?.rvResultData?.setHasFixedSize(true)
-            val adapter = MarksAdapter(this, loggedInUser.marks)
+            val adapter = MarksAdapter(this, students.marks)
 
             binding?.rvResultData?.adapter = adapter
         }
+
+
     }
 
     private fun setupActionBar(){
-        setSupportActionBar(binding?.toolbarResultActivity)
+        setSupportActionBar(binding?.toolbarAddResultActivity)
         if (supportActionBar != null){
             supportActionBar!!.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.title = "Result"
-            binding?.toolbarResultActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
-            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24) //------ No need for this
+            supportActionBar?.title = "Add Result"
+            binding?.toolbarAddResultActivity?.setTitleTextColor(ContextCompat.getColor(this, R.color.white))
+            supportActionBar!!.setHomeAsUpIndicator(R.drawable.baseline_arrow_back_24)
         }
-        binding?.toolbarResultActivity?.setNavigationOnClickListener {
+        binding?.toolbarAddResultActivity?.setNavigationOnClickListener {
             onBackPressed()
             finish()
         }
@@ -152,6 +125,4 @@ class ResultActivity : BaseActivity() {
         super.onDestroy()
         binding = null
     }
-
-
 }
