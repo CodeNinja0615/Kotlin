@@ -1,5 +1,6 @@
 package com.example.studentdashboard.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -28,6 +29,12 @@ class AddResultActivity : BaseActivity() {
 
         showProgressDialog("Please wait....")
         FireStoreClass().getStudentByStudentID(this, mUserDetails.studentId)
+
+        binding?.fabAddResult?.setOnClickListener {
+            val intent = Intent(this, MakeResultActivity:: class.java)
+            intent.putExtra(Constants.USERS, mUserDetails)
+            startActivity(intent)
+        }
     }
 
     fun setStudentDataInUI(students: User){

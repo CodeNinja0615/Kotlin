@@ -11,6 +11,7 @@ import com.example.studentdashboard.activities.ClassStudentsActivity
 import com.example.studentdashboard.activities.ContentActivity
 import com.example.studentdashboard.activities.LibraryActivity
 import com.example.studentdashboard.activities.MainActivity
+import com.example.studentdashboard.activities.MakeResultActivity
 import com.example.studentdashboard.activities.MyProfileActivity
 import com.example.studentdashboard.activities.ResultActivity
 import com.example.studentdashboard.activities.SignInActivity
@@ -264,6 +265,45 @@ class FireStoreClass() {
                     }
                 }
                 Log.e(activity.javaClass.simpleName, "Error while fetching student data", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun addUpdateMarksList(activity: MakeResultActivity, user: User) {
+        val marksListHashmap = HashMap<String, Any>()
+        marksListHashmap[Constants.MARKS] = user.marks // Hash map to update the user's marks
+
+        // First, find the document with the matching student ID
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.STUDENT_ID, user.studentId)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    // Get the first matching document (assuming student IDs are unique)
+                    val documentId = documents.documents[0].id
+
+                    // Now update the document using the document ID
+                    mFireStore.collection(Constants.USERS)
+                        .document(documentId)
+                        .update(marksListHashmap)
+                        .addOnSuccessListener {
+                            activity.resultAddedSuccessfully()
+                            Log.e(activity.javaClass.simpleName, "Marks Updated Successfully")
+                        }
+                        .addOnFailureListener { e ->
+                            activity.hideProgressDialog()
+                            Log.e(activity.javaClass.simpleName, "Error while updating marks", e)
+                            Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                        }
+                } else {
+                    // No matching student found
+                    activity.hideProgressDialog()
+                    Toast.makeText(activity, "Student not found", Toast.LENGTH_LONG).show()
+                }
+            }
+            .addOnFailureListener { e ->
+                activity.hideProgressDialog()
+                Log.e(activity.javaClass.simpleName, "Error finding student", e)
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }

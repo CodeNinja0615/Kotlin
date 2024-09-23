@@ -30,7 +30,7 @@ open class ImageSliderAdapter(
             .with(context)
             .load(model.image)
             .centerCrop()
-            .placeholder(R.drawable.user_place_holder_black)
+            .placeholder(R.drawable.ic_result_placeholder)
             .into(holder.imageView)
         holder.textOverlay.text = model.title
 
