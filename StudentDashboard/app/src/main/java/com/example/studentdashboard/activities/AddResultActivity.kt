@@ -1,10 +1,14 @@
 package com.example.studentdashboard.activities
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
 import com.example.studentdashboard.adapters.MarksAdapter
 import com.example.studentdashboard.databinding.ActivityAddResultBinding
@@ -33,9 +37,19 @@ class AddResultActivity : BaseActivity() {
         binding?.fabAddResult?.setOnClickListener {
             val intent = Intent(this, MakeResultActivity:: class.java)
             intent.putExtra(Constants.USERS, mUserDetails)
-            startActivity(intent)
+            startActivityForResult(intent, Constants.ADD_RESULT)
         }
     }
+
+
+    public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK && requestCode == Constants.ADD_RESULT){
+            showProgressDialog("Please wait....")
+            FireStoreClass().getStudentByStudentID(this, mUserDetails.studentId)
+        }
+    }
+
 
     fun setStudentDataInUI(students: User){
         hideProgressDialog()

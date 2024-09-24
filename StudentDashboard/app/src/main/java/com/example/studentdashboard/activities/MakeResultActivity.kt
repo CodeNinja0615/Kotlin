@@ -6,9 +6,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Matrix
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -16,15 +14,19 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivityMakeResultBinding
+import com.example.studentdashboard.firebase.FireStoreClass
+import com.example.studentdashboard.models.Marks
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
-import java.io.IOException
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 
 class MakeResultActivity : BaseActivity() {
     private var binding: ActivityMakeResultBinding? = null
     private lateinit var mUserDetails: User
-    private lateinit var mSelectedImageURI: Uri
+    private var mSelectedImageURI: Uri? = null
     private var saveImageToInternalStorage: Uri? = null
+    private var mResultImageUrl: String = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding =  ActivityMakeResultBinding.inflate(layoutInflater)
@@ -57,6 +59,60 @@ class MakeResultActivity : BaseActivity() {
             pictureDialog.show()
         }
 
+        binding?.btnAddResult?.setOnClickListener {
+            addUpdateMarksInResult()
+        }
+
+    }
+
+
+    private fun uploadResultImage(){
+        showProgressDialog("Please wait....")
+        if (mSelectedImageURI != null){
+            val sRef: StorageReference = FirebaseStorage.getInstance().reference
+                .child("Results/result" + System.currentTimeMillis() + "." + Constants.getFileExtension(this, mSelectedImageURI))
+            sRef.putFile(mSelectedImageURI!!).addOnSuccessListener {
+                    taskSnapShot->
+                Log.e("Firebase Image Url:", taskSnapShot.metadata!!.reference!!.downloadUrl.toString())
+                taskSnapShot.metadata!!.reference!!.downloadUrl.addOnSuccessListener {
+                        uri->
+                    Log.e("Downloadable Image Url:", uri.toString())
+                    mResultImageUrl = uri.toString()
+                }
+            }.addOnFailureListener {
+                    exception->
+                Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
+            }
+            hideProgressDialog()
+        }
+    }
+
+
+    private fun addUpdateMarksInResult(){
+        val term = binding?.etTerm?.text.toString()
+        val english = binding?.etEnglish?.text.toString().toDoubleOrNull() ?: 0.0
+        val maths = binding?.etMaths?.text.toString().toDoubleOrNull() ?: 0.0
+        val science = binding?.etScience?.text.toString().toDoubleOrNull() ?: 0.0
+        val socialScience = binding?.etSocialScience?.text.toString().toDoubleOrNull() ?: 0.0
+        val hindi = binding?.etHindi?.text.toString().toDoubleOrNull() ?: 0.0
+        val computerScience = binding?.etComputerScience?.text.toString().toDoubleOrNull() ?: 0.0
+        val imageResult = mResultImageUrl
+
+        val marksNew = Marks(
+            term = term,
+            english = english,
+            maths = maths,
+            science = science,
+            socialScience = socialScience,
+            hindi = hindi,
+            computerScience = computerScience,
+            imageResult = imageResult
+
+        )
+        mUserDetails.marks.add(marksNew)
+
+        showProgressDialog("Please wait....")
+        FireStoreClass().addUpdateMarksList(this, mUserDetails)
     }
 
 
@@ -74,12 +130,14 @@ class MakeResultActivity : BaseActivity() {
                         .centerCrop()
                         .placeholder(R.drawable.ic_result_placeholder)
                         .into(resultImg!!)
+                    uploadResultImage()
                 }
             }else if(requestCode == Constants.CAMERA){
                 val thumbnail: Bitmap = data!!.extras!!.get("data") as Bitmap //------Getting the data from camera Intent as bitmap
                 val rotatedBitmap = rotateBitmap(thumbnail, 90f) //---- Because the image is -90 degree rotated
 //                saveImageToInternalStorage = Constants.saveImageToInternalStorage(applicationContext, rotatedBitmap) //---Save the image
                 saveImageToInternalStorage = Constants.saveImageToInternalStorage(this, rotatedBitmap) //---Save the image
+                mSelectedImageURI = saveImageToInternalStorage
                 Log.e("Saved Image", "Path:: $saveImageToInternalStorage")
                 Glide
                     .with(this)
@@ -87,6 +145,7 @@ class MakeResultActivity : BaseActivity() {
                     .centerCrop()
                     .placeholder(R.drawable.ic_result_placeholder)
                     .into(resultImg!!)
+                uploadResultImage()
             }
         }
     }
@@ -99,7 +158,9 @@ class MakeResultActivity : BaseActivity() {
     }
 
     fun resultAddedSuccessfully() {
-        TODO("Not yet implemented")
+        hideProgressDialog()
+        setResult(Activity.RESULT_OK)
+        finish()
     }
 
     private fun setupActionBar(){

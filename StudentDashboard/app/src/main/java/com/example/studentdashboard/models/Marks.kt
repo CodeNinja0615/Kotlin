@@ -2,6 +2,7 @@ package com.example.studentdashboard.models
 
 import android.os.Parcel
 import android.os.Parcelable
+import android.text.Editable
 
 data class Marks(
     val term: String = "",

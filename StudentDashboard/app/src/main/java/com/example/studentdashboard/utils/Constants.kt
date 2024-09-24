@@ -41,7 +41,7 @@ object Constants {
     const val GRADE: String = "grade"
     const val MARKS: String = "marks"
     const val STUDENT_ID: String = "studentId"
-    const val GALLERY = 1
+    const val ADD_RESULT = 15
     const val CAMERA = 3
     const val IMAGE_DIRECTORY = "ResultImages"
 

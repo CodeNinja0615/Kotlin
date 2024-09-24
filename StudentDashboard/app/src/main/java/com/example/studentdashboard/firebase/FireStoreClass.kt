@@ -18,6 +18,7 @@ import com.example.studentdashboard.activities.SignInActivity
 import com.example.studentdashboard.activities.SignUpActivity
 import com.example.studentdashboard.activities.TimeTableActivity
 import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.models.Marks
 import com.example.studentdashboard.models.School
 import com.example.studentdashboard.models.User
 import com.example.studentdashboard.utils.Constants
@@ -268,10 +269,9 @@ class FireStoreClass() {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }
-
     fun addUpdateMarksList(activity: MakeResultActivity, user: User) {
+        // Hash map to update the user's marks
         val marksListHashmap = HashMap<String, Any>()
-        marksListHashmap[Constants.MARKS] = user.marks // Hash map to update the user's marks
 
         // First, find the document with the matching student ID
         mFireStore.collection(Constants.USERS)
@@ -281,6 +281,16 @@ class FireStoreClass() {
                 if (!documents.isEmpty) {
                     // Get the first matching document (assuming student IDs are unique)
                     val documentId = documents.documents[0].id
+
+                    // Get the existing marks from Firestore
+                    val existingMarks = documents.documents[0].get(Constants.MARKS) as? ArrayList<Marks>
+
+                    // Add new marks to the existing list
+                    val updatedMarksList = existingMarks ?: arrayListOf()
+                    updatedMarksList.addAll(user.marks) // Append new marks to the list
+
+                    // Update the hash map with the updated marks list
+                    marksListHashmap[Constants.MARKS] = updatedMarksList
 
                     // Now update the document using the document ID
                     mFireStore.collection(Constants.USERS)
@@ -307,6 +317,5 @@ class FireStoreClass() {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }
-
 
 }
