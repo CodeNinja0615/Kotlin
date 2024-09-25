@@ -91,6 +91,12 @@ class FireStoreClass() {
                     is MyProfileActivity ->{
                         activity.hideProgressDialog()
                     }
+                    is AttendanceActivity ->{
+                        activity.hideProgressDialog()
+                    }
+                    is ResultActivity -> {
+                        activity.hideProgressDialog()
+                    }
                 }
                 Log.e("SignInUser", "Error getting the document: $e")
             }
@@ -318,4 +324,29 @@ class FireStoreClass() {
             }
     }
 
+    fun addUpdateTimeTable(activity: Activity,timeTableOf: String, uri: String, grade: String){//------To add/update data in notice
+        val noticeListHashmap = HashMap<String, Any>()
+
+        noticeListHashmap[timeTableOf] = uri //------Hash map to update notice (array list) from ClassRoom Model
+
+        mFireStore.collection(Constants.CLASS_CONTENT)
+            .document(grade)
+            .update(noticeListHashmap)
+            .addOnSuccessListener {
+                Log.e(activity.javaClass.simpleName, "Time Table Updated Successfully")
+                when(activity) {
+                    is TimeTableActivity -> {
+                    }
+                }
+            }
+            .addOnFailureListener {e->
+                when(activity) {
+                    is TimeTableActivity -> {
+                        activity.hideProgressDialog()
+                    }
+                }
+                Log.e(activity.javaClass.simpleName, "error while updating task list", e)
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
+    }
 }

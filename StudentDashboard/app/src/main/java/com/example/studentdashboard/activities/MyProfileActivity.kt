@@ -69,7 +69,7 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.cardTimeTable?.setOnClickListener {
             val intent = Intent(this, TimeTableActivity::class.java)
-            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            intent.putExtra(Constants.USERS, mUserDetails)
             startActivity(intent)
         }
 
