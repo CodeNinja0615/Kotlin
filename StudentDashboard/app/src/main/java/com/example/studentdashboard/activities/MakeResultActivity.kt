@@ -109,7 +109,7 @@ class MakeResultActivity : BaseActivity() {
             imageResult = imageResult
 
         )
-        mUserDetails.marks.add(marksNew)
+        mUserDetails.marks.add(0, marksNew)
 
         showProgressDialog("Please wait....")
         FireStoreClass().addUpdateMarksList(this, mUserDetails)

@@ -48,8 +48,8 @@ class TimeTableActivity : BaseActivity() {
             binding?.fabAddTimetable?.visibility = View.GONE
         }
 
-        if (mClassRoomData.classTimeTable.isEmpty() || mClassRoomData.midTerm.isEmpty() || mClassRoomData.finalTerm.isEmpty()) {
-            binding?.fabAddTimetable?.setOnClickListener {
+        binding?.fabAddTimetable?.setOnClickListener {
+            if (mClassRoomData.classTimeTable.isEmpty() || mClassRoomData.midTerm.isEmpty() || mClassRoomData.finalTerm.isEmpty()) {
                 if (ContextCompat.checkSelfPermission(
                         this,
                         Manifest.permission.READ_MEDIA_IMAGES
@@ -63,10 +63,33 @@ class TimeTableActivity : BaseActivity() {
                         Constants.READ_STORAGE_PERMISSION_CODE
                     )
                 }
+            }else{
+                Toast.makeText(this, "All the timetables are being used get in touch with admin", Toast.LENGTH_SHORT).show()
             }
         }
+
     }
 
+    fun timeTableUpdated(){
+        hideProgressDialog()
+        Toast.makeText(this, "Timetable added", Toast.LENGTH_SHORT).show()
+        showProgressDialog(resources.getString(R.string.please_wait))
+        FireStoreClass().loadClassRoomData(this, mUserDetails.grade)
+    }
+
+    private fun updateTimetableData(){
+        var timeTableOf: String = ""
+        if (mClassRoomData.classTimeTable.isEmpty()){
+            timeTableOf = "classTimeTable"
+        }else if (mClassRoomData.midTerm.isEmpty()){
+            timeTableOf = "midTerm"
+        }else if (mClassRoomData.finalTerm.isEmpty()){
+            timeTableOf = "finalTerm"
+        }
+        if (timeTableOf.isNotEmpty()) {
+            FireStoreClass().addUpdateTimeTable(this,timeTableOf,mTimeTableImageUrl,mUserDetails.grade)
+        }
+    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == Constants.PICK_IMAGE_REQUEST_CODE && data != null){
@@ -76,10 +99,10 @@ class TimeTableActivity : BaseActivity() {
                 if (mClassRoomData.classTimeTable.isEmpty()){
                     imageOf = binding?.ivClassTimeTable
                 }else if (mClassRoomData.midTerm.isEmpty()){
-                        imageOf = binding?.ivMidTerm
-                    }else if (mClassRoomData.finalTerm.isEmpty()){
-                        imageOf = binding?.ivFinalTerm
-                    }
+                    imageOf = binding?.ivMidTerm
+                }else if (mClassRoomData.finalTerm.isEmpty()){
+                    imageOf = binding?.ivFinalTerm
+                }
                 Glide
                     .with(this)
                     .load(mSelectedImageFileUri)
@@ -99,7 +122,7 @@ class TimeTableActivity : BaseActivity() {
         showProgressDialog("Please wait....")
         if (mSelectedImageFileUri != null){
             val sRef: StorageReference = FirebaseStorage.getInstance().reference
-                .child("${mUserDetails.grade} Timetable/USER_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this, mSelectedImageFileUri))
+                .child("${mUserDetails.grade} Timetable/TT_IMAGE" + System.currentTimeMillis() + "." + Constants.getFileExtension(this, mSelectedImageFileUri))
             sRef.putFile(mSelectedImageFileUri!!).addOnSuccessListener {
                     taskSnapShot->
                 Log.e("Firebase Image Url:", taskSnapShot.metadata!!.reference!!.downloadUrl.toString())
@@ -107,13 +130,13 @@ class TimeTableActivity : BaseActivity() {
                         uri->
                     Log.e("Downloadable Image Url:", uri.toString())
                     mTimeTableImageUrl = uri.toString()
-//                    updateUserProfileData()
+                    hideProgressDialog()
+                    updateTimetableData()
                 }
             }.addOnFailureListener {
                     exception->
                 Toast.makeText(this, exception.message, Toast.LENGTH_SHORT).show()
             }
-            hideProgressDialog()
         }
     }
 
@@ -141,7 +164,6 @@ class TimeTableActivity : BaseActivity() {
     }
 
     fun setTimetable(classRoom: ClassRoom) {
-
         mClassRoomData = classRoom
         hideProgressDialog()
         if (classRoom.classTimeTable.isNotEmpty()){

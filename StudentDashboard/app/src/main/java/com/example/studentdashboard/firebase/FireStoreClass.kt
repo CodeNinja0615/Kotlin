@@ -206,19 +206,19 @@ class FireStoreClass() {
     }
 
 
-    fun getStudentsByClass(activity: Activity, grade: String){//------To fetch members details LIST assigned to board for RV
-        mFireStore.collection(Constants.USERS)//----- "Users" document in firestore
-            .whereEqualTo(Constants.GRADE, grade)//----Finding the student with desired grade
+    fun getStudentsByClass(activity: Activity, grade: String){
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.GRADE, grade)
             .get()
             .addOnSuccessListener {
                     document ->
                 Log.e(activity.javaClass.simpleName, document.documents.toString())
 
-                val usersList: ArrayList<User> = ArrayList() //----------List of users
+                val usersList: ArrayList<User> = ArrayList()
 
                 for(i in document.documents){
                     val user = i.toObject(User::class.java)!!
-                    usersList.add(user)//----adding every data to the array list
+                    usersList.add(user)
                 }
 
                 when(activity){
@@ -324,18 +324,19 @@ class FireStoreClass() {
             }
     }
 
-    fun addUpdateTimeTable(activity: Activity,timeTableOf: String, uri: String, grade: String){//------To add/update data in notice
-        val noticeListHashmap = HashMap<String, Any>()
+    fun addUpdateTimeTable(activity: Activity,timeTableOf: String, uri: String, grade: String){//------To add/update data in timetable
+        val timeTableHashmap = HashMap<String, Any>()
 
-        noticeListHashmap[timeTableOf] = uri //------Hash map to update notice (array list) from ClassRoom Model
+        timeTableHashmap[timeTableOf] = uri //------Hash map to update timetable from ClassRoom Model
 
         mFireStore.collection(Constants.CLASS_CONTENT)
             .document(grade)
-            .update(noticeListHashmap)
+            .update(timeTableHashmap)
             .addOnSuccessListener {
                 Log.e(activity.javaClass.simpleName, "Time Table Updated Successfully")
                 when(activity) {
                     is TimeTableActivity -> {
+                        activity.timeTableUpdated()
                     }
                 }
             }
