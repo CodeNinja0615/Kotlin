@@ -350,4 +350,26 @@ class FireStoreClass() {
                 Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
     }
+
+    fun getStudentCount(activity: MainActivity) {
+        // Access the Firestore collection
+
+        // Query the USERS collection where tag equals "student"
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.TAG, Constants.STUDENT)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                // Get the number of users with tag = "student"
+                val studentCount = querySnapshot.size()
+                activity.loadTotalStudents(studentCount)
+                // Do something with the count
+                Log.d(activity.javaClass.simpleName, "Number of students: $studentCount")
+//                Toast.makeText(activity, "Number of students: $studentCount", Toast.LENGTH_LONG).show()
+            }
+            .addOnFailureListener { e ->
+                // Handle any errors
+                Log.e(activity.javaClass.simpleName, "Error fetching student count", e)
+                Toast.makeText(activity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
 }

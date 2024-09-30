@@ -15,7 +15,16 @@
         android:layout_height="?android:attr/actionBarSize"
         android:background="@color/deep_blue"
         android:theme="@style/ToolBarTheme"
-        android:titleTextColor="@color/textColorPrimary" />
+        android:titleTextColor="@color/textColorPrimary">
+        <TextView
+            android:id="@+id/tv_student_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green"
+            tools:text="4000 Students"
+            android:paddingEnd="25dp"
+            android:layout_gravity="end"/>
+    </androidx.appcompat.widget.Toolbar>
 
     <!-- Profile Section -->
     <androidx.cardview.widget.CardView

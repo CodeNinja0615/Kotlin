@@ -44,6 +44,8 @@ object Constants {
     const val ADD_RESULT = 15
     const val CAMERA = 3
     const val IMAGE_DIRECTORY = "ResultImages"
+    const val TAG = "tag"
+    const val STUDENT = "student"
 
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2

@@ -2,6 +2,7 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/off_white"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -15,6 +16,14 @@
             android:layout_height="?attr/actionBarSize"
             android:background="@color/deep_blue"
             app:popupTheme="@style/Theme.PopupOverlay">
+            <TextView
+                android:id="@+id/tv_student_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/green"
+                tools:text="4000 Students"
+                android:paddingEnd="25dp"
+                android:layout_gravity="end"/>
         </androidx.appcompat.widget.Toolbar>
     </com.google.android.material.appbar.AppBarLayout>
 
