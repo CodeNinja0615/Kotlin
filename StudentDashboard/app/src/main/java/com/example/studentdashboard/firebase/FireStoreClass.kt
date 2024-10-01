@@ -9,6 +9,7 @@ import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.ClassStudentsActivity
 import com.example.studentdashboard.activities.ContentActivity
+import com.example.studentdashboard.activities.HelpActivity
 import com.example.studentdashboard.activities.LibraryActivity
 import com.example.studentdashboard.activities.MainActivity
 import com.example.studentdashboard.activities.MakeResultActivity
@@ -18,6 +19,7 @@ import com.example.studentdashboard.activities.SignInActivity
 import com.example.studentdashboard.activities.SignUpActivity
 import com.example.studentdashboard.activities.TimeTableActivity
 import com.example.studentdashboard.models.ClassRoom
+import com.example.studentdashboard.models.Feedback
 import com.example.studentdashboard.models.Marks
 import com.example.studentdashboard.models.School
 import com.example.studentdashboard.models.User
@@ -370,6 +372,17 @@ class FireStoreClass() {
                 // Handle any errors
                 Log.e(activity.javaClass.simpleName, "Error fetching student count", e)
                 Toast.makeText(activity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    fun feedBack(activity: HelpActivity, feedback: Feedback) { //------------To Create/Store user data in firestore with name and user's details
+        mFireStore.collection(Constants.FEEDBACK)
+            .document(getCurrentEmailId())//----- Creating document with current student ID
+            .set(feedback, SetOptions.merge())
+            .addOnSuccessListener {
+                activity.feedBackRegisteredSuccess()
+            }.addOnFailureListener { e ->
+                Log.e(activity.javaClass.simpleName, "Error Writing the document: $e")
             }
     }
 }

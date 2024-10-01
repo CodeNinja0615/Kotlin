@@ -46,6 +46,7 @@ object Constants {
     const val IMAGE_DIRECTORY = "ResultImages"
     const val TAG = "tag"
     const val STUDENT = "student"
+    const val FEEDBACK = "feedback"
 
     const val READ_STORAGE_PERMISSION_CODE = 1
     const val PICK_IMAGE_REQUEST_CODE = 2

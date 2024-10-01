@@ -119,10 +119,13 @@
                 android:minLines="3"
                 android:layout_marginBottom="8dp" />
 
-            <Button
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnSubmitFeedback"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:background="@color/deep_blue"
+                android:textColor="@color/white"
+                android:padding="5dp"
                 android:text="@string/submit_feedback" />
 
         </LinearLayout>

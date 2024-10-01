@@ -7,9 +7,11 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.example.studentdashboard.R
 import com.example.studentdashboard.databinding.ActivityHelpBinding
+import com.example.studentdashboard.firebase.FireStoreClass
+import com.example.studentdashboard.models.Feedback
 import com.example.studentdashboard.models.User
 
-class HelpActivity : AppCompatActivity() {
+class HelpActivity : BaseActivity() {
     private var binding: ActivityHelpBinding? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,8 +20,18 @@ class HelpActivity : AppCompatActivity() {
         hideSystemUI()
         setupActionBar()
 
+        binding?.btnSubmitFeedback?.setOnClickListener {
+            showProgressDialog(resources.getString(R.string.please_wait))
+            val feedback:String = binding?.etFeedback?.text.toString()
+            val newFeedback = Feedback(feedback)
+            FireStoreClass().feedBack(this, newFeedback)
+        }
     }
 
+    fun feedBackRegisteredSuccess(){
+        hideProgressDialog()
+        finish()
+    }
 
     private fun setupActionBar(){
         setSupportActionBar(binding?.toolbarHelp)
