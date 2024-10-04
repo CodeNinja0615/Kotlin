@@ -60,6 +60,10 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
         // Access the main_content binding through the include ID
         contentBinding = MainContentBinding.bind(binding?.appBarMain!!.mainContent.root)
 
+        contentBinding?.tvGallery?.setOnClickListener {
+            val intent = Intent(this, GalleryActivity::class.java)
+            startActivity(intent)
+        }
         if (binding != null) {
             binding?.navView?.setNavigationItemSelectedListener(this)
         }

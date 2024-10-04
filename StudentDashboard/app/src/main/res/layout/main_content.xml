@@ -59,16 +59,16 @@
 
         <!-- Posts Section -->
         <TextView
-            android:id="@+id/tv_post"
+            android:id="@+id/tv_Gallery"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:text="Posts"
+            android:text="Gallery"
             android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
 
-        <!-- RecyclerView for Posts -->
+        <!-- RecyclerView for Posts
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_posts"
             android:layout_width="match_parent"
@@ -76,7 +76,7 @@
             android:padding="1dp"
             android:clipToPadding="false"
             tools:listitem="@layout/notice_item"
-            android:layout_marginTop="5dp" />
+            android:layout_marginTop="5dp" />-->
 
         <!-- CalendarView to show today's date -->
         <CalendarView
