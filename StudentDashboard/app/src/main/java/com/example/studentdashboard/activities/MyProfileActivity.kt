@@ -90,6 +90,12 @@ class MyProfileActivity : BaseActivity() {
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
         }
+
+        binding?.cardForYou?.setOnClickListener {
+            val intent = Intent(this, LibraryActivity::class.java)
+            intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
+            startActivity(intent)
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

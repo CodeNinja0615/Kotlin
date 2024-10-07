@@ -431,7 +431,7 @@
                     android:id="@+id/iv_ForYou"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
-                    android:src="@drawable/ic_class_notice"
+                    android:src="@drawable/ic_for_you"
                     android:contentDescription="For You" />
 
                 <TextView

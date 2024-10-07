@@ -16,4 +16,13 @@
         android:theme="@style/ToolBarTheme"
         android:titleTextColor="@color/textColorPrimary"/>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvEventImages"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="8dp"
+        tools:listitem="@layout/item_gallery_image"
+        android:scrollbars="vertical" />
+
+
 </LinearLayout>
