@@ -6,14 +6,14 @@ import android.os.Parcelable
 data class School (
     val schoolImage: String = "",
     val notice: ArrayList<String> = ArrayList(),
-//    val post: ArrayList<String> = ArrayList(),
+    val gallery: ArrayList<String> = ArrayList(),
     val images: ArrayList<SchoolImages> = ArrayList(),
     val books: ArrayList<Library> = ArrayList()
 ):Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
-//        parcel.createStringArrayList()!!,
+        parcel.createStringArrayList()!!,
         parcel.createTypedArrayList(SchoolImages.CREATOR)!!,
         parcel.createTypedArrayList(Library.CREATOR)!!
     )
@@ -21,7 +21,7 @@ data class School (
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(schoolImage)
         parcel.writeStringList(notice)
-//        parcel.writeStringList(post)
+        parcel.writeStringList(gallery)
         parcel.writeTypedList(images)
         parcel.writeTypedList(books)
     }

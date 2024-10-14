@@ -9,6 +9,7 @@ import com.example.studentdashboard.activities.AttendanceActivity
 import com.example.studentdashboard.activities.ClassNoticeActivity
 import com.example.studentdashboard.activities.ClassStudentsActivity
 import com.example.studentdashboard.activities.ContentActivity
+import com.example.studentdashboard.activities.GalleryActivity
 import com.example.studentdashboard.activities.HelpActivity
 import com.example.studentdashboard.activities.LibraryActivity
 import com.example.studentdashboard.activities.MainActivity
@@ -383,6 +384,17 @@ class FireStoreClass() {
                 activity.feedBackRegisteredSuccess()
             }.addOnFailureListener { e ->
                 Log.e(activity.javaClass.simpleName, "Error Writing the document: $e")
+            }
+    }
+
+    fun loadGalleryData(activity: GalleryActivity){ //---------------To load school's data in different activity
+        mFireStore.collection(Constants.SCHOOL_CONTENT)
+            .document(Constants.GALLERY).get()
+            .addOnSuccessListener {document ->
+                val school = document.toObject(School::class.java)!!
+                activity.setGalleryData(school)
+            }.addOnFailureListener { e ->
+                Log.e("Class Room Data", "Error getting the document: $e")
             }
     }
 }
