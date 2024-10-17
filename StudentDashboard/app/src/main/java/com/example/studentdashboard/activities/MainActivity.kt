@@ -120,9 +120,11 @@ class MainActivity : BaseActivity(), NavigationView.OnNavigationItemSelectedList
             }
         }
     }
+
     fun loadTotalStudents(count: Int){
         binding?.appBarMain?.tvStudentCount?.text = count.toString()+" Students"
     }
+
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
         if (hasFocus) {

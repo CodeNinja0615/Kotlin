@@ -92,7 +92,7 @@ class MyProfileActivity : BaseActivity() {
         }
 
         binding?.cardForYou?.setOnClickListener {
-            val intent = Intent(this, LibraryActivity::class.java)
+            val intent = Intent(this, ForYouActivity::class.java)
             intent.putExtra(Constants.USER_CLASS, mUserDetails.grade)
             startActivity(intent)
         }
