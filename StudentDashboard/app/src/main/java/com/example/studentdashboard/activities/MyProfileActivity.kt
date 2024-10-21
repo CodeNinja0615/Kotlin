@@ -236,8 +236,12 @@ class MyProfileActivity : BaseActivity() {
         }
         binding?.tvClass?.text = user.grade
         binding?.tvStudentID?.text = user.studentId.toString()
+        FireStoreClass().getStudentInClassCount(this, mUserDetails.grade)
     }
 
+    fun loadTotalStudentsInClass(studentCount: Int){
+        binding?.tvStudentCount?.text = studentCount.toString() + " Students"
+    }
     override fun onDestroy() {
         super.onDestroy()
         binding = null

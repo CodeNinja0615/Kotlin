@@ -52,15 +52,6 @@ class FireStoreClass() {
     }
 
 
-    fun getCurrentUserName(): String{ //-----------To get the signed in user ID
-        val currentUser = FirebaseAuth.getInstance().currentUser
-        var currentUserID = ""
-        if(currentUser != null){
-            currentUserID = currentUser.displayName.toString()
-        }
-        return currentUserID
-    }
-
     fun loadUserData(activity: Activity, readBoardsList: Boolean = false){ //---------------To load user's data in different activity
         mFireStore.collection(Constants.USERS)
             .document(getCurrentEmailId()).get()
@@ -397,4 +388,26 @@ class FireStoreClass() {
                 Log.e("Class Room Data", "Error getting the document: $e")
             }
     }
+
+    fun getStudentInClassCount(activity: MyProfileActivity, grade: String) {
+        // Access the Firestore collection and perform a compound query
+        mFireStore.collection(Constants.USERS)
+            .whereEqualTo(Constants.TAG, Constants.STUDENT)
+            .whereEqualTo(Constants.GRADE, grade)  // Add the second condition
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                // Get the number of users matching the criteria
+                val studentCount = querySnapshot.size()
+                activity.loadTotalStudentsInClass(studentCount)
+
+                // Log the count
+                Log.d(activity.javaClass.simpleName, "Number of students in 12-A: $studentCount")
+            }
+            .addOnFailureListener { e ->
+                // Handle any errors
+                Log.e(activity.javaClass.simpleName, "Error fetching student count", e)
+                Toast.makeText(activity, "Error: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
 }
